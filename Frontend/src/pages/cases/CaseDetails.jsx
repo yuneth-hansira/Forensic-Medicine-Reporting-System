@@ -128,8 +128,6 @@ const ClinicalTab = () => (
       <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Injury Description</h4>
       <div className="space-y-3">
         {[
-          { region: 'Forehead', desc: 'A laceration measuring 4 cm × 0.5 cm present on the right side of the forehead, 3 cm above the right eyebrow. Edges are irregular.', severity: 'Moderate' },
-          { region: 'Left Arm', desc: 'Multiple contusions (3 in number) present on the dorsal aspect of the left forearm, measuring approx. 2 cm × 1.5 cm each.', severity: 'Minor' },
         ].map((inj, i) => (
           <div key={i} className="p-4 bg-slate-50 border border-slate-100 rounded-xl">
             <div className="flex items-center justify-between mb-2">
@@ -221,13 +219,7 @@ const CourtTab = () => (
 );
 
 const InlineTimeline = ({ caseId }) => {
-  const events = [
-    { date: '20 Jul 2026', time: '10:15 AM', title: 'Case Registered',      user: 'Admin Clerk',     color: 'bg-blue-500' },
-    { date: '20 Jul 2026', time: '11:00 AM', title: 'Doctor Assigned',       user: 'Chief JMO',       color: 'bg-emerald-500' },
-    { date: '21 Jul 2026', time: '09:30 AM', title: 'Clinical Examination',  user: 'Dr. John Silva',  color: 'bg-amber-500' },
-    { date: '21 Jul 2026', time: '10:45 AM', title: 'Lab Investigation',     user: 'Lab Technician',  color: 'bg-purple-500' },
-    { date: '22 Jul 2026', time: '02:00 PM', title: 'Report Drafted',        user: 'Dr. John Silva',  color: 'bg-slate-400' },
-  ];
+  const events = [];
   return (
     <motion.div key="timeline" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
       <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
@@ -405,9 +397,6 @@ const CaseDetails = () => {
               </h4>
               <div className="space-y-4">
                 {[
-                  { dot: 'bg-blue-500',    text: 'Document Uploaded',  time: '2 hours ago by Clerk' },
-                  { dot: 'bg-emerald-500', text: 'Doctor Assigned',     time: '1 day ago by Admin'  },
-                  { dot: 'bg-amber-500',   text: 'Case Registered',     time: '2 days ago by Clerk' },
                 ].map((a, i) => (
                   <div key={i} className="flex gap-3">
                     <div className={`w-2 h-2 rounded-full ${a.dot} mt-1.5 flex-shrink-0`} />

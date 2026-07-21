@@ -8,13 +8,7 @@ import {
 } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 
-const dummyExaminees = [
-  { id: 'EX-2026-0891', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', nic: '890123456V', name: 'Nimal Perera', gender: 'Male', age: 34, phone: '+94 71 234 5678', caseId: 'C2026-1045', doctor: 'Dr. John Silva', date: '20 Jul 2026', status: 'Pending Examination' },
-  { id: 'EX-2026-0890', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', nic: '921456789V', name: 'Kasun Fernando', gender: 'Male', age: 29, phone: '+94 77 987 6543', caseId: 'C2026-1043', doctor: 'Dr. Chandima', date: '18 Jul 2026', status: 'Active Case' },
-  { id: 'EX-2026-0889', photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', nic: '956789123V', name: 'Dilani Samarasinghe', gender: 'Female', age: 27, phone: '+94 76 543 2109', caseId: 'C2026-1039', doctor: 'Dr. N. Perera', date: '15 Jul 2026', status: 'Completed' },
-  { id: 'EX-2026-0888', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', nic: '841239876V', name: 'Sahan Wijesinghe', gender: 'Male', age: 41, phone: '+94 70 112 2334', caseId: 'C2026-1042', doctor: 'Dr. John Silva', date: '17 Jul 2026', status: 'Pending Examination' },
-  { id: 'EX-2026-0887', photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150', nic: '987654321V', name: 'Ruwan Jayasekara', gender: 'Male', age: 38, phone: '+94 71 888 9900', caseId: 'C2026-1041', doctor: 'Dr. N. Perera', date: '16 Jul 2026', status: 'Completed' },
-];
+const dummyExaminees = [];
 
 const StatCard = ({ title, count, icon: Icon, color, subtext }) => (
   <motion.div
@@ -69,10 +63,10 @@ const ExamineeList = () => {
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard title="Total Examinees" count="1,482" icon={Users} color="bg-blue-50 text-blue-600" subtext="+24 this week" />
-          <StatCard title="Today's Registrations" count="8" icon={UserCheck} color="bg-emerald-50 text-emerald-600" subtext="3 completed" />
-          <StatCard title="Active Cases" count="45" icon={Activity} color="bg-indigo-50 text-indigo-600" subtext="Assigned to 6 doctors" />
-          <StatCard title="Pending Exams" count="14" icon={Clock} color="bg-amber-50 text-amber-600" subtext="Requires JMO review" />
+          <StatCard title="Total Examinees" count="0" icon={Users} color="bg-blue-50 text-blue-600" subtext="+0 this week" />
+          <StatCard title="Today's Registrations" count="0" icon={UserCheck} color="bg-emerald-50 text-emerald-600" subtext="0 completed" />
+          <StatCard title="Active Cases" count="0" icon={Activity} color="bg-indigo-50 text-indigo-600" subtext="Assigned to 0 doctors" />
+          <StatCard title="Pending Exams" count="0" icon={Clock} color="bg-amber-50 text-amber-600" subtext="Requires JMO review" />
         </div>
 
         {/* Table & Filter Container */}
@@ -135,60 +129,68 @@ const ExamineeList = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {dummyExaminees.map((examinee, idx) => (
-                  <motion.tr
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    key={examinee.id}
-                    className="hover:bg-slate-50/80 transition-colors group"
-                  >
-                    <td className="px-6 py-4 flex items-center gap-3">
-                      <img src={examinee.photo} alt={examinee.name} className="w-10 h-10 rounded-full object-cover border border-slate-200" />
-                      <div>
-                        <div className="font-bold text-slate-800 text-sm">{examinee.name}</div>
-                        <div className="text-xs text-blue-600 font-semibold">{examinee.id}</div>
-                      </div>
+                {dummyExaminees.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" className="px-6 py-12 text-center text-slate-500">
+                      No examinees found.
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-slate-700">{examinee.nic}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{examinee.gender}, {examinee.age} yrs</td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{examinee.phone}</td>
-                    <td className="px-6 py-4">
-                      <Link to={`/cases/${examinee.caseId}`} className="text-sm font-semibold text-blue-600 hover:underline">
-                        {examinee.caseId}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{examinee.doctor}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold border ${statusColors[examinee.status]}`}>
-                        {examinee.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
-                        <Link to={`/examinees/${examinee.id}`} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View Profile">
-                          <Eye size={16} />
+                  </tr>
+                ) : (
+                  dummyExaminees.map((examinee, idx) => (
+                    <motion.tr
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      key={examinee.id}
+                      className="hover:bg-slate-50/80 transition-colors group"
+                    >
+                      <td className="px-6 py-4 flex items-center gap-3">
+                        <img src={examinee.photo} alt={examinee.name} className="w-10 h-10 rounded-full object-cover border border-slate-200" />
+                        <div>
+                          <div className="font-bold text-slate-800 text-sm">{examinee.name}</div>
+                          <div className="text-xs text-blue-600 font-semibold">{examinee.id}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-slate-700">{examinee.nic}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{examinee.gender}, {examinee.age} yrs</td>
+                      <td className="px-6 py-4 text-sm text-slate-500">{examinee.phone}</td>
+                      <td className="px-6 py-4">
+                        <Link to={`/cases/${examinee.caseId}`} className="text-sm font-semibold text-blue-600 hover:underline">
+                          {examinee.caseId}
                         </Link>
-                        <Link to={`/examinees/${examinee.id}/edit`} className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
-                          <Edit size={16} />
-                        </Link>
-                        <Link to={`/examinees/${examinee.id}/history`} className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Medical History">
-                          <FileText size={16} />
-                        </Link>
-                        <Link to={`/examinees/${examinee.id}/consent`} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Consent Forms">
-                          <FileCheck size={16} />
-                        </Link>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{examinee.doctor}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${statusColors[examinee.status]}`}>
+                          {examinee.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+                          <Link to={`/examinees/${examinee.id}`} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View Profile">
+                            <Eye size={16} />
+                          </Link>
+                          <Link to={`/examinees/${examinee.id}/edit`} className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
+                            <Edit size={16} />
+                          </Link>
+                          <Link to={`/examinees/${examinee.id}/history`} className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Medical History">
+                            <FileText size={16} />
+                          </Link>
+                          <Link to={`/examinees/${examinee.id}/consent`} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Consent Forms">
+                            <FileCheck size={16} />
+                          </Link>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
 
           {/* Pagination */}
           <div className="p-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-sm text-slate-500 font-medium">Showing 1 to 5 of 1,482 examinees</span>
+            <span className="text-sm text-slate-500 font-medium">Showing 0 to 0 of 0 examinees</span>
             <div className="flex items-center gap-1">
               <button className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:bg-slate-50"><ChevronLeft size={16} /></button>
               <button className="w-9 h-9 border border-blue-600 bg-blue-600 text-white rounded-lg text-sm font-bold">1</button>

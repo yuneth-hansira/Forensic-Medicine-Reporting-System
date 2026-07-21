@@ -15,12 +15,7 @@ const SEVERITIES     = [
   { label:'Critical', color:'#7c3aed', bg:'#f5f3ff' },
 ];
 
-/* Injury pins placed on body — {id,x,y,type,severity,desc} */
-const defaultPins = [
-  { id:1, x:49, y:12,  side:'front', type:'Laceration',  severity:'Severe',   desc:'5cm laceration on forehead' },
-  { id:2, x:35, y:32,  side:'front', type:'Contusion',   severity:'Moderate', desc:'Bruising on left arm' },
-  { id:3, x:60, y:55,  side:'front', type:'Abrasion',    severity:'Minor',    desc:'Road rash on right thigh' },
-];
+const defaultPins = [];
 
 const severityColor = { Minor:'#10b981', Moderate:'#f59e0b', Severe:'#ef4444', Critical:'#7c3aed' };
 
@@ -259,15 +254,7 @@ const InjuryDocumentation = () => {
 
               {/* Uploaded Photo Grid */}
               <div className="id-photo-grid">
-                {[1,2,3].map(i=>(
-                  <div key={i} className="id-photo-thumb">
-                    <div className="id-photo-placeholder">
-                      <Camera size={20} color="#94a3b8"/>
-                      <span style={{fontSize:'0.7rem',color:'#94a3b8'}}>Photo {i}</span>
-                    </div>
-                    <button className="id-photo-remove"><X size={11}/></button>
-                  </div>
-                ))}
+                {[]}
               </div>
             </div>
 

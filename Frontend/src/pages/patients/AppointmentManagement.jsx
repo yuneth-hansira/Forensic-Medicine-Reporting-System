@@ -11,15 +11,7 @@ import './AppointmentManagement.css';
 const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-const appointments = [
-  { id:'APT-001', patient:'Nimal Perera',     doctor:'Dr. John Silva',  type:'Medical Examination', date:'21 Jul 2026', time:'10:00 AM', status:'upcoming',   room:'Room 3A' },
-  { id:'APT-002', patient:'Kasun Fernando',   doctor:'Dr. Chandima',    type:'Injury Assessment',   date:'21 Jul 2026', time:'11:30 AM', status:'upcoming',   room:'Room 2B' },
-  { id:'APT-003', patient:'Anjali De Silva',  doctor:'Dr. N. Perera',   type:'Follow-Up',           date:'21 Jul 2026', time:'02:00 PM', status:'upcoming',   room:'Room 1A' },
-  { id:'APT-004', patient:'Sahan Wijesinghe', doctor:'Dr. John Silva',  type:'Toxicology Review',   date:'20 Jul 2026', time:'09:00 AM', status:'completed',  room:'Lab' },
-  { id:'APT-005', patient:'Ruwan Jayasekara', doctor:'Dr. Chandima',    type:'Court Report Review', date:'20 Jul 2026', time:'03:00 PM', status:'completed',  room:'Room 3A' },
-  { id:'APT-006', patient:'Priya Ranasinghe', doctor:'Dr. N. Perera',   type:'Postmortem',          date:'19 Jul 2026', time:'08:30 AM', status:'completed',  room:'PM Room' },
-  { id:'APT-007', patient:'Amali Kumari',     doctor:'Dr. John Silva',  type:'Medical Examination', date:'22 Jul 2026', time:'10:00 AM', status:'scheduled',  room:'Room 2A' },
-];
+const appointments = [];
 
 const statusCls = { upcoming:'pm-badge-pending', completed:'pm-badge-completed', scheduled:'pm-badge-in-progress', cancelled:'pm-badge-closed' };
 
@@ -93,9 +85,9 @@ const AppointmentManagement = () => {
             <div className="am-today-summary">
               <h4 style={{margin:'0 0 0.75rem',fontSize:'0.875rem',fontWeight:700,color:'#0f172a'}}>Today's Summary</h4>
               {[
-                {label:'Total Appointments', value:3, color:'#2563eb'},
+                {label:'Total Appointments', value:0, color:'#2563eb'},
                 {label:'Completed', value:0, color:'#10b981'},
-                {label:'Upcoming', value:3, color:'#f59e0b'},
+                {label:'Upcoming', value:0, color:'#f59e0b'},
               ].map((s,i)=>(
                 <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.4rem 0',borderBottom:'1px solid #f1f5f9',fontSize:'0.82rem'}}>
                   <span style={{color:'#64748b'}}>{s.label}</span>

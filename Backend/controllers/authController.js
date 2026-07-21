@@ -93,3 +93,50 @@ exports.departmentLogin = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+exports.register = async (req, res) => {
+    const { username, password, role } = req.body;
+
+    try {
+        if (!username || !password) {
+            return res.status(400).json({ message: 'Username and password are required' });
+        }
+
+        const [existing] = await pool.query('SELECT * FROM user WHERE Username = ?', [username]);
+        if (existing.length > 0) {
+            return res.status(400).json({ message: 'Username already exists' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const connection = await pool.getConnection();
+        await connection.beginTransaction();
+
+        try {
+            const [userResult] = await connection.query(
+                'INSERT INTO user (Username, Password_Hash, Role, Access_Level) VALUES (?, ?, ?, ?)',
+                [username, hashedPassword, role || 'User', 'Standard']
+            );
+            const userId = userResult.insertId;
+
+            if (role === 'Doctor') {
+                await connection.query(
+                    'INSERT INTO doctor (User_ID, Name) VALUES (?, ?)',
+                    [userId, username]
+                );
+            }
+
+            await connection.commit();
+            res.status(201).json({ message: 'User registered successfully' });
+        } catch (err) {
+            await connection.rollback();
+            throw err;
+        } finally {
+            connection.release();
+        }
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};

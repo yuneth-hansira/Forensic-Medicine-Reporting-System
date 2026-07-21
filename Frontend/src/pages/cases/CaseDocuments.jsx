@@ -4,14 +4,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, UploadCloud, Search, Filter, FileText, Image as ImageIcon, File, Download, Trash2, Eye } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 
-const documents = [
-  { id: 1, name: 'Police_Referral_PR2026.pdf', type: 'PDF', category: 'Police Documents', size: '2.4 MB', date: '20 Jul 2026', user: 'Admin' },
-  { id: 2, name: 'Initial_Examination_Notes.pdf', type: 'PDF', category: 'Reports', size: '1.1 MB', date: '21 Jul 2026', user: 'Dr. John Silva' },
-  { id: 3, name: 'Laceration_Forehead_1.jpg', type: 'Image', category: 'Medical Images', size: '4.5 MB', date: '21 Jul 2026', user: 'Dr. John Silva' },
-  { id: 4, name: 'Laceration_Forehead_2.jpg', type: 'Image', category: 'Medical Images', size: '3.8 MB', date: '21 Jul 2026', user: 'Dr. John Silva' },
-  { id: 5, name: 'Patient_Consent_Form.pdf', type: 'PDF', category: 'Consent Forms', size: '0.8 MB', date: '20 Jul 2026', user: 'Admin' },
-  { id: 6, name: 'Blood_Test_Request.pdf', type: 'PDF', category: 'Referral', size: '1.5 MB', date: '21 Jul 2026', user: 'Dr. John Silva' },
-];
+const documents = [];
 
 const getIcon = (type) => {
   if (type === 'PDF') return <FileText size={32} className="text-red-500" />;
@@ -80,7 +73,13 @@ const CaseDocuments = () => {
         </div>
 
         {/* Document Grid/List */}
-        {view === 'grid' ? (
+        {documents.length === 0 ? (
+          <div className="bg-white rounded-[20px] p-12 shadow-sm border border-slate-200/60 text-center flex flex-col items-center">
+            <FileText size={48} className="text-slate-200 mb-4" />
+            <h3 className="text-lg font-bold text-slate-700">No documents found</h3>
+            <p className="text-slate-500 mt-1">There are no documents uploaded for this case yet.</p>
+          </div>
+        ) : view === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {documents.map((doc, idx) => (
               <motion.div 

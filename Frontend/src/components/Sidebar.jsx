@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { 
   Home, Users, FolderOpen, ShieldAlert, Activity, 
   FileText, Shield, Gavel, Users2, Building2, Clock,
   Settings, UserCircle, LogOut, Scale,
   List, UserPlus, Calendar, AlertCircle, BarChart2, FileCheck
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 
 // ClipboardList fallback using FileText alias
@@ -47,6 +47,19 @@ const navItems = [
 
 const Sidebar = ({ isOpen }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const navContainerRef = useRef(null);
+
+  useEffect(() => {
+    const savedScrollPos = sessionStorage.getItem('sidebarScrollPos');
+    if (savedScrollPos && navContainerRef.current) {
+      navContainerRef.current.scrollTop = parseInt(savedScrollPos, 10);
+    }
+  }, []);
+
+  const handleScroll = (e) => {
+    sessionStorage.setItem('sidebarScrollPos', e.target.scrollTop);
+  };
 
   const handleNavigation = (path) => {
     if (path === '/logout') {
@@ -56,6 +69,12 @@ const Sidebar = ({ isOpen }) => {
     } else {
       navigate(path);
     }
+  };
+
+  const isActive = (path) => {
+    if (path === '/dashboard' && location.pathname === '/dashboard') return true;
+    if (path !== '/dashboard' && location.pathname.startsWith(path)) return true;
+    return false;
   };
 
   return (
@@ -68,8 +87,8 @@ const Sidebar = ({ isOpen }) => {
         </div>
       </div>
 
-      <div className="sidebar-nav-container">
-        <div className="nav-item active dashboard-btn" onClick={() => handleNavigation('/dashboard')}>
+      <div className="sidebar-nav-container" ref={navContainerRef} onScroll={handleScroll}>
+        <div className={`nav-item dashboard-btn ${isActive('/dashboard') ? 'active' : ''}`} onClick={() => handleNavigation('/dashboard')}>
           <Home size={20} />
           <span>Dashboard</span>
         </div>
@@ -81,7 +100,7 @@ const Sidebar = ({ isOpen }) => {
               {group.items.map((item, itemIdx) => (
                 <li 
                   key={itemIdx} 
-                  className={`nav-item ${item.action ? 'action-item' : ''}`}
+                  className={`nav-item ${item.action ? 'action-item' : ''} ${isActive(item.path) ? 'active' : ''}`}
                   onClick={() => handleNavigation(item.path)}
                 >
                   <item.icon size={20} className="nav-icon" />

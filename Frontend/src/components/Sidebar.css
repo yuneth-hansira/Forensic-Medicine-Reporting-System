@@ -4,16 +4,16 @@
   color: #f8fafc;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, width 0.3s ease;
+  transition: width 0.3s ease, margin-left 0.3s ease;
   height: 100vh;
   flex-shrink: 0;
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 100;
+  overflow: hidden;
 }
 
 .sidebar.closed {
   width: 0;
-  transform: translateX(-100%);
 }
 
 .sidebar-header {
@@ -58,7 +58,8 @@
 }
 
 .dashboard-btn {
-  background-color: #2563eb;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 0.8rem 1rem;
   display: flex;
@@ -67,10 +68,21 @@
   font-weight: 500;
   margin-bottom: 1.5rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  color: #cbd5e1;
 }
 
 .dashboard-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.dashboard-btn.active {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.nav-item.dashboard-btn.active:hover {
   background-color: #1d4ed8;
 }
 
@@ -111,12 +123,21 @@
   color: #ffffff;
 }
 
+.nav-item.active {
+  background-color: rgba(96, 165, 250, 0.1);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 0 #60a5fa;
+  border-radius: 0 8px 8px 0;
+}
+
 .nav-icon {
   color: #94a3b8;
   transition: color 0.2s;
 }
 
-.nav-item:hover .nav-icon {
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon {
   color: #60a5fa;
 }
 

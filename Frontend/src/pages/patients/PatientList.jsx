@@ -7,18 +7,7 @@ import {
 } from 'lucide-react';
 import '../patients/patients.css';
 
-const allPatients = [
-  { id:'PT-2026-1045',name:'Nimal Perera',     age:34,gender:'Male',  nic:'890123456V',  caseType:'Medico-Legal', doctor:'Dr. John Silva', status:'active',      date:'20 Jul 2026',phone:'0712345678' },
-  { id:'PT-2026-1044',name:'Kasun Fernando',   age:28,gender:'Male',  nic:'980234567V',  caseType:'Injury',       doctor:'Dr. Chandima',   status:'pending',     date:'20 Jul 2026',phone:'0723456789' },
-  { id:'PT-2026-1043',name:'Anjali De Silva',  age:45,gender:'Female',nic:'791345678V',  caseType:'Postmortem',   doctor:'Dr. N. Perera',  status:'completed',   date:'19 Jul 2026',phone:'0734567890' },
-  { id:'PT-2026-1042',name:'Sahan Wijesinghe', age:52,gender:'Male',  nic:'740456789V',  caseType:'Toxicology',   doctor:'Dr. John Silva', status:'in-progress', date:'19 Jul 2026',phone:'0745678901' },
-  { id:'PT-2026-1041',name:'Ruwan Jayasekara', age:38,gender:'Male',  nic:'880567890V',  caseType:'Medico-Legal', doctor:'Dr. Chandima',   status:'completed',   date:'18 Jul 2026',phone:'0756789012' },
-  { id:'PT-2026-1040',name:'Priya Ranasinghe', age:29,gender:'Female',nic:'970678901V',  caseType:'Injury',       doctor:'Dr. N. Perera',  status:'active',      date:'18 Jul 2026',phone:'0767890123' },
-  { id:'PT-2026-1039',name:'Amali Kumari',     age:36,gender:'Female',nic:'900789012V',  caseType:'Medico-Legal', doctor:'Dr. John Silva', status:'pending',     date:'17 Jul 2026',phone:'0778901234' },
-  { id:'PT-2026-1038',name:'Chathura Bandara', age:41,gender:'Male',  nic:'850890123V',  caseType:'Postmortem',   doctor:'Dr. Chandima',   status:'completed',   date:'17 Jul 2026',phone:'0789012345' },
-  { id:'PT-2026-1037',name:'Dilnoza Perera',   age:23,gender:'Female',nic:'030901234V',  caseType:'Toxicology',   doctor:'Dr. N. Perera',  status:'active',      date:'16 Jul 2026',phone:'0790123456' },
-  { id:'PT-2026-1036',name:'Janaka Silva',     age:55,gender:'Male',  nic:'710012345V',  caseType:'Medico-Legal', doctor:'Dr. John Silva', status:'closed',      date:'16 Jul 2026',phone:'0701234567' },
-];
+const allPatients = [];
 
 const statusMap = {
   active:       { label:'Active',       cls:'pm-badge-active' },

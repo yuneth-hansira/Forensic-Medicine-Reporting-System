@@ -51,12 +51,17 @@ exports.getDeceasedById = async (req, res) => {
 // @desc    Create a deceased record
 // @route   POST /api/deceased
 exports.createDeceased = async (req, res) => {
-    const { Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type } = req.body;
+    let { Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type } = req.body;
+    
+    // Sanitize falsy values (like empty strings or undefined) to null for optional integer fields
+    Hospital_ID = Hospital_ID || null;
+    Ward_ID = Ward_ID || null;
+    Age = Age || null;
     
     try {
         const [result] = await pool.query(
             'INSERT INTO Deceased (Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type]
+            [Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death || null, Place_Of_Death, Death_Type]
         );
         
         if (req.user) {
@@ -69,19 +74,27 @@ exports.createDeceased = async (req, res) => {
         res.status(201).json({ message: 'Deceased created successfully', deceasedId: result.insertId });
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server error');
+        if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW_1') {
+            return res.status(400).json({ message: 'Invalid Case ID. The specified Case does not exist.' });
+        }
+        res.status(500).json({ message: 'Server error: ' + err.message });
     }
 };
 
 // @desc    Update a deceased record
 // @route   PUT /api/deceased/:id
 exports.updateDeceased = async (req, res) => {
-    const { Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type } = req.body;
+    let { Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type } = req.body;
     
+    // Sanitize falsy values (like empty strings or undefined) to null for optional integer fields
+    Hospital_ID = Hospital_ID || null;
+    Ward_ID = Ward_ID || null;
+    Age = Age || null;
+
     try {
         const [result] = await pool.query(
             'UPDATE Deceased SET Case_ID = ?, Hospital_ID = ?, Ward_ID = ?, Full_Name = ?, Sex = ?, Age = ?, BHT_No = ?, Date_Of_Death = ?, Place_Of_Death = ?, Death_Type = ? WHERE Deceased_ID = ?',
-            [Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type, req.params.id]
+            [Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death || null, Place_Of_Death, Death_Type, req.params.id]
         );
         
         if (result.affectedRows === 0) {
@@ -96,6 +109,33 @@ exports.updateDeceased = async (req, res) => {
         }
         
         res.json({ message: 'Deceased updated successfully' });
+    } catch (err) {
+        console.error(err.message);
+        if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW_1') {
+            return res.status(400).json({ message: 'Invalid Case ID. The specified Case does not exist.' });
+        }
+        res.status(500).json({ message: 'Server error: ' + err.message });
+    }
+};
+
+// @desc    Delete a deceased record
+// @route   DELETE /api/deceased/:id
+exports.deleteDeceased = async (req, res) => {
+    try {
+        const [result] = await pool.query('DELETE FROM Deceased WHERE Deceased_ID = ?', [req.params.id]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Deceased not found' });
+        }
+        
+        if (req.user) {
+            await pool.query(
+                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
+                [req.user.id, 'Delete Deceased', 'Deceased']
+            );
+        }
+        
+        res.json({ message: 'Deceased deleted successfully' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

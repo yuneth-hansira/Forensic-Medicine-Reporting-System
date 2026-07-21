@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import PlaceholderPage from './pages/PlaceholderPage';
 
 // Auth & Core
 import Login        from './components/Login';
-import LandingPage  from './pages/LandingPage';
+import Register     from './components/Register';
 import Dashboard    from './pages/Dashboard';
 
 // Patient Management
@@ -34,6 +35,9 @@ import ExamineeProfile  from './pages/examinees/ExamineeProfile';
 import MedicalHistory   from './pages/examinees/MedicalHistory';
 import ConsentForms     from './pages/examinees/ConsentForms';
 
+import DeceasedList     from './pages/admin/DeceasedList';
+import UserProfile      from './pages/UserProfile';
+
 function App() {
   return (
     <Router>
@@ -41,7 +45,7 @@ function App() {
         <Routes>
           {/* ── Auth ── */}
           <Route path="/"     element={<Login />} />
-          <Route path="/home" element={<LandingPage />} />
+          <Route path="/register" element={<Register />} />
 
           {/* ── Main Dashboard ── */}
           <Route path="/dashboard" element={<Dashboard />} />
@@ -77,6 +81,13 @@ function App() {
           <Route path="/examinees/:id/history"    element={<MedicalHistory />} />
           <Route path="/examinees/:id/consent"    element={<ConsentForms />} />
 
+          {/* ── Administration & Other ────────────────────────── */}
+          <Route path="/deceased"                 element={<DeceasedList />} />
+          <Route path="/clinical-findings"        element={<PlaceholderPage title="Clinical Findings" />} />
+          <Route path="/doctors"                  element={<PlaceholderPage title="Doctor Directory" />} />
+          <Route path="/settings"                 element={<PlaceholderPage title="System Settings" />} />
+          <Route path="/profile"                  element={<UserProfile />} />
+          
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

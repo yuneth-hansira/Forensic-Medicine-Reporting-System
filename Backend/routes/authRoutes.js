@@ -12,4 +12,9 @@ router.post('/login', authController.login);
 // @access  Public
 router.post('/department-login', authController.departmentLogin);
 
+// @route   POST api/auth/register
+// @desc    Register a new user
+// @access  Public
+router.post('/register', authController.register);
+
 module.exports = router;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, Folder, Clock, CheckCircle, 
   FlaskConical, FileText, Building2, Calendar,
@@ -9,31 +9,59 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 import DashboardLayout from '../layouts/DashboardLayout';
+import userService from '../services/userService';
 import './Dashboard.css';
 
 const monthlyData = [
-  { name: 'Jan', cases: 30 },
-  { name: 'Feb', cases: 40 },
-  { name: 'Mar', cases: 55 },
-  { name: 'Apr', cases: 80 },
-  { name: 'May', cases: 60 },
-  { name: 'Jun', cases: 65 },
-  { name: 'Jul', cases: 82 },
-  { name: 'Aug', cases: 60 },
-  { name: 'Sep', cases: 55 },
-  { name: 'Oct', cases: 65 },
-  { name: 'Nov', cases: 50 },
-  { name: 'Dec', cases: 45 },
+  { name: 'Jan', cases: 0 },
+  { name: 'Feb', cases: 0 },
+  { name: 'Mar', cases: 0 },
+  { name: 'Apr', cases: 0 },
+  { name: 'May', cases: 0 },
+  { name: 'Jun', cases: 0 },
+  { name: 'Jul', cases: 0 },
+  { name: 'Aug', cases: 0 },
+  { name: 'Sep', cases: 0 },
+  { name: 'Oct', cases: 0 },
+  { name: 'Nov', cases: 0 },
+  { name: 'Dec', cases: 0 },
 ];
 
 const pieData = [
-  { name: 'Pending', value: 28, color: '#3b82f6' },
-  { name: 'In Progress', value: 112, color: '#f59e0b' },
-  { name: 'Completed', value: 296, color: '#8b5cf6' },
-  { name: 'Court Submitted', value: 24, color: '#10b981' },
+  { name: 'Pending', value: 0, color: '#3b82f6' },
+  { name: 'In Progress', value: 0, color: '#f59e0b' },
+  { name: 'Completed', value: 0, color: '#8b5cf6' },
+  { name: 'Court Submitted', value: 0, color: '#10b981' },
 ];
 
 const Dashboard = () => {
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [profileName, setProfileName] = useState('...');
+  const [profileRole, setProfileRole] = useState('...');
+
+  useEffect(() => {
+    // Clock
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+    
+    // Fetch Profile
+    userService.getProfile().then(data => {
+      setProfileName(data.Name || data.Username || 'Unknown User');
+      if (data.Designation && data.Role) {
+         setProfileRole(`${data.Designation} | ${data.Role}`);
+      } else {
+         setProfileRole(data.Designation || data.Role || 'Staff Member');
+      }
+    }).catch(err => console.error('Failed to load profile:', err));
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDate = (date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const formatDay = (date) => date.toLocaleDateString('en-GB', { weekday: 'long' });
+  const formatTime = (date) => date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
   return (
     <DashboardLayout>
       <div className="dashboard-content">
@@ -41,12 +69,14 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <div className="welcome-section">
           <div className="welcome-text">
-            <h2>Welcome back, <span className="highlight">Dr. John Silva</span></h2>
-            <p>Judicial Medical Officer | Forensic Medicine Department</p>
+            <h2>Welcome back, <span className="highlight">{profileName}</span></h2>
+            <p>{profileRole}</p>
           </div>
           <div className="date-display">
             <Calendar size={18} className="date-icon" />
-            <span className="date-text"><strong>21 July 2026</strong>, Monday</span>
+            <span className="date-text">
+              <strong>{formatDate(currentDateTime)}</strong>, {formatDay(currentDateTime)} • {formatTime(currentDateTime)}
+            </span>
           </div>
         </div>
 
@@ -57,9 +87,9 @@ const Dashboard = () => {
               <Users size={24} className="stat-icon" />
               <span className="stat-title">Total Patients</span>
             </div>
-            <div className="stat-value">1,245</div>
-            <div className="stat-footer positive">
-              <span>+12 today</span>
+            <div className="stat-value">0</div>
+            <div className="stat-footer neutral">
+              <span>0 today</span>
               <Activity size={14} />
             </div>
           </div>
@@ -69,9 +99,9 @@ const Dashboard = () => {
               <Folder size={24} className="stat-icon" />
               <span className="stat-title">Active Cases</span>
             </div>
-            <div className="stat-value">324</div>
-            <div className="stat-footer positive">
-              <span>+8 today</span>
+            <div className="stat-value">0</div>
+            <div className="stat-footer neutral">
+              <span>0 today</span>
               <Activity size={14} />
             </div>
           </div>
@@ -81,9 +111,9 @@ const Dashboard = () => {
               <Clock size={24} className="stat-icon" />
               <span className="stat-title">Pending Cases</span>
             </div>
-            <div className="stat-value">28</div>
-            <div className="stat-footer negative">
-              <span>-3 today</span>
+            <div className="stat-value">0</div>
+            <div className="stat-footer neutral">
+              <span>0 today</span>
               <Activity size={14} />
             </div>
           </div>
@@ -93,9 +123,9 @@ const Dashboard = () => {
               <CheckCircle size={24} className="stat-icon" />
               <span className="stat-title">Completed Cases</span>
             </div>
-            <div className="stat-value">296</div>
-            <div className="stat-footer positive">
-              <span>+15 today</span>
+            <div className="stat-value">0</div>
+            <div className="stat-footer neutral">
+              <span>0 today</span>
               <Activity size={14} />
             </div>
           </div>
@@ -105,9 +135,9 @@ const Dashboard = () => {
               <FlaskConical size={24} className="stat-icon" />
               <span className="stat-title">Evidence Items</span>
             </div>
-            <div className="stat-value">152</div>
-            <div className="stat-footer positive">
-              <span>+6 today</span>
+            <div className="stat-value">0</div>
+            <div className="stat-footer neutral">
+              <span>0 today</span>
               <Activity size={14} />
             </div>
           </div>
@@ -117,9 +147,9 @@ const Dashboard = () => {
               <FileText size={24} className="stat-icon" />
               <span className="stat-title">Reports Generated</span>
             </div>
-            <div className="stat-value">91</div>
-            <div className="stat-footer positive">
-              <span>+10 today</span>
+            <div className="stat-value">0</div>
+            <div className="stat-footer neutral">
+              <span>0 today</span>
               <Activity size={14} />
             </div>
           </div>
@@ -201,7 +231,7 @@ const Dashboard = () => {
                 </PieChart>
               </ResponsiveContainer>
               <div className="pie-center-text">
-                <span className="pie-total">324</span>
+                <span className="pie-total">0</span>
                 <span className="pie-label">Total Cases</span>
               </div>
             </div>
@@ -211,7 +241,7 @@ const Dashboard = () => {
                   <div className="legend-indicator" style={{ backgroundColor: item.color }}></div>
                   <span className="legend-name">{item.name}</span>
                   <span className="legend-value">{item.value} 
-                    <span className="legend-percent">({((item.value/460)*100).toFixed(1)}%)</span>
+                    <span className="legend-percent">(0%)</span>
                   </span>
                 </div>
               ))}
@@ -267,44 +297,7 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>C2026-1045</td>
-                    <td>Nimal Perera</td>
-                    <td>Dr. John Silva</td>
-                    <td><span className="badge badge-warning">Pending</span></td>
-                    <td>20/07/2026</td>
-                    <td><button className="icon-btn"><Eye size={16}/></button></td>
-                  </tr>
-                  <tr>
-                    <td>C2026-1044</td>
-                    <td>Kasun Fernando</td>
-                    <td>Dr. Chandima</td>
-                    <td><span className="badge badge-info">In Progress</span></td>
-                    <td>20/07/2026</td>
-                    <td><button className="icon-btn"><Eye size={16}/></button></td>
-                  </tr>
-                  <tr>
-                    <td>C2026-1043</td>
-                    <td>Anjali De Silva</td>
-                    <td>Dr. N. Perera</td>
-                    <td><span className="badge badge-success">Completed</span></td>
-                    <td>19/07/2026</td>
-                    <td><button className="icon-btn"><Eye size={16}/></button></td>
-                  </tr>
-                  <tr>
-                    <td>C2026-1042</td>
-                    <td>Sahan Wijesinghe</td>
-                    <td>Dr. John Silva</td>
-                    <td><span className="badge badge-warning">Pending</span></td>
-                    <td>19/07/2026</td>
-                    <td><button className="icon-btn"><Eye size={16}/></button></td>
-                  </tr>
-                  <tr>
-                    <td>C2026-1041</td>
-                    <td>Ruwan Jayasekara</td>
-                    <td>Dr. Chandima</td>
-                    <td><span className="badge badge-success">Completed</span></td>
-                    <td>18/07/2026</td>
-                    <td><button className="icon-btn"><Eye size={16}/></button></td>
+                    <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No recent cases</td>
                   </tr>
                 </tbody>
               </table>
@@ -329,34 +322,7 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>PR2026-089</td>
-                    <td>Kandy PS</td>
-                    <td>Medico-legal Examination</td>
-                    <td><span className="badge badge-light-green">New</span></td>
-                  </tr>
-                  <tr>
-                    <td>PR2026-088</td>
-                    <td>Matale PS</td>
-                    <td>Postmortem Request</td>
-                    <td><span className="badge badge-info">In Progress</span></td>
-                  </tr>
-                  <tr>
-                    <td>PR2026-087</td>
-                    <td>Peradeniya PS</td>
-                    <td>Injury Examination</td>
-                    <td><span className="badge badge-light-green">New</span></td>
-                  </tr>
-                  <tr>
-                    <td>PR2026-086</td>
-                    <td>Gampola PS</td>
-                    <td>Postmortem Request</td>
-                    <td><span className="badge badge-light-blue">Completed</span></td>
-                  </tr>
-                  <tr>
-                    <td>PR2026-085</td>
-                    <td>Kegalle PS</td>
-                    <td>Medico-legal Examination</td>
-                    <td><span className="badge badge-info">In Progress</span></td>
+                    <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No recent requests</td>
                   </tr>
                 </tbody>
               </table>
@@ -370,41 +336,7 @@ const Dashboard = () => {
               <a href="#" className="view-all">View all</a>
             </div>
             <div className="schedule-list">
-              <div className="schedule-item">
-                <div className="time-badge blue">10:00 AM</div>
-                <div className="schedule-info">
-                  <span className="schedule-title">Case ID: C2026-1046</span>
-                  <span className="schedule-desc">Patient: Dinesh Madushan</span>
-                </div>
-                <span className="tag blue">Medical Examination</span>
-              </div>
-              
-              <div className="schedule-item">
-                <div className="time-badge purple">11:30 AM</div>
-                <div className="schedule-info">
-                  <span className="schedule-title">Case ID: C2026-1047</span>
-                  <span className="schedule-desc">Patient: Chamari Fernando</span>
-                </div>
-                <span className="tag purple">Injury Examination</span>
-              </div>
-
-              <div className="schedule-item">
-                <div className="time-badge orange">02:00 PM</div>
-                <div className="schedule-info">
-                  <span className="schedule-title">Case ID: PM2026-0148</span>
-                  <span className="schedule-desc">Patient: Unknown</span>
-                </div>
-                <span className="tag orange">Postmortem</span>
-              </div>
-
-              <div className="schedule-item">
-                <div className="time-badge green">03:30 PM</div>
-                <div className="schedule-info">
-                  <span className="schedule-title">Case ID: C2026-1049</span>
-                  <span className="schedule-desc">Patient: Thilina Perera</span>
-                </div>
-                <span className="tag green">Medical Examination</span>
-              </div>
+              <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No upcoming examinations</div>
             </div>
           </div>
 
@@ -431,25 +363,7 @@ const Dashboard = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>EV2026-0152</td>
-                      <td>C2026-1045</td>
-                      <td>Blood Sample</td>
-                      <td><span className="badge badge-success">Collected</span></td>
-                      <td>Lab - Freezer 1</td>
-                    </tr>
-                    <tr>
-                      <td>EV2026-0151</td>
-                      <td>C2026-1044</td>
-                      <td>Clothing</td>
-                      <td><span className="badge badge-info">Stored</span></td>
-                      <td>Evidence Room A</td>
-                    </tr>
-                    <tr>
-                      <td>EV2026-0150</td>
-                      <td>C2026-1043</td>
-                      <td>Weapon</td>
-                      <td><span className="badge badge-success">Collected</span></td>
-                      <td>Evidence Room B</td>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No recent evidence</td>
                     </tr>
                   </tbody>
                 </table>
@@ -463,34 +377,7 @@ const Dashboard = () => {
                 <a href="#" className="view-all">View all</a>
               </div>
               <div className="notification-list">
-                <div className="notification-item">
-                  <div className="notif-icon green-bg"><CheckCircle size={16}/></div>
-                  <div className="notif-content">
-                    <p>New Police Request (PR2026-089) received from Kandy Police Station.</p>
-                  </div>
-                  <span className="notif-time">09:15 AM</span>
-                </div>
-                <div className="notification-item">
-                  <div className="notif-icon blue-bg"><UserPlus size={16}/></div>
-                  <div className="notif-content">
-                    <p>New patient (Nimal Perera) registered.</p>
-                  </div>
-                  <span className="notif-time">09:10 AM</span>
-                </div>
-                <div className="notification-item">
-                  <div className="notif-icon purple-bg"><FileText size={16}/></div>
-                  <div className="notif-content">
-                    <p>Court Report (CR2026-078) approved by Dr. John Silva.</p>
-                  </div>
-                  <span className="notif-time">08:45 AM</span>
-                </div>
-                <div className="notification-item">
-                  <div className="notif-icon orange-bg"><FlaskConical size={16}/></div>
-                  <div className="notif-content">
-                    <p>New evidence (EV2026-0152) added to case C2026-1045.</p>
-                  </div>
-                  <span className="notif-time">08:30 AM</span>
-                </div>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No new notifications</div>
               </div>
             </div>
 
@@ -501,38 +388,7 @@ const Dashboard = () => {
                 <a href="#" className="view-all">View all</a>
               </div>
               <div className="timeline">
-                <div className="timeline-item">
-                  <div className="timeline-time">09:10 AM</div>
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <h4>Patient Registered</h4>
-                    <p>Patient Nimal Perera registered by Clerk</p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-time">09:45 AM</div>
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <h4>Evidence Uploaded</h4>
-                    <p>Evidence EV2026-0152 uploaded to case C2026-1045</p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-time">10:20 AM</div>
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <h4>Report Generated</h4>
-                    <p>Postmortem Report PM2026-0147 generated</p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-time">11:30 AM</div>
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <h4>Case Updated</h4>
-                    <p>Case C2026-1044 status changed to In Progress</p>
-                  </div>
-                </div>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No recent activities</div>
               </div>
             </div>
 

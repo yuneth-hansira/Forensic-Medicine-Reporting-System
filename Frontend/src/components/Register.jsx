@@ -9,50 +9,47 @@ import {
   Dna, 
   Fingerprint, 
   Microscope,
-  ShieldCheck
+  ShieldCheck,
+  UserPlus
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { authService } from '../services/authService';
+import axios from 'axios';
 import './Login.css';
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('User');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
 
     try {
-      // Backend API call
-      const response = await authService.login(username, password);
-      console.log("Login success", response);
-      
-      if (!username || !password) {
-        throw new Error('Please enter username and password');
-      }
-      
-      console.log('Login attempt:', { username, rememberMe });
-      
-      // Navigate to dashboard on success
-      navigate('/dashboard');
-      
+      await axios.post('http://localhost:5000/api/auth/register', { username, password, role });
+      setSuccess('Account created successfully! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (err) {
-      setError(err.message || 'An error occurred during login');
+      setError(err.response?.data?.message || 'An error occurred during registration');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDepartmentLogin = async () => {
-    // Example handler for the secondary login option
-    console.log('Department login initiated');
   };
 
   return (
@@ -82,12 +79,12 @@ const Login = () => {
             <div className="brand-separator animate-fade-in delay-150"></div>
             
             <h2 className="animate-fade-in delay-200">
-              Accurate Data. Reliable Reports. <br/>
-              Justice Through <strong>Evidence.</strong>
+              Join the System. <br/>
+              Ensure <strong>Accountability.</strong>
             </h2>
             
             <p className="animate-fade-in delay-300">
-              A secure and efficient platform for managing forensic medicine reports, cases, and departmental data.
+              Create an account to securely access forensic medicine reports, manage cases, and handle departmental data.
             </p>
           </div>
 
@@ -101,13 +98,10 @@ const Login = () => {
           <div className="right-content">
             <div className="form-header animate-fade-in delay-100">
               <div className="form-header-icon">
-                <User size={40} />
-                <div className="badge">
-                  <Lock size={14} />
-                </div>
+                <UserPlus size={40} />
               </div>
-              <h2>Welcome Back</h2>
-              <p>Sign in to continue to Forensic Medicine <br/> Data Report System</p>
+              <h2>Create Account</h2>
+              <p>Sign up for the Forensic Medicine <br/> Data Report System</p>
             </div>
 
             {error && (
@@ -115,16 +109,36 @@ const Login = () => {
                 {error}
               </div>
             )}
+            
+            {success && (
+              <div style={{ color: '#10b981', backgroundColor: '#d1fae5', padding: '10px', borderRadius: '8px', marginBottom: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+                {success}
+              </div>
+            )}
 
             <form className="login-form animate-fade-in delay-200" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Role</label>
+                <div className="input-wrapper">
+                  <select 
+                    value={role} 
+                    onChange={(e) => setRole(e.target.value)}
+                  >
+                    <option value="User">User</option>
+                    <option value="Doctor">Doctor</option>
+                  </select>
+                </div>
+              </div>
+
               <div className="form-group">
                 <label>Username</label>
                 <div className="input-wrapper">
                   <input 
                     type="text" 
-                    placeholder="Enter your username"
+                    placeholder="Choose a username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -134,9 +148,10 @@ const Login = () => {
                 <div className="input-wrapper">
                   <input 
                     type={showPassword ? "text" : "password"} 
-                    placeholder="Enter your password"
+                    placeholder="Create a password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <button 
                     type="button" 
@@ -148,36 +163,31 @@ const Login = () => {
                 </div>
               </div>
 
-              <div className="form-options">
-                <label className="checkbox-wrapper">
+              <div className="form-group">
+                <label>Confirm Password</label>
+                <div className="input-wrapper">
                   <input 
-                    type="checkbox" 
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
+                    type={showPassword ? "text" : "password"} 
+                    placeholder="Confirm your password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
                   />
-                  Remember me
-                </label>
-                <a href="#" className="forgot-password">Forgot Password?</a>
+                </div>
               </div>
 
-              <button type="submit" className="btn-submit" disabled={loading}>
-                <Lock size={18} />
-                {loading ? 'Signing in...' : 'Sign In'}
+              <button type="submit" className="btn-submit" disabled={loading} style={{ marginTop: '1.5rem' }}>
+                <UserPlus size={18} />
+                {loading ? 'Creating Account...' : 'Sign Up'}
               </button>
-
+              
               <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.95rem' }}>
-                Don't have an account? <Link to="/register" style={{ color: '#2563eb', fontWeight: '500', textDecoration: 'none' }}>Sign up here</Link>
+                Already have an account? <Link to="/" style={{ color: '#2563eb', fontWeight: '500', textDecoration: 'none' }}>Sign in here</Link>
               </div>
 
-              <div className="divider">or</div>
-
-              <button type="button" className="btn-secondary" onClick={handleDepartmentLogin}>
-                <ShieldCheck size={20} />
-                Login with Department ID
-              </button>
             </form>
 
-            <div className="footer-text animate-fade-in delay-300">
+            <div className="footer-text animate-fade-in delay-300" style={{ marginTop: '1rem' }}>
               <Shield size={16} />
               Secure • Confidential • Authorized Access Only
             </div>
@@ -188,4 +198,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

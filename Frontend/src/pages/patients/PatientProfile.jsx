@@ -150,10 +150,6 @@ const PatientProfile = () => {
               </div>
               <div className="pm-timeline">
                 {[
-                  { date:'20 Jul 2026, 10:15 AM', title:'Patient Registered', desc:'Registered by Clerk — Kandy Teaching Hospital', color:'#2563eb' },
-                  { date:'20 Jul 2026, 11:00 AM', title:'Case Assigned',      desc:'Assigned to Dr. John Silva', color:'#8b5cf6' },
-                  { date:'20 Jul 2026, 02:30 PM', title:'Examination Scheduled', desc:'Medical Examination at 10:00 AM 21 Jul', color:'#f59e0b' },
-                  { date:'19 Jul 2026, 09:00 AM', title:'Police Request Received', desc:'Kandy PS — Medico-Legal Examination', color:'#ef4444' },
                 ].map((e,i) => (
                   <div key={i} className="pm-timeline-item">
                     <p className="pm-timeline-date">{e.date}</p>
@@ -174,10 +170,6 @@ const PatientProfile = () => {
             </div>
             <div className="pp-history-list">
               {[
-                { date:'2024-03-10', condition:'Hypertension',           treatment:'Amlodipine 5mg daily',      doctor:'Dr. Perera',    status:'ongoing' },
-                { date:'2023-08-22', condition:'Type 2 Diabetes',        treatment:'Metformin 500mg twice daily',doctor:'Dr. Fernando',  status:'ongoing' },
-                { date:'2022-01-15', condition:'Road Traffic Accident',   treatment:'Right arm fracture — ORIF',  doctor:'Dr. Silva',     status:'resolved' },
-                { date:'2020-06-30', condition:'Appendicitis',            treatment:'Laparoscopic appendectomy',  doctor:'Dr. Kumari',    status:'resolved' },
               ].map((h,i) => (
                 <div key={i} className="pp-history-item">
                   <div className="pp-history-icon">
@@ -211,9 +203,6 @@ const PatientProfile = () => {
               </thead>
               <tbody>
                 {[
-                  { id:'EX-2026-0312', type:'General Medico-Legal', doctor:'Dr. John Silva',   date:'21 Jul 2026, 10:00 AM', status:'scheduled' },
-                  { id:'EX-2026-0298', type:'Injury Assessment',    doctor:'Dr. Chandima',    date:'18 Jul 2026, 02:00 PM', status:'completed' },
-                  { id:'EX-2026-0281', type:'Psychiatric Evaluation',doctor:'Dr. N. Perera',  date:'15 Jul 2026, 11:30 AM', status:'completed' },
                 ].map((e,i) => (
                   <tr key={i}>
                     <td><code style={{color:'#2563eb',fontWeight:600,fontSize:'0.78rem'}}>{e.id}</code></td>
@@ -236,7 +225,7 @@ const PatientProfile = () => {
               <button className="pm-btn pm-btn-primary pm-btn-sm"><Plus size={14}/>Add {tab==='Documents'?'Document':'Report'}</button>
             </div>
             <div className="pp-doc-grid">
-              {[1,2,3].map(i => (
+              {[].map(i => (
                 <div key={i} className="pp-doc-card">
                   <FileText size={28} color="#2563eb"/>
                   <div className="pp-doc-info">
@@ -260,11 +249,6 @@ const PatientProfile = () => {
             </div>
             <div className="pm-timeline" style={{paddingLeft:'2rem'}}>
               {[
-                { date:'20 Jul 2026, 10:15 AM', title:'Patient Registered',         desc:'Nimal Perera registered by Clerk at Kandy Teaching Hospital',color:'blue' },
-                { date:'20 Jul 2026, 11:00 AM', title:'Case Assigned',              desc:'Case C2026-1045 assigned to Dr. John Silva',             color:'purple' },
-                { date:'20 Jul 2026, 12:00 PM', title:'Police Request Linked',       desc:'Request PR2026-089 from Kandy PS linked to this patient', color:'orange' },
-                { date:'20 Jul 2026, 02:30 PM', title:'Examination Scheduled',      desc:'General Medico-Legal exam at 10:00 AM 21 Jul 2026',       color:'green' },
-                { date:'19 Jul 2026, 09:00 AM', title:'Police Request Received',    desc:'Request received from Kandy Police Station',              color:'red' },
               ].map((e,i) => (
                 <div key={i} className="pm-timeline-item">
                   <p className="pm-timeline-date">{e.date}</p>

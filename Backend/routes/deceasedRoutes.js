@@ -10,5 +10,6 @@ router.get('/', deceasedController.getAllDeceased);
 router.get('/:id', deceasedController.getDeceasedById);
 router.post('/', deceasedController.createDeceased);
 router.put('/:id', deceasedController.updateDeceased);
+router.delete('/:id', deceasedController.deleteDeceased);
 
 module.exports = router;
