@@ -17,6 +17,23 @@ import MedicalReports        from './pages/patients/MedicalReports';
 import AppointmentManagement from './pages/patients/AppointmentManagement';
 import PatientAnalytics      from './pages/patients/PatientAnalytics';
 
+// Case Management
+import CaseDashboard from './pages/cases/CaseDashboard';
+import CaseList       from './pages/cases/CaseList';
+import NewCase        from './pages/cases/NewCase';
+import CaseDetails    from './pages/cases/CaseDetails';
+import AssignDoctor   from './pages/cases/AssignDoctor';
+import CaseTimeline   from './pages/cases/CaseTimeline';
+import CaseDocuments  from './pages/cases/CaseDocuments';
+import CloseCase      from './pages/cases/CloseCase';
+
+// Examinee Management
+import ExamineeList     from './pages/examinees/ExamineeList';
+import RegisterExaminee from './pages/examinees/RegisterExaminee';
+import ExamineeProfile  from './pages/examinees/ExamineeProfile';
+import MedicalHistory   from './pages/examinees/MedicalHistory';
+import ConsentForms     from './pages/examinees/ConsentForms';
+
 function App() {
   return (
     <Router>
@@ -30,35 +47,35 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
 
           {/* ── Patient Management ─────────────────────────── */}
-          {/* /patients          → Patient Module Dashboard      */}
           <Route path="/patients"                element={<PatientDashboard />} />
-
-          {/* /patients/list     → Searchable Patient Table      */}
           <Route path="/patients/list"           element={<PatientList />} />
-
-          {/* /patients/register → 7-Step Registration Form      */}
           <Route path="/patients/register"       element={<RegisterPatient />} />
-
-          {/* /patients/:id      → Patient Profile (hero card)   */}
           <Route path="/patients/:id"            element={<PatientProfile />} />
-
-          {/* /patients/:id/details → 9-Tab Detail Page         */}
           <Route path="/patients/:id/details"    element={<PatientDetails />} />
-
-          {/* /patients/:id/edit → Edit Form                     */}
           <Route path="/patients/:id/edit"       element={<RegisterPatient />} />
-
-          {/* /patients/:id/injuries → Injury Body Diagram       */}
           <Route path="/patients/:id/injuries"   element={<InjuryDocumentation />} />
-
-          {/* /patients/reports  → Medical Reports + PDF View    */}
           <Route path="/patients/reports"        element={<MedicalReports />} />
-
-          {/* /patients/appointments → Calendar + Appointment Mgmt */}
           <Route path="/patients/appointments"   element={<AppointmentManagement />} />
-
-          {/* /patients/analytics → Charts & KPI Analytics       */}
           <Route path="/patients/analytics"      element={<PatientAnalytics />} />
+
+          {/* ── Case Management ───────────────────────────── */}
+          <Route path="/cases"                    element={<CaseDashboard />} />
+          <Route path="/cases/list"              element={<CaseList />} />
+          <Route path="/cases/new"                element={<NewCase />} />
+          <Route path="/cases/:id"                element={<CaseDetails />} />
+          <Route path="/cases/:id/edit"           element={<NewCase />} />
+          <Route path="/cases/:id/assign"         element={<AssignDoctor />} />
+          <Route path="/cases/:id/timeline"       element={<CaseTimeline />} />
+          <Route path="/cases/:id/documents"      element={<CaseDocuments />} />
+          <Route path="/cases/:id/close"          element={<CloseCase />} />
+
+          {/* ── Examinee Management ────────────────────────── */}
+          <Route path="/examinees"                element={<ExamineeList />} />
+          <Route path="/examinees/new"            element={<RegisterExaminee />} />
+          <Route path="/examinees/:id"            element={<ExamineeProfile />} />
+          <Route path="/examinees/:id/edit"       element={<RegisterExaminee />} />
+          <Route path="/examinees/:id/history"    element={<MedicalHistory />} />
+          <Route path="/examinees/:id/consent"    element={<ConsentForms />} />
 
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -69,4 +86,3 @@ function App() {
 }
 
 export default App;
-

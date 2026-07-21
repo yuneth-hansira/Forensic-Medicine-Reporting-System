@@ -1,9 +1,9 @@
 import React from 'react';
 import { 
   Home, Users, FolderOpen, ShieldAlert, Activity, 
-  FileText, Shield, Gavel, Users2, Building2, 
+  FileText, Shield, Gavel, Users2, Building2, Clock,
   Settings, UserCircle, LogOut, Scale,
-  List, UserPlus, Calendar, AlertCircle, BarChart2
+  List, UserPlus, Calendar, AlertCircle, BarChart2, FileCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
@@ -12,25 +12,31 @@ import './Sidebar.css';
 const ClipboardList = FileText;
 
 const navItems = [
-  { section: 'MAIN', items: [
+  { section: 'CASE MANAGEMENT', items: [
+    { name: 'Case Dashboard',      icon: Activity,     path: '/cases' },
+    { name: 'All Cases',           icon: FolderOpen,   path: '/cases/list' },
+    { name: 'New Case',            icon: FileText,     path: '/cases/new' },
+    { name: 'Timeline',            icon: Clock,        path: '/cases/C2026-1045/timeline' },
+    { name: 'Documents',           icon: ClipboardList,path: '/cases/C2026-1045/documents' },
+  ]},
+  { section: 'EXAMINEE MANAGEMENT', items: [
+    { name: 'Examinee List',       icon: Users,        path: '/examinees' },
+    { name: 'Register Examinee',   icon: UserPlus,     path: '/examinees/new' },
+    { name: 'Medical History',     icon: FileText,     path: '/examinees/EX-2026-0891/history' },
+    { name: 'Consent Forms',       icon: FileCheck,    path: '/examinees/EX-2026-0891/consent' },
+  ]},
+  { section: 'PATIENT MANAGEMENT', items: [
     { name: 'Patients',            icon: Users,      path: '/patients' },
-    { name: 'Patient List',        icon: List,       path: '/patients/list' },
     { name: 'Register Patient',    icon: UserPlus,   path: '/patients/register' },
-    { name: 'Cases',               icon: FolderOpen, path: '/cases' },
-    { name: 'Police Requests',     icon: ShieldAlert,path: '/police-requests' },
-    { name: 'Examinations',        icon: Activity,   path: '/examinations' },
-    { name: 'Postmortem Reports',  icon: FileText,   path: '/postmortems' },
-    { name: 'Evidence',            icon: Shield,     path: '/evidence' },
-    { name: 'Court Reports',       icon: Gavel,      path: '/court-reports' },
     { name: 'Appointments',        icon: Calendar,   path: '/patients/appointments' },
     { name: 'Medical Reports',     icon: ClipboardList, path: '/patients/reports' },
     { name: 'Injury Docs',         icon: AlertCircle,path: '/patients/PT-2026-1045/injuries' },
     { name: 'Analytics',           icon: BarChart2,  path: '/patients/analytics' },
   ]},
   { section: 'ADMINISTRATION', items: [
-    { name: 'Staff Management', icon: Users2,    path: '/staff' },
-    { name: 'Departments',      icon: Building2, path: '/departments' },
-    { name: 'Reports',          icon: FileText,  path: '/reports' },
+    { name: 'Deceased',         icon: Shield,    path: '/deceased' },
+    { name: 'Clinical Findings',icon: Activity,  path: '/clinical-findings' },
+    { name: 'Doctors',          icon: Users2,    path: '/doctors' },
     { name: 'Settings',         icon: Settings,  path: '/settings' },
   ]},
   { section: 'OTHER', items: [
