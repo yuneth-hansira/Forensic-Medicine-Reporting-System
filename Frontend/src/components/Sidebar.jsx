@@ -33,8 +33,15 @@ const navItems = [
     { name: 'Injury Docs',         icon: AlertCircle,path: '/patients/PT-2026-1045/injuries' },
     { name: 'Analytics',           icon: BarChart2,  path: '/patients/analytics' },
   ]},
+  { section: 'DECEASED MANAGEMENT', items: [
+    { name: 'Deceased List',       icon: Shield,       path: '/deceased' },
+    { name: 'Register Deceased',   icon: UserPlus,     path: '/deceased/new' },
+    { name: 'Body Identification', icon: ShieldAlert,  path: '/deceased/C2026-1045/identification' },
+    { name: 'Next of Kin',         icon: Users,        path: '/deceased/C2026-1045/next-of-kin' },
+    { name: 'Hospital Info',       icon: Activity,     path: '/deceased/C2026-1045/hospital' },
+    { name: 'Body Release',        icon: FileCheck,    path: '/deceased/C2026-1045/release' },
+  ]},
   { section: 'ADMINISTRATION', items: [
-    { name: 'Deceased',         icon: Shield,    path: '/deceased' },
     { name: 'Clinical Findings',icon: Activity,  path: '/clinical-findings' },
     { name: 'Doctors',          icon: Users2,    path: '/doctors' },
     { name: 'Settings',         icon: Settings,  path: '/settings' },

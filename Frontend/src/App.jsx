@@ -34,6 +34,15 @@ import ExamineeProfile  from './pages/examinees/ExamineeProfile';
 import MedicalHistory   from './pages/examinees/MedicalHistory';
 import ConsentForms     from './pages/examinees/ConsentForms';
 
+// Deceased Management
+import DeceasedList         from './pages/deceased/DeceasedList';
+import RegisterDeceased     from './pages/deceased/RegisterDeceased';
+import DeceasedProfile      from './pages/deceased/DeceasedProfile';
+import BodyIdentification   from './pages/deceased/BodyIdentification';
+import NextOfKin            from './pages/deceased/NextOfKin';
+import HospitalInformation  from './pages/deceased/HospitalInformation';
+import BodyRelease          from './pages/deceased/BodyRelease';
+
 function App() {
   return (
     <Router>
@@ -76,6 +85,16 @@ function App() {
           <Route path="/examinees/:id/edit"       element={<RegisterExaminee />} />
           <Route path="/examinees/:id/history"    element={<MedicalHistory />} />
           <Route path="/examinees/:id/consent"    element={<ConsentForms />} />
+
+          {/* ── Deceased Management ────────────────────────── */}
+          <Route path="/deceased"                       element={<DeceasedList />} />
+          <Route path="/deceased/new"                   element={<RegisterDeceased />} />
+          <Route path="/deceased/:id"                   element={<DeceasedProfile />} />
+          <Route path="/deceased/:id/edit"              element={<RegisterDeceased />} />
+          <Route path="/deceased/:id/identification"    element={<BodyIdentification />} />
+          <Route path="/deceased/:id/next-of-kin"       element={<NextOfKin />} />
+          <Route path="/deceased/:id/hospital"          element={<HospitalInformation />} />
+          <Route path="/deceased/:id/release"           element={<BodyRelease />} />
 
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />
