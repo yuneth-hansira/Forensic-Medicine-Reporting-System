@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import api from './api';
 
 export const authService = {
   /**
@@ -9,29 +9,19 @@ export const authService = {
    */
   async login(username, password) {
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
+      const response = await api.post('/auth/login', { username, password });
+      const data = response.data;
 
       // Store token on successful login
       if (data.token) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
       }
 
       return data;
     } catch (error) {
       console.error('Login error:', error);
-      throw error;
+      throw error.response?.data || error;
     }
   },
 
@@ -42,36 +32,32 @@ export const authService = {
    */
   async loginWithDepartment(departmentId) {
     try {
-      const response = await fetch(`${API_URL}/auth/department-login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ departmentId }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Department login failed');
-      }
+      const response = await api.post('/auth/department-login', { departmentId });
+      const data = response.data;
 
       if (data.token) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
       }
 
       return data;
     } catch (error) {
       console.error('Department login error:', error);
-      throw error;
+      throw error.response?.data || error;
     }
   },
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   },
 
   getToken() {
     return localStorage.getItem('token');
+  },
+  
+  getUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
 };

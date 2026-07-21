@@ -30,12 +30,9 @@ const Login = () => {
     setError('');
 
     try {
-      // Plug and play ready backend API call
-      // const response = await authService.login(username, password);
-      // console.log("Login success", response);
-      
-      // Simulate API call for demonstration since backend might not be up
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Backend API call
+      const response = await authService.login(username, password);
+      console.log("Login success", response);
       
       if (!username || !password) {
         throw new Error('Please enter username and password');
