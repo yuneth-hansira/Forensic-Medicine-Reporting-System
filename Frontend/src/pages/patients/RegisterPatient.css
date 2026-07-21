@@ -1,0 +1,167 @@
+/* Register Patient Styles */
+.rp-stepper {
+  display: flex;
+  background: white;
+  border-radius: var(--pm-radius);
+  border: 1px solid var(--pm-border);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--pm-shadow-sm);
+  gap: 0;
+  overflow-x: auto;
+}
+
+.rp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.rp-step-conn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.rp-step-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.rp-step.active .rp-step-num {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.2);
+}
+
+.rp-step.completed .rp-step-num {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.rp-step-line {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 0.25rem;
+  transition: background 0.3s;
+}
+
+.rp-step.completed .rp-step-line { background: #10b981; }
+
+.rp-step-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+.rp-step-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.rp-step.active .rp-step-label,
+.rp-step.completed .rp-step-label {
+  color: #0f172a;
+}
+
+.rp-step-desc {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.rp-form-card {
+  min-height: 400px;
+}
+
+.rp-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--pm-border);
+}
+
+.rp-upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.rp-photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.rp-camera-box {
+  background: #f8fafc;
+  border: 1.5px dashed #e2e8f0;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rp-camera-box:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.rp-biometric-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: #92400e;
+  line-height: 1.4;
+}
+
+.rp-review-box {
+  background: #f8fafc;
+  border: 1px solid var(--pm-border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.rp-review-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+@media (max-width: 900px) {
+  .rp-stepper { gap: 0.75rem; }
+  .rp-step-line { display: none; }
+  .rp-upload-grid, .rp-photo-grid { grid-template-columns: 1fr; }
+  .rp-review-grid { grid-template-columns: 1fr; }
+}
