@@ -1,0 +1,19 @@
+/* PatientList extra styles */
+.pl-bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.pl-bulk-bar span { flex: 1; }
+
+.pl-row-selected { background: #f0f9ff !important; }
+.pl-row-selected:hover { background: #e0f2fe !important; }

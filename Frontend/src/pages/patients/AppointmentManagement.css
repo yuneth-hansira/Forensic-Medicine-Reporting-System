@@ -1,0 +1,241 @@
+/* AppointmentManagement.css */
+.am-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.am-calendar-card { padding: 1.5rem; }
+
+.am-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.am-cal-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.am-nav-btn {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: white;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #475569;
+  transition: all 0.2s;
+}
+.am-nav-btn:hover { border-color: #2563eb; color: #2563eb; }
+
+.am-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.am-cal-day-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-align: center;
+  padding: 0.3rem 0;
+  text-transform: uppercase;
+}
+
+.am-cal-cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+  font-weight: 500;
+  gap: 2px;
+}
+
+.am-cal-cell:hover { background: #f1f5f9; }
+.am-cal-cell.empty { pointer-events: none; }
+
+.am-cal-cell.today {
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+}
+
+.am-cal-cell.has-event { font-weight: 700; }
+
+.am-event-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  position: absolute;
+  bottom: 3px;
+}
+
+.am-cal-cell.today .am-event-dot { background: white; }
+
+.am-cal-legend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.am-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+}
+.am-dot.blue  { background: #2563eb; }
+.am-dot.green { background: #10b981; }
+
+.am-today-summary {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* View Toggle */
+.am-view-toggle {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.am-view-toggle button {
+  padding: 0.35rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.am-view-toggle button.active {
+  background: white;
+  color: #2563eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Filter tabs */
+.am-filter-tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.am-filter-tab {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  border: 1.5px solid #e2e8f0;
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.am-filter-tab.active {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+/* Appointment Cards */
+.am-cards-list { display: flex; flex-direction: column; gap: 0.85rem; }
+
+.am-apt-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid transparent;
+  transition: all 0.2s;
+}
+
+.am-apt-card.upcoming   { border-left-color: #f59e0b; }
+.am-apt-card.completed  { border-left-color: #10b981; }
+.am-apt-card.scheduled  { border-left-color: #8b5cf6; }
+.am-apt-card.cancelled  { border-left-color: #ef4444; }
+
+.am-apt-card:hover { box-shadow: var(--pm-shadow-md); transform: translateY(-1px); }
+
+.am-apt-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.am-apt-type-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.am-apt-type-dot.upcoming   { background: #f59e0b; }
+.am-apt-type-dot.completed  { background: #10b981; }
+.am-apt-type-dot.scheduled  { background: #8b5cf6; }
+.am-apt-type-dot.cancelled  { background: #ef4444; }
+
+.am-time-block { min-width: 80px; flex-shrink: 0; }
+
+.am-apt-time {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.am-apt-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 0.15rem;
+}
+
+.am-apt-divider {
+  width: 1px;
+  height: 40px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+.am-apt-details { flex: 1; }
+
+.am-apt-patient {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.am-apt-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+  .am-layout { grid-template-columns: 1fr; }
+  .am-calendar-card { display: none; }
+}
