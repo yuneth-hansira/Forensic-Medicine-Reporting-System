@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ChevronRight, FilePlus, UserCheck, Stethoscope, FlaskConical, FileText, CheckCircle } from 'lucide-react';
+import { ChevronRight, FilePlus, UserCheck, Stethoscope, FlaskConical, FileText, CheckCircle, Clock } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 
 const timelineEvents = [
