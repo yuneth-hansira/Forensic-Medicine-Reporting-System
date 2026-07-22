@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   Home, Users, FolderOpen, ShieldAlert, Activity, 
   FileText, Shield, Gavel, Users2, Building2, Clock,
@@ -7,6 +7,7 @@ import {
   FlaskConical, Search, Archive, Microscope, ArrowRightCircle
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { authService } from '../services/authService';
 import './Sidebar.css';
 
 // ClipboardList fallback using FileText alias
@@ -65,6 +66,7 @@ const Sidebar = ({ isOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const navContainerRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const savedScrollPos = sessionStorage.getItem('sidebarScrollPos');
@@ -79,7 +81,8 @@ const Sidebar = ({ isOpen }) => {
 
   const handleNavigation = (path) => {
     if (path === '/logout') {
-      navigate('/');
+      authService.logout();
+      navigate('/', { replace: true });
     } else if (path === '/') {
       navigate('/home');
     } else {
@@ -104,35 +107,52 @@ const Sidebar = ({ isOpen }) => {
       </div>
 
       <div className="sidebar-nav-container" ref={navContainerRef} onScroll={handleScroll}>
-        <div className={`nav-item dashboard-btn ${isActive('/dashboard') ? 'active' : ''}`} onClick={() => handleNavigation('/dashboard')}>
-          <Home size={20} />
-          <span>Dashboard</span>
+        <div className="sidebar-search-box">
+          <Search size={18} className="search-icon" />
+          <input 
+            type="text" 
+            placeholder="Search items..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="sidebar-search-input"
+          />
         </div>
 
-        {navItems.map((group, idx) => (
-          <div key={idx} className="nav-group">
-            <h3 className="nav-group-title">{group.section}</h3>
-            <ul className="nav-list">
-              {group.items.map((item, itemIdx) => (
-                <li 
-                  key={itemIdx} 
-                  className={`nav-item ${item.action ? 'action-item' : ''} ${isActive(item.path) ? 'active' : ''}`}
-                  onClick={() => handleNavigation(item.path)}
-                >
-                  <item.icon size={20} className="nav-icon" />
-                  <span>{item.name}</span>
-                </li>
-              ))}
-            </ul>
+        {(!searchTerm || 'dashboard'.includes(searchTerm.toLowerCase())) && (
+          <div className={`nav-item dashboard-btn ${isActive('/dashboard') ? 'active' : ''}`} onClick={() => handleNavigation('/dashboard')}>
+            <Home size={20} />
+            <span>Dashboard</span>
           </div>
-        ))}
+        )}
+
+        {navItems.map((group, idx) => {
+          const filteredItems = group.items.filter(item => 
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          
+          if (filteredItems.length === 0) return null;
+
+          return (
+            <div key={idx} className="nav-group">
+              <h3 className="nav-group-title">{group.section}</h3>
+              <ul className="nav-list">
+                {filteredItems.map((item, itemIdx) => (
+                  <li 
+                    key={itemIdx} 
+                    className={`nav-item ${item.action ? 'action-item' : ''} ${isActive(item.path) ? 'active' : ''}`}
+                    onClick={() => handleNavigation(item.path)}
+                  >
+                    <item.icon size={20} className="nav-icon" />
+                    <span>{item.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </div>
 
       <div className="sidebar-footer">
-        <div className="footer-content">
-          <p className="version">FMMS v1.0</p>
-          <p className="copyright">© 2026 All rights reserved.</p>
-        </div>
         <Scale className="bg-logo" size={120} />
       </div>
     </aside>
