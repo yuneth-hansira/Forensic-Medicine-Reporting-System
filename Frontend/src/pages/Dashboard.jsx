@@ -82,7 +82,7 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <div className="welcome-section">
           <div className="welcome-text">
-            <h2>Welcome back, <span className="highlight">{profileName}</span></h2>
+            <h2>Welcome, <span className="highlight">{profileName}</span></h2>
             <p>{profileRole}</p>
           </div>
           <div 

@@ -102,7 +102,7 @@ const Sidebar = ({ isOpen }) => {
         <Scale className="logo-icon" size={28} />
         <div className="logo-text">
           <h2>Forensic Medical</h2>
-          <p>Management System</p>
+          <p>Database Management System</p>
         </div>
       </div>
 

@@ -19,7 +19,6 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ const Login = () => {
         throw new Error('Please enter username and password');
       }
       
-      console.log('Login attempt:', { username, rememberMe });
+      console.log('Login attempt:', { username });
       
       // Navigate to dashboard on success
       navigate('/dashboard');
@@ -48,11 +47,6 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDepartmentLogin = async () => {
-    // Example handler for the secondary login option
-    console.log('Department login initiated');
   };
 
   return (
@@ -106,8 +100,8 @@ const Login = () => {
                   <Lock size={14} />
                 </div>
               </div>
-              <h2>Welcome Back</h2>
-              <p>Sign in to continue to Forensic Medicine <br/> Data Report System</p>
+              <h2>Welcome</h2>
+              <p>Sign in to continue to Forensic Medicine <br/> Data Base System</p>
             </div>
 
             {error && (
@@ -148,18 +142,6 @@ const Login = () => {
                 </div>
               </div>
 
-              <div className="form-options">
-                <label className="checkbox-wrapper">
-                  <input 
-                    type="checkbox" 
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  />
-                  Remember me
-                </label>
-                <a href="#" className="forgot-password">Forgot Password?</a>
-              </div>
-
               <button type="submit" className="btn-submit" disabled={loading}>
                 <Lock size={18} />
                 {loading ? 'Signing in...' : 'Sign In'}
@@ -168,13 +150,6 @@ const Login = () => {
               <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.95rem' }}>
                 Don't have an account? <Link to="/register" style={{ color: '#2563eb', fontWeight: '500', textDecoration: 'none' }}>Sign up here</Link>
               </div>
-
-              <div className="divider">or</div>
-
-              <button type="button" className="btn-secondary" onClick={handleDepartmentLogin}>
-                <ShieldCheck size={20} />
-                Login with Department ID
-              </button>
             </form>
 
             <div className="footer-text animate-fade-in delay-300">
