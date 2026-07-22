@@ -28,6 +28,8 @@ import CaseTimeline   from './pages/cases/CaseTimeline';
 import CaseDocuments  from './pages/cases/CaseDocuments';
 import CloseCase      from './pages/cases/CloseCase';
 import PoliceInfo     from './pages/cases/PoliceInfo';
+import RegisterPoliceInfo from './pages/cases/RegisterPoliceInfo';
+import PoliceInfoProfile from './pages/cases/PoliceInfoProfile';
 import CourtInfo      from './pages/cases/CourtInfo';
 import RegisterCourtInfo from './pages/cases/RegisterCourtInfo';
 import ClinicalFindings from './pages/cases/ClinicalFindings';
@@ -172,6 +174,9 @@ function App() {
           
           {/* ── Additional Database Modules ───────────────────────── */}
           <Route path="/police-info"              element={<PoliceInfo />} />
+          <Route path="/police-info/register"     element={<RegisterPoliceInfo />} />
+          <Route path="/police-info/:id"          element={<PoliceInfoProfile />} />
+          <Route path="/police-info/:id/edit"     element={<RegisterPoliceInfo />} />
           <Route path="/court-info"               element={<CourtInfo />} />
           <Route path="/court-info/register"      element={<RegisterCourtInfo />} />
           <Route path="/court-info/:id/edit"      element={<RegisterCourtInfo />} />
