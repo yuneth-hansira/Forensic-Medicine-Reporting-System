@@ -39,6 +39,15 @@ import InjuryProfile from './pages/cases/InjuryProfile';
 import Documents from './pages/cases/Documents';
 import RegisterDocument from './pages/cases/RegisterDocument';
 import DocumentProfile from './pages/cases/DocumentProfile';
+import Consents from './pages/cases/Consents';
+import RegisterConsent from './pages/cases/RegisterConsent';
+import ConsentProfile from './pages/cases/ConsentProfile';
+import Reports from './pages/cases/Reports';
+import RegisterReport from './pages/cases/RegisterReport';
+import ReportProfile from './pages/cases/ReportProfile';
+import Certificates from './pages/cases/Certificates';
+import RegisterCertificate from './pages/cases/RegisterCertificate';
+import CertificateProfile from './pages/cases/CertificateProfile';
 
 // Examinee Management
 import ExamineeList     from './pages/examinees/ExamineeList';
@@ -49,7 +58,22 @@ import ConsentForms     from './pages/examinees/ConsentForms';
 
 import DeceasedList     from './pages/admin/DeceasedList';
 import RegisterDeceased from './pages/admin/RegisterDeceased';
-import DeceasedProfile  from './pages/admin/DeceasedProfile';
+import DeceasedProfile from './pages/admin/DeceasedProfile';
+import Hospitals from './pages/admin/Hospitals';
+import RegisterHospital from './pages/admin/RegisterHospital';
+import HospitalProfile from './pages/admin/HospitalProfile';
+import Wards from './pages/admin/Wards';
+import RegisterWard from './pages/admin/RegisterWard';
+import WardProfile from './pages/admin/WardProfile';
+import BodyIdentifications from './pages/admin/BodyIdentifications';
+import RegisterBodyIdentification from './pages/admin/RegisterBodyIdentification';
+import BodyIdentificationProfile from './pages/admin/BodyIdentificationProfile';
+import NextOfKin from './pages/admin/NextOfKin';
+import RegisterNextOfKin from './pages/admin/RegisterNextOfKin';
+import NextOfKinProfile from './pages/admin/NextOfKinProfile';
+import SystemUsers from './pages/admin/SystemUsers';
+import RegisterSystemUser from './pages/admin/RegisterSystemUser';
+import SystemUserProfile from './pages/admin/SystemUserProfile';
 import UserProfile      from './pages/UserProfile';
 
 function App() {
@@ -121,14 +145,38 @@ function App() {
           <Route path="/documents/register"       element={<RegisterDocument />} />
           <Route path="/documents/:id"            element={<DocumentProfile />} />
           <Route path="/documents/:id/edit"       element={<RegisterDocument />} />
-          <Route path="/consents"                 element={<PlaceholderPage title="Consents" />} />
-          <Route path="/reports"                  element={<PlaceholderPage title="Reports" />} />
-          <Route path="/certificates"             element={<PlaceholderPage title="Certificates" />} />
-          <Route path="/hospitals"                element={<PlaceholderPage title="Hospitals" />} />
-          <Route path="/wards"                    element={<PlaceholderPage title="Wards" />} />
-          <Route path="/body-id"                  element={<PlaceholderPage title="Body Identification" />} />
-          <Route path="/next-of-kin"              element={<PlaceholderPage title="Next of Kin" />} />
-          <Route path="/users"                    element={<PlaceholderPage title="System Users" />} />
+          <Route path="/consents"                 element={<Consents />} />
+          <Route path="/consents/register"        element={<RegisterConsent />} />
+          <Route path="/consents/:id"             element={<ConsentProfile />} />
+          <Route path="/consents/:id/edit"        element={<RegisterConsent />} />
+          <Route path="/reports"                  element={<Reports />} />
+          <Route path="/reports/register"         element={<RegisterReport />} />
+          <Route path="/reports/:id"              element={<ReportProfile />} />
+          <Route path="/reports/:id/edit"         element={<RegisterReport />} />
+          <Route path="/certificates"             element={<Certificates />} />
+          <Route path="/certificates/register"    element={<RegisterCertificate />} />
+          <Route path="/certificates/:id"         element={<CertificateProfile />} />
+          <Route path="/certificates/:id/edit"    element={<RegisterCertificate />} />
+          <Route path="/hospitals"                element={<Hospitals />} />
+          <Route path="/hospitals/register"       element={<RegisterHospital />} />
+          <Route path="/hospitals/:id"            element={<HospitalProfile />} />
+          <Route path="/hospitals/:id/edit"       element={<RegisterHospital />} />
+          <Route path="/wards"                    element={<Wards />} />
+          <Route path="/wards/register"           element={<RegisterWard />} />
+          <Route path="/wards/:id"                element={<WardProfile />} />
+          <Route path="/wards/:id/edit"           element={<RegisterWard />} />
+          <Route path="/body-id"                  element={<BodyIdentifications />} />
+          <Route path="/body-id/register"         element={<RegisterBodyIdentification />} />
+          <Route path="/body-id/:id"              element={<BodyIdentificationProfile />} />
+          <Route path="/body-id/:id/edit"         element={<RegisterBodyIdentification />} />
+          <Route path="/next-of-kin"              element={<NextOfKin />} />
+          <Route path="/next-of-kin/register"     element={<RegisterNextOfKin />} />
+          <Route path="/next-of-kin/:id"          element={<NextOfKinProfile />} />
+          <Route path="/next-of-kin/:id/edit"     element={<RegisterNextOfKin />} />
+          <Route path="/users"                    element={<SystemUsers />} />
+          <Route path="/users/register"           element={<RegisterSystemUser />} />
+          <Route path="/users/:id"                element={<SystemUserProfile />} />
+          <Route path="/users/:id/edit"           element={<RegisterSystemUser />} />
           <Route path="/audit-logs"               element={<PlaceholderPage title="Audit Logs" />} />
           
           {/* ── Catch-All ── */}

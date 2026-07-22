@@ -1,23 +1,40 @@
-import axios from 'axios';
+import api from './api';
 
-const API_URL = 'http://localhost:5000/api/users';
+export const userService = {
+    getProfile: async () => {
+        const response = await api.get('/users/profile');
+        return response.data;
+    },
+    
+    updateProfile: async (data) => {
+        const response = await api.put('/users/profile', data);
+        return response.data;
+    },
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
-  return { headers: { Authorization: `Bearer ${token}` } };
+    getAllUsers: async () => {
+        const response = await api.get('/users');
+        return response.data;
+    },
+    
+    getUserById: async (id) => {
+        const response = await api.get(`/users/${id}`);
+        return response.data;
+    },
+    
+    createUser: async (data) => {
+        const response = await api.post('/users', data);
+        return response.data;
+    },
+    
+    updateUser: async (id, data) => {
+        const response = await api.put(`/users/${id}`, data);
+        return response.data;
+    },
+    
+    deleteUser: async (id) => {
+        const response = await api.delete(`/users/${id}`);
+        return response.data;
+    }
 };
 
-const getProfile = async () => {
-  const response = await axios.get(`${API_URL}/profile`, getAuthHeaders());
-  return response.data;
-};
-
-const updateProfile = async (profileData) => {
-  const response = await axios.put(`${API_URL}/profile`, profileData, getAuthHeaders());
-  return response.data;
-};
-
-export default {
-  getProfile,
-  updateProfile
-};
+export default userService;

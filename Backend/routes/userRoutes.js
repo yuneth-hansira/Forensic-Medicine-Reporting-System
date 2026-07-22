@@ -6,4 +6,11 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.get('/profile', authMiddleware, userController.getUserProfile);
 router.put('/profile', authMiddleware, userController.updateUserProfile);
 
+// Admin CRUD routes
+router.get('/', authMiddleware, userController.getAllUsers);
+router.get('/:id', authMiddleware, userController.getUserById);
+router.post('/', authMiddleware, userController.createUser);
+router.put('/:id', authMiddleware, userController.updateUser);
+router.delete('/:id', authMiddleware, userController.deleteUser);
+
 module.exports = router;

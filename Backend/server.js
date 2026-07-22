@@ -27,6 +27,11 @@ app.use('/api/court-info', require('./routes/courtInfoRoutes'));
 app.use('/api/clinical-findings', require('./routes/clinicalFindingsRoutes'));
 app.use('/api/injuries', require('./routes/injuryRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
+app.use('/api/consents', require('./routes/consentRoutes'));
+app.use('/api/certificates', require('./routes/certificateRoutes'));
+app.use('/api/wards', require('./routes/wardRoutes'));
+app.use('/api/body-id', require('./routes/bodyIdRoutes'));
+app.use('/api/next-of-kin', require('./routes/kinRoutes'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
