@@ -27,6 +27,18 @@ import AssignDoctor   from './pages/cases/AssignDoctor';
 import CaseTimeline   from './pages/cases/CaseTimeline';
 import CaseDocuments  from './pages/cases/CaseDocuments';
 import CloseCase      from './pages/cases/CloseCase';
+import PoliceInfo     from './pages/cases/PoliceInfo';
+import CourtInfo      from './pages/cases/CourtInfo';
+import RegisterCourtInfo from './pages/cases/RegisterCourtInfo';
+import ClinicalFindings from './pages/cases/ClinicalFindings';
+import RegisterClinicalFindings from './pages/cases/RegisterClinicalFindings';
+import ClinicalFindingsProfile from './pages/cases/ClinicalFindingsProfile';
+import Injuries from './pages/cases/Injuries';
+import RegisterInjury from './pages/cases/RegisterInjury';
+import InjuryProfile from './pages/cases/InjuryProfile';
+import Documents from './pages/cases/Documents';
+import RegisterDocument from './pages/cases/RegisterDocument';
+import DocumentProfile from './pages/cases/DocumentProfile';
 
 // Examinee Management
 import ExamineeList     from './pages/examinees/ExamineeList';
@@ -36,6 +48,8 @@ import MedicalHistory   from './pages/examinees/MedicalHistory';
 import ConsentForms     from './pages/examinees/ConsentForms';
 
 import DeceasedList     from './pages/admin/DeceasedList';
+import RegisterDeceased from './pages/admin/RegisterDeceased';
+import DeceasedProfile  from './pages/admin/DeceasedProfile';
 import UserProfile      from './pages/UserProfile';
 
 function App() {
@@ -65,7 +79,7 @@ function App() {
           {/* ── Case Management ───────────────────────────── */}
           <Route path="/cases"                    element={<CaseDashboard />} />
           <Route path="/cases/list"              element={<CaseList />} />
-          <Route path="/cases/new"                element={<NewCase />} />
+          <Route path="/cases/register"           element={<NewCase />} />
           <Route path="/cases/:id"                element={<CaseDetails />} />
           <Route path="/cases/:id/edit"           element={<NewCase />} />
           <Route path="/cases/:id/assign"         element={<AssignDoctor />} />
@@ -75,7 +89,7 @@ function App() {
 
           {/* ── Examinee Management ────────────────────────── */}
           <Route path="/examinees"                element={<ExamineeList />} />
-          <Route path="/examinees/new"            element={<RegisterExaminee />} />
+          <Route path="/examinees/register"       element={<RegisterExaminee />} />
           <Route path="/examinees/:id"            element={<ExamineeProfile />} />
           <Route path="/examinees/:id/edit"       element={<RegisterExaminee />} />
           <Route path="/examinees/:id/history"    element={<MedicalHistory />} />
@@ -83,10 +97,39 @@ function App() {
 
           {/* ── Administration & Other ────────────────────────── */}
           <Route path="/deceased"                 element={<DeceasedList />} />
-          <Route path="/clinical-findings"        element={<PlaceholderPage title="Clinical Findings" />} />
+          <Route path="/deceased/register"        element={<RegisterDeceased />} />
+          <Route path="/deceased/:id"             element={<DeceasedProfile />} />
+          <Route path="/deceased/:id/edit"        element={<RegisterDeceased />} />
+          <Route path="/clinical-findings"        element={<ClinicalFindings />} />
+          <Route path="/clinical-findings/register" element={<RegisterClinicalFindings />} />
+          <Route path="/clinical-findings/:id"    element={<ClinicalFindingsProfile />} />
+          <Route path="/clinical-findings/:id/edit" element={<RegisterClinicalFindings />} />
           <Route path="/doctors"                  element={<PlaceholderPage title="Doctor Directory" />} />
           <Route path="/settings"                 element={<PlaceholderPage title="System Settings" />} />
           <Route path="/profile"                  element={<UserProfile />} />
+          
+          {/* ── Additional Database Modules ───────────────────────── */}
+          <Route path="/police-info"              element={<PoliceInfo />} />
+          <Route path="/court-info"               element={<CourtInfo />} />
+          <Route path="/court-info/register"      element={<RegisterCourtInfo />} />
+          <Route path="/court-info/:id/edit"      element={<RegisterCourtInfo />} />
+          <Route path="/injuries"                 element={<Injuries />} />
+          <Route path="/injuries/register"        element={<RegisterInjury />} />
+          <Route path="/injuries/:id"             element={<InjuryProfile />} />
+          <Route path="/injuries/:id/edit"        element={<RegisterInjury />} />
+          <Route path="/documents"                element={<Documents />} />
+          <Route path="/documents/register"       element={<RegisterDocument />} />
+          <Route path="/documents/:id"            element={<DocumentProfile />} />
+          <Route path="/documents/:id/edit"       element={<RegisterDocument />} />
+          <Route path="/consents"                 element={<PlaceholderPage title="Consents" />} />
+          <Route path="/reports"                  element={<PlaceholderPage title="Reports" />} />
+          <Route path="/certificates"             element={<PlaceholderPage title="Certificates" />} />
+          <Route path="/hospitals"                element={<PlaceholderPage title="Hospitals" />} />
+          <Route path="/wards"                    element={<PlaceholderPage title="Wards" />} />
+          <Route path="/body-id"                  element={<PlaceholderPage title="Body Identification" />} />
+          <Route path="/next-of-kin"              element={<PlaceholderPage title="Next of Kin" />} />
+          <Route path="/users"                    element={<PlaceholderPage title="System Users" />} />
+          <Route path="/audit-logs"               element={<PlaceholderPage title="Audit Logs" />} />
           
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />

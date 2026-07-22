@@ -21,6 +21,12 @@ app.use('/api/doctors', require('./routes/doctorRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/stats', require('./routes/statsRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/patients', require('./routes/patientRoutes'));
+app.use('/api/police-info', require('./routes/policeInfoRoutes'));
+app.use('/api/court-info', require('./routes/courtInfoRoutes'));
+app.use('/api/clinical-findings', require('./routes/clinicalFindingsRoutes'));
+app.use('/api/injuries', require('./routes/injuryRoutes'));
+app.use('/api/documents', require('./routes/documentRoutes'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

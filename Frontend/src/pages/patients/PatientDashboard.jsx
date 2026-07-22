@@ -1,44 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import {
-  Users, FolderOpen, Clock, CheckCircle, TrendingUp,
-  UserPlus, Search, FileText, Calendar, Activity,
-  ArrowUpRight, Eye, MoreHorizontal, Filter
-} from 'lucide-react';
-import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
-} from 'recharts';
+import { UserPlus, ArrowUpRight, Eye, Edit3, Trash2, Search } from 'lucide-react';
+import { patientService } from '../../services/patientService';
 import '../patients/patients.css';
 import './PatientDashboard.css';
 
-const areaData = [
-  { month: 'Jan', patients: 0 }, { month: 'Feb', patients: 0 },
-  { month: 'Mar', patients: 0 }, { month: 'Apr', patients: 0 },
-  { month: 'May', patients: 0 }, { month: 'Jun', patients: 0 },
-  { month: 'Jul', patients: 0 }, { month: 'Aug', patients: 0 },
-  { month: 'Sep', patients: 0 }, { month: 'Oct', patients: 0 },
-  { month: 'Nov', patients: 0 }, { month: 'Dec', patients: 0 },
-];
-
-const caseTypeData = [
-  { name: 'Medico-Legal', value: 0, color: '#2563eb' },
-  { name: 'Postmortem',   value: 0, color: '#8b5cf6' },
-  { name: 'Injury',       value: 0, color: '#10b981' },
-  { name: 'Toxicology',   value: 0, color: '#f59e0b' },
-];
-
-const recentPatients = [];
-
-const statusMap = {
-  active:      { label: 'Active',      cls: 'pm-badge-active' },
-  pending:     { label: 'Pending',     cls: 'pm-badge-pending' },
-  completed:   { label: 'Completed',   cls: 'pm-badge-completed' },
-  'in-progress':{ label: 'In Progress', cls: 'pm-badge-in-progress' },
-};
-
 const PatientDashboard = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const [recentPatients, setRecentPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const data = await patientService.getAllPatients();
+        // Just take the first 10 for 'Recent' (assuming backend returns newest first, or just slicing)
+        setRecentPatients(data.slice(0, 10));
+      } catch (err) {
+        console.error("Failed to fetch patients:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPatients();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this patient?")) {
+      try {
+        await patientService.deletePatient(id);
+        setRecentPatients(recentPatients.filter(p => p.Patient_ID !== id));
+      } catch (err) {
+        alert("Failed to delete patient");
+      }
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -50,140 +45,22 @@ const PatientDashboard = () => {
               <a href="#">Home</a><span>/</span><span>Patient Management</span>
             </div>
             <h1 className="pm-page-title">Patient Management</h1>
-            <p className="pm-page-subtitle">Monitor, manage and track all forensic patients</p>
+            <p className="pm-page-subtitle">View recent patients or register a new one</p>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-secondary"><Filter size={16}/>Filters</button>
             <button className="pm-btn pm-btn-primary" onClick={() => window.location.href='/patients/register'}>
-              <UserPlus size={16}/>Register Patient
+              <UserPlus size={16}/>Register New Patient
             </button>
           </div>
         </div>
 
-        {/* KPI Cards */}
-        <div className="pm-kpi-grid">
-          <div className="pm-kpi-card blue">
-            <div className="pm-kpi-icon"><Users size={24}/></div>
-            <div className="pm-kpi-info">
-              <p className="pm-kpi-label">Total Patients</p>
-              <p className="pm-kpi-value">0</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0 today</div>
-            </div>
-          </div>
-          <div className="pm-kpi-card orange">
-            <div className="pm-kpi-icon"><Clock size={24}/></div>
-            <div className="pm-kpi-info">
-              <p className="pm-kpi-label">Pending Reports</p>
-              <p className="pm-kpi-value">0</p>
-              <div className="pm-kpi-trend down"><TrendingUp size={13}/>-0 since yesterday</div>
-            </div>
-          </div>
-          <div className="pm-kpi-card purple">
-            <div className="pm-kpi-icon"><Activity size={24}/></div>
-            <div className="pm-kpi-info">
-              <p className="pm-kpi-label">Today's Cases</p>
-              <p className="pm-kpi-value">0</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0 new</div>
-            </div>
-          </div>
-          <div className="pm-kpi-card green">
-            <div className="pm-kpi-icon"><CheckCircle size={24}/></div>
-            <div className="pm-kpi-info">
-              <p className="pm-kpi-label">Completed Cases</p>
-              <p className="pm-kpi-value">0</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0 this week</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Charts Row */}
-        <div className="pd-charts-row">
-          {/* Area Chart */}
-          <div className="pm-card pd-chart-main">
-            <div className="pm-card-header">
-              <h3 className="pm-card-title">Patient Registrations — 2026</h3>
-              <select className="pm-filter-select" style={{minWidth:'120px',padding:'0.4rem 0.75rem',fontSize:'0.8rem'}}>
-                <option>This Year</option><option>Last Year</option>
-              </select>
-            </div>
-            <ResponsiveContainer width="100%" height={220}>
-              <AreaChart data={areaData} margin={{top:5,right:10,bottom:0,left:-10}}>
-                <defs>
-                  <linearGradient id="colorPat" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"  stopColor="#2563eb" stopOpacity={0.15}/>
-                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9"/>
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize:11,fill:'#94a3b8'}} dy={8}/>
-                <YAxis axisLine={false} tickLine={false} tick={{fontSize:11,fill:'#94a3b8'}}/>
-                <Tooltip contentStyle={{borderRadius:'10px',border:'none',boxShadow:'0 4px 12px rgba(0,0,0,0.12)',fontSize:'0.85rem'}}/>
-                <Area type="monotone" dataKey="patients" stroke="#2563eb" strokeWidth={2.5} fill="url(#colorPat)" dot={{r:3,fill:'#2563eb',strokeWidth:2,stroke:'#fff'}} activeDot={{r:5}}/>
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Pie Chart */}
-          <div className="pm-card pd-chart-side">
-            <div className="pm-card-header">
-              <h3 className="pm-card-title">Case Type Distribution</h3>
-            </div>
-            <ResponsiveContainer width="100%" height={175}>
-              <PieChart>
-                <Pie data={caseTypeData} cx="50%" cy="50%" outerRadius={70} innerRadius={42} paddingAngle={4} dataKey="value">
-                  {caseTypeData.map((e, i) => <Cell key={i} fill={e.color}/>)}
-                </Pie>
-                <Tooltip contentStyle={{borderRadius:'10px',border:'none',boxShadow:'0 4px 12px rgba(0,0,0,0.12)',fontSize:'0.85rem'}}/>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="pd-pie-legend">
-              {caseTypeData.map((e,i) => (
-                <div key={i} className="pd-legend-item">
-                  <span className="pd-legend-dot" style={{background:e.color}}/>
-                  <span className="pd-legend-name">{e.name}</span>
-                  <span className="pd-legend-val">{e.value}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="pm-card" style={{marginBottom:'1.5rem'}}>
-          <h3 className="pm-card-title" style={{marginBottom:'1.25rem'}}>Quick Actions</h3>
-          <div className="pm-quick-actions">
-            {[
-              { icon: <UserPlus size={24}/>, label: 'Register Patient',   href:'/patients/register' },
-              { icon: <Search    size={24}/>, label: 'Search Patient',    href:'/patients/list' },
-              { icon: <FileText  size={24}/>, label: 'Generate Report',   href:'/patients/reports' },
-              { icon: <Calendar  size={24}/>, label: 'Appointments',      href:'/patients/appointments' },
-              { icon: <Eye       size={24}/>, label: 'Patient Details',   href:'/patients/profile' },
-              { icon: <Activity  size={24}/>, label: 'Analytics',         href:'/patients/analytics' },
-              { icon: <FolderOpen size={24}/>,label: 'All Cases',         href:'/cases' },
-              { icon: <Clock     size={24}/>, label: 'Pending Reports',   href:'/patients/reports' },
-            ].map((a,i) => (
-              <button key={i} className="pm-quick-action-btn" onClick={()=>window.location.href=a.href}>
-                <span className="pm-qa-icon">{a.icon}</span>
-                <span className="pm-qa-label">{a.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Recent Patients Table */}
-        <div className="pm-card">
+        <div className="pm-card" style={{marginTop: '2rem'}}>
           <div className="pm-card-header">
             <h3 className="pm-card-title">Recent Patients</h3>
             <div style={{display:'flex',gap:'0.75rem',alignItems:'center'}}>
-              <div className="pd-tab-pills">
-                {['all','active','pending','completed'].map(t => (
-                  <button key={t} className={`pd-pill ${activeTab===t?'active':''}`} onClick={()=>setActiveTab(t)}>
-                    {t.charAt(0).toUpperCase()+t.slice(1)}
-                  </button>
-                ))}
-              </div>
               <button className="pm-btn pm-btn-secondary pm-btn-sm" onClick={()=>window.location.href='/patients/list'}>
-                <ArrowUpRight size={14}/> View All
+                <ArrowUpRight size={14}/> View All Patients
               </button>
             </div>
           </div>
@@ -191,42 +68,55 @@ const PatientDashboard = () => {
             <table className="pm-table">
               <thead>
                 <tr>
-                  <th>Patient ID</th><th>Name</th><th>Age / Gender</th>
-                  <th>Case Type</th><th>Assigned Doctor</th><th>Status</th>
-                  <th>Date</th><th>Actions</th>
+                  <th>Patient ID</th>
+                  <th>Patient Name</th>
+                  <th>NIC</th>
+                  <th>Age / Gender</th>
+                  <th>Blood Group</th>
+                  <th>Contact No</th>
+                  <th style={{textAlign:'center'}}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {recentPatients.length === 0 ? (
+                {loading ? (
                   <tr>
-                    <td colSpan="8" style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>
-                      No recent patients found.
+                    <td colSpan="7" style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>
+                      Loading recent patients...
+                    </td>
+                  </tr>
+                ) : recentPatients.length === 0 ? (
+                  <tr>
+                    <td colSpan="7">
+                      <div className="pm-empty-state">
+                        <Search size={36}/>
+                        <h4>No Recent Patients</h4>
+                        <p>Register a new patient to get started</p>
+                      </div>
                     </td>
                   </tr>
                 ) : (
                   recentPatients.map((p,i) => (
                     <tr key={i}>
-                      <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>{p.id}</code></td>
+                      <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>PT-{p.Patient_ID}</code></td>
                       <td>
                         <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
                           <div className="pm-avatar-placeholder pm-avatar-sm" style={{fontSize:'0.75rem'}}>
-                            {p.name.charAt(0)}
+                            {p.Full_Name?.charAt(0) || 'U'}
                           </div>
-                          <span style={{fontWeight:600,color:'#0f172a'}}>{p.name}</span>
+                          <span style={{fontWeight:600,color:'#0f172a'}}>{p.Full_Name}</span>
                         </div>
                       </td>
-                      <td>{p.age} / {p.gender}</td>
-                      <td><span style={{fontSize:'0.78rem',fontWeight:600,color:'#475569'}}>{p.caseType}</span></td>
-                      <td>{p.doctor}</td>
-                      <td><span className={`pm-badge ${statusMap[p.status].cls}`}>{statusMap[p.status].label}</span></td>
-                      <td style={{color:'#94a3b8',fontSize:'0.8rem'}}>{p.date}</td>
+                      <td style={{fontFamily:'monospace',fontSize:'0.82rem'}}>{p.NIC_Passport || '-'}</td>
+                      <td>{p.Date_Of_Birth ? new Date(p.Date_Of_Birth).toLocaleDateString() : '-'} / {p.Sex || '-'}</td>
+                      <td>{p.Blood_Group || '-'}</td>
+                      <td>{p.Contact_No || '-'}</td>
                       <td>
-                        <div className="pm-action-menu">
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.65rem'}}>
+                        <div className="pm-action-menu" style={{justifyContent:'center', gap:'0.5rem'}}>
+                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/patients/${p.Patient_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.65rem'}}>
-                            <MoreHorizontal size={14}/>
+                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(p.Patient_ID)}>
+                            <Trash2 size={14}/>
                           </button>
                         </div>
                       </td>

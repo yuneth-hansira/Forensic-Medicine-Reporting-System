@@ -295,3 +295,47 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- ============================================================
+-- SECTION 6: PATIENT QUERIES
+-- ============================================================
+
+-- 6.1 All case history for a single patient (works across Examinee and Deceased)
+SELECT p.Patient_ID, p.Full_Name, e.Case_ID AS Examinee_Case, de.Case_ID AS Deceased_Case
+FROM Patient p
+LEFT JOIN Examinee e ON e.Patient_ID = p.Patient_ID
+LEFT JOIN Deceased de ON de.Patient_ID = p.Patient_ID
+WHERE p.Patient_ID = 1;
+
+-- 6.2 Patients who were examined as a living examinee more than once (repeat cases)
+SELECT p.Patient_ID, p.Full_Name, COUNT(e.Examinee_ID) AS Examination_Count
+FROM Patient p
+JOIN Examinee e ON e.Patient_ID = p.Patient_ID
+GROUP BY p.Patient_ID, p.Full_Name
+HAVING COUNT(e.Examinee_ID) > 1;
+
+-- 6.3 Patients who were first examined while alive, and later became a Deceased record
+SELECT p.Patient_ID, p.Full_Name, e.Case_ID AS Clinical_Case_ID, de.Case_ID AS Autopsy_Case_ID
+FROM Patient p
+JOIN Examinee e ON e.Patient_ID = p.Patient_ID
+JOIN Deceased de ON de.Patient_ID = p.Patient_ID;
+
+-- 6.4 Number of patients currently registered per hospital
+SELECT h.Hospital_Name, COUNT(p.Patient_ID) AS Patient_Count
+FROM Hospital h
+LEFT JOIN Patient p ON p.Hospital_ID = h.Hospital_ID
+GROUP BY h.Hospital_Name;
+
+-- 6.5 Full patient profile with linked case type (clinical vs autopsy), using a single case
+SELECT
+    p.Full_Name,
+    p.NIC_Passport,
+    p.Blood_Group,
+    COALESCE(ec.Case_Type, dc.Case_Type) AS Case_Type,
+    COALESCE(ec.Case_ID, dc.Case_ID) AS Case_ID
+FROM Patient p
+LEFT JOIN Examinee e ON e.Patient_ID = p.Patient_ID
+LEFT JOIN `Case` ec ON ec.Case_ID = e.Case_ID
+LEFT JOIN Deceased de ON de.Patient_ID = p.Patient_ID
+LEFT JOIN `Case` dc ON dc.Case_ID = de.Case_ID
+WHERE p.Patient_ID = 1;

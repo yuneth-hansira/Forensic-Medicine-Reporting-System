@@ -12,34 +12,38 @@ import './Sidebar.css';
 const ClipboardList = FileText;
 
 const navItems = [
-  { section: 'CASE MANAGEMENT', items: [
-    { name: 'Case Dashboard',      icon: Activity,     path: '/cases' },
-    { name: 'All Cases',           icon: FolderOpen,   path: '/cases/list' },
-    { name: 'New Case',            icon: FileText,     path: '/cases/new' },
-    { name: 'Timeline',            icon: Clock,        path: '/cases/C2026-1045/timeline' },
-    { name: 'Documents',           icon: ClipboardList,path: '/cases/C2026-1045/documents' },
-  ]},
-  { section: 'EXAMINEE MANAGEMENT', items: [
-    { name: 'Examinee List',       icon: Users,        path: '/examinees' },
-    { name: 'Register Examinee',   icon: UserPlus,     path: '/examinees/new' },
-    { name: 'Medical History',     icon: FileText,     path: '/examinees/EX-2026-0891/history' },
-    { name: 'Consent Forms',       icon: FileCheck,    path: '/examinees/EX-2026-0891/consent' },
-  ]},
-  { section: 'PATIENT MANAGEMENT', items: [
+  { section: 'MAIN', items: [
     { name: 'Patients',            icon: Users,      path: '/patients' },
-    { name: 'Register Patient',    icon: UserPlus,   path: '/patients/register' },
-    { name: 'Appointments',        icon: Calendar,   path: '/patients/appointments' },
-    { name: 'Medical Reports',     icon: ClipboardList, path: '/patients/reports' },
-    { name: 'Injury Docs',         icon: AlertCircle,path: '/patients/PT-2026-1045/injuries' },
-    { name: 'Analytics',           icon: BarChart2,  path: '/patients/analytics' },
+    { name: 'Cases',               icon: FolderOpen, path: '/cases' },
+    { name: 'Examinees',           icon: Users,      path: '/examinees' },
+    { name: 'Deceased',            icon: Shield,     path: '/deceased' },
+  ]},
+  { section: 'CASE DETAILS', items: [
+    { name: 'Police Info',         icon: ShieldAlert,path: '/police-info' },
+    { name: 'Court Info',          icon: Gavel,      path: '/court-info' },
+    { name: 'Clinical Findings',   icon: FileText,   path: '/clinical-findings' },
+    { name: 'Injuries',            icon: AlertCircle,path: '/injuries' },
+    { name: 'Documents',           icon: ClipboardList,path: '/documents' },
+  ]},
+  { section: 'MEDICAL & REPORTS', items: [
+    { name: 'Consents',            icon: FileCheck,  path: '/consents' },
+    { name: 'Reports',             icon: ClipboardList, path: '/reports' },
+    { name: 'Certificates',        icon: FileText,   path: '/certificates' },
+  ]},
+  { section: 'HOSPITALIZATION', items: [
+    { name: 'Hospitals',           icon: Building2,  path: '/hospitals' },
+    { name: 'Wards',               icon: Building2,  path: '/wards' },
+  ]},
+  { section: 'DECEASED INFO', items: [
+    { name: 'Body Identification', icon: Users,      path: '/body-id' },
+    { name: 'Next of Kin',         icon: Users2,     path: '/next-of-kin' },
   ]},
   { section: 'ADMINISTRATION', items: [
-    { name: 'Deceased',         icon: Shield,    path: '/deceased' },
-    { name: 'Clinical Findings',icon: Activity,  path: '/clinical-findings' },
-    { name: 'Doctors',          icon: Users2,    path: '/doctors' },
-    { name: 'Settings',         icon: Settings,  path: '/settings' },
+    { name: 'Users',               icon: UserCircle, path: '/users' },
+    { name: 'Doctors',             icon: Users2,     path: '/doctors' },
+    { name: 'Audit Logs',          icon: List,       path: '/audit-logs' },
   ]},
-  { section: 'OTHER', items: [
+  { section: 'ACCOUNT', items: [
     { name: 'Profile', icon: UserCircle, path: '/profile' },
     { name: 'Logout',  icon: LogOut,     path: '/logout', action: true },
   ]}

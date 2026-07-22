@@ -312,3 +312,35 @@ CREATE TABLE IF NOT EXISTS Audit_Log (
     FOREIGN KEY (User_ID) REFERENCES User(User_ID)
         ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB;
+
+-- ============================================================
+-- GROUP 5: PATIENT CORE (NEW)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS Patient (
+    Patient_ID      INT AUTO_INCREMENT PRIMARY KEY,
+    Full_Name       VARCHAR(100) NOT NULL,
+    Sex             ENUM('Male','Female','Other'),
+    Date_Of_Birth   DATE,
+    NIC_Passport    VARCHAR(20) UNIQUE,
+    Blood_Group     VARCHAR(5),
+    Contact_No      VARCHAR(20),
+    Address         VARCHAR(255),
+    Hospital_ID     INT,
+    Ward_ID         INT,
+    FOREIGN KEY (Hospital_ID) REFERENCES Hospital(Hospital_ID)
+        ON UPDATE CASCADE ON DELETE SET NULL,
+    FOREIGN KEY (Ward_ID) REFERENCES Ward(Ward_ID)
+        ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+ALTER TABLE Examinee
+    ADD COLUMN Patient_ID INT AFTER Case_ID,
+    ADD FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
+        ON UPDATE CASCADE ON DELETE SET NULL;
+
+ALTER TABLE Deceased
+    ADD COLUMN Patient_ID INT AFTER Case_ID,
+    ADD FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
+        ON UPDATE CASCADE ON DELETE SET NULL,
+    ADD UNIQUE KEY uq_deceased_patient (Patient_ID);

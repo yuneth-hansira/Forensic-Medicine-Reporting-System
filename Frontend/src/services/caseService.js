@@ -33,5 +33,25 @@ export const caseService = {
       console.error('Error creating case:', error);
       throw error;
     }
+  },
+
+  async updateCase(id, caseData) {
+    try {
+      const response = await api.put(`/cases/${id}`, caseData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating case:', error);
+      throw error;
+    }
+  },
+
+  async deleteCase(id) {
+    try {
+      const response = await api.delete(`/cases/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting case:', error);
+      throw error;
+    }
   }
 };

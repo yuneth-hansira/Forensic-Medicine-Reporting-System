@@ -34,3 +34,13 @@ INSERT INTO Examinee (Case_ID, Full_Name, Sex, Age, NIC_Passport, Address) VALUE
 -- Seed Deceased
 INSERT INTO Deceased (Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death, Place_Of_Death, Death_Type) VALUES 
 (3, 1, 1, 'Sunil Shantha', 'Male', 55, 'BHT-1002', '2026-07-20', 'Ward 45', 'Natural');
+
+-- Seed Patients
+INSERT INTO Patient (Full_Name, Sex, Date_Of_Birth, NIC_Passport, Blood_Group, Contact_No, Address, Hospital_ID, Ward_ID)
+VALUES
+('A. Fernando',   'Male', '1997-03-12', '199712345678', 'O+', '0711112222', 'Kandy Road, Peradeniya', NULL, NULL),
+('N. Jayasuriya',  'Male', '1972-01-05', '197200987654', 'B+', '0754443333', 'Gampola', 1, 1);
+
+-- Link the two existing sample records to their Patient rows
+UPDATE Examinee SET Patient_ID = 1 WHERE Examinee_ID = 1;
+UPDATE Deceased SET Patient_ID = 2 WHERE Deceased_ID = 1;

@@ -2,21 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { AlertCircle, Check } from 'lucide-react';
-import { examineeService } from '../../services/examineeService';
+import { deceasedService } from '../../services/deceasedService';
 import '../patients/patients.css';
 
-const RegisterExaminee = () => {
+const RegisterDeceased = () => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
     Case_ID: '',
+    Hospital_ID: '',
+    Ward_ID: '',
     Full_Name: '',
     Sex: '',
     Age: '',
-    NIC_Passport: '',
-    Address: ''
+    BHT_No: '',
+    Date_Of_Death: '',
+    Place_Of_Death: '',
+    Death_Type: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,25 +29,29 @@ const RegisterExaminee = () => {
 
   useEffect(() => {
     if (isEditMode) {
-      const fetchExaminee = async () => {
+      const fetchDeceased = async () => {
         try {
-          const data = await examineeService.getExamineeById(id);
+          const data = await deceasedService.getDeceasedById(id);
           setForm({
             Case_ID: data.Case_ID || '',
+            Hospital_ID: data.Hospital_ID || '',
+            Ward_ID: data.Ward_ID || '',
             Full_Name: data.Full_Name || '',
             Sex: data.Sex || '',
             Age: data.Age || '',
-            NIC_Passport: data.NIC_Passport || '',
-            Address: data.Address || ''
+            BHT_No: data.BHT_No || '',
+            Date_Of_Death: data.Date_Of_Death ? data.Date_Of_Death.substring(0, 10) : '',
+            Place_Of_Death: data.Place_Of_Death || '',
+            Death_Type: data.Death_Type || ''
           });
         } catch (err) {
           console.error(err);
-          setError("Failed to load examinee data for editing");
+          setError("Failed to load record for editing");
         } finally {
           setIsLoadingData(false);
         }
       };
-      fetchExaminee();
+      fetchDeceased();
     }
   }, [id, isEditMode]);
 
@@ -59,21 +67,23 @@ const RegisterExaminee = () => {
       
       const payload = {
         ...form,
+        Hospital_ID: form.Hospital_ID === '' ? null : form.Hospital_ID,
+        Ward_ID: form.Ward_ID === '' ? null : form.Ward_ID,
         Age: form.Age === '' ? null : form.Age,
       };
 
       if (isEditMode) {
-        await examineeService.updateExaminee(id, payload);
-        alert('Examinee updated successfully!');
-        navigate(`/examinees/${id}`);
+        await deceasedService.updateDeceased(id, payload);
+        alert('Record updated successfully!');
+        navigate(`/deceased/${id}`);
       } else {
-        const response = await examineeService.createExaminee(payload);
-        alert('Examinee registered successfully! Examinee ID: E-' + response.examineeId);
-        navigate('/examinees');
+        const response = await deceasedService.createDeceased(payload);
+        alert('Record registered successfully! ID: D-' + response.deceasedId);
+        navigate('/deceased');
       }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'register'} examinee`);
+      setError(err.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'register'} record`);
     } finally {
       setIsSubmitting(false);
     }
@@ -85,10 +95,10 @@ const RegisterExaminee = () => {
         <div className="pm-page-header" style={{marginBottom:'2rem'}}>
           <div>
             <div className="pm-breadcrumb">
-              <Link to="/examinees">Examinees</Link><span>/</span><span>{isEditMode ? 'Edit Examinee' : 'Register New Examinee'}</span>
+              <Link to="/deceased">Deceased</Link><span>/</span><span>{isEditMode ? 'Edit Record' : 'Register Deceased'}</span>
             </div>
-            <h1 className="pm-page-title">{isEditMode ? 'Edit Examinee Details' : 'Register New Examinee'}</h1>
-            <p className="pm-page-subtitle">{isEditMode ? 'Update examinee details in the database' : 'Enter examinee details to register in the database'}</p>
+            <h1 className="pm-page-title">{isEditMode ? 'Edit Deceased Record' : 'Register Deceased Record'}</h1>
+            <p className="pm-page-subtitle">{isEditMode ? 'Update deceased details in the database' : 'Enter deceased details to register in the database'}</p>
           </div>
         </div>
 
@@ -99,7 +109,7 @@ const RegisterExaminee = () => {
         )}
 
         {isLoadingData ? (
-          <div style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>Loading examinee data...</div>
+          <div style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>Loading record data...</div>
         ) : (
           <div className="pm-card" style={{maxWidth: '800px', margin: '0 auto'}}>
             <form onSubmit={handleSubmit} style={{padding: '2rem'}}>
@@ -150,35 +160,84 @@ const RegisterExaminee = () => {
                     className="pm-input" 
                     value={form.Age} 
                     onChange={(e) => handleChange('Age', e.target.value)} 
-                    placeholder="e.g. 34"
+                    placeholder="e.g. 45"
                   />
                 </div>
                 <div className="pm-form-group">
-                  <label className="pm-label">NIC / Passport Number</label>
+                  <label className="pm-label">BHT No (Bed Head Ticket)</label>
                   <input 
                     className="pm-input" 
-                    value={form.NIC_Passport} 
-                    onChange={(e) => handleChange('NIC_Passport', e.target.value)}
-                    placeholder="e.g. 901234567V"
+                    value={form.BHT_No} 
+                    onChange={(e) => handleChange('BHT_No', e.target.value)}
+                    placeholder="e.g. BHT-902"
                   />
                 </div>
               </div>
 
-              <div className="pm-form-group" style={{marginBottom: '2rem'}}>
-                <label className="pm-label">Address</label>
-                <textarea 
-                  className="pm-textarea" 
-                  rows={3} 
-                  value={form.Address} 
-                  onChange={(e) => handleChange('Address', e.target.value)} 
-                  placeholder="Enter full address"
+              <div className="pm-form-grid-2" style={{marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
+                <div className="pm-form-group">
+                  <label className="pm-label">Date of Death</label>
+                  <input 
+                    type="date"
+                    className="pm-input" 
+                    value={form.Date_Of_Death} 
+                    onChange={(e) => handleChange('Date_Of_Death', e.target.value)} 
+                  />
+                </div>
+                <div className="pm-form-group">
+                  <label className="pm-label">Death Type</label>
+                  <select 
+                    className="pm-select" 
+                    value={form.Death_Type} 
+                    onChange={(e) => handleChange('Death_Type', e.target.value)}
+                  >
+                    <option value="">Select Type</option>
+                    <option value="Natural">Natural</option>
+                    <option value="Accident">Accident</option>
+                    <option value="Homicide">Homicide</option>
+                    <option value="Suicide">Suicide</option>
+                    <option value="Undetermined">Undetermined</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pm-form-group" style={{marginBottom: '1.5rem'}}>
+                <label className="pm-label">Place of Death</label>
+                <input 
+                  className="pm-input" 
+                  value={form.Place_Of_Death} 
+                  onChange={(e) => handleChange('Place_Of_Death', e.target.value)} 
+                  placeholder="Enter location"
                 />
+              </div>
+
+              <div className="pm-form-grid-2" style={{marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
+                <div className="pm-form-group">
+                  <label className="pm-label">Hospital ID (Optional)</label>
+                  <input 
+                    type="number"
+                    className="pm-input" 
+                    value={form.Hospital_ID} 
+                    onChange={(e) => handleChange('Hospital_ID', e.target.value)} 
+                    placeholder="e.g. 1"
+                  />
+                </div>
+                <div className="pm-form-group">
+                  <label className="pm-label">Ward ID (Optional)</label>
+                  <input 
+                    type="number"
+                    className="pm-input" 
+                    value={form.Ward_ID} 
+                    onChange={(e) => handleChange('Ward_ID', e.target.value)} 
+                    placeholder="e.g. 5"
+                  />
+                </div>
               </div>
 
               <div style={{display:'flex', justifyContent:'flex-end', gap:'1rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem'}}>
                 <button type="button" className="pm-btn pm-btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
                 <button type="submit" className="pm-btn pm-btn-primary" disabled={isSubmitting}>
-                  <Check size={16}/> {isSubmitting ? 'Saving...' : (isEditMode ? 'Update Examinee' : 'Register Examinee')}
+                  <Check size={16}/> {isSubmitting ? 'Saving...' : (isEditMode ? 'Update Record' : 'Register Deceased')}
                 </button>
               </div>
 
@@ -190,4 +249,4 @@ const RegisterExaminee = () => {
   );
 };
 
-export default RegisterExaminee;
+export default RegisterDeceased;

@@ -1,424 +1,229 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import {
-  User, Phone, Building2, FolderOpen, Upload,
-  Camera, Users, Check, ChevronRight, ChevronLeft,
-  AlertCircle, X, Image
-} from 'lucide-react';
+import { AlertCircle, Check } from 'lucide-react';
+import { patientService } from '../../services/patientService';
 import '../patients/patients.css';
 import './RegisterPatient.css';
 
-const STEPS = [
-  { num: 1, label: 'Personal Info',    desc: 'Basic details',     icon: <User size={16}/> },
-  { num: 2, label: 'Contact Info',     desc: 'Address & phone',   icon: <Phone size={16}/> },
-  { num: 3, label: 'Hospital Details', desc: 'Admission info',    icon: <Building2 size={16}/> },
-  { num: 4, label: 'Case Details',     desc: 'Forensic info',     icon: <FolderOpen size={16}/> },
-  { num: 5, label: 'Documents',        desc: 'Upload files',      icon: <Upload size={16}/> },
-  { num: 6, label: 'Photo & Biometrics',desc:'Capture photo',    icon: <Camera size={16}/> },
-  { num: 7, label: 'Emergency Contact',desc: 'Next of kin',       icon: <Users size={16}/> },
-];
-
 const RegisterPatient = () => {
-  const [step, setStep] = useState(1);
   const [form, setForm] = useState({
-    firstName:'', lastName:'', dob:'', gender:'', nic:'', nationality:'Sri Lankan',
-    address:'', city:'', district:'', province:'', phone:'', email:'',
-    admissionDate:'', wardNo:'', bedNo:'', referredBy:'', admissionType:'',
-    caseNo:'', caseType:'', policeStation:'', officerName:'', officerBadge:'', crimeRef:'',
-    assignedDoctor:'', priority:'normal',
-    emergencyName:'', emergencyRelation:'', emergencyPhone:'', emergencyAddress:''
+    Full_Name: '',
+    Date_Of_Birth: '',
+    Sex: '',
+    NIC_Passport: '',
+    Blood_Group: '',
+    Contact_No: '',
+    Address: '',
+    Hospital_ID: '',
+    Ward_ID: ''
   });
+  
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(isEditMode);
+  const [error, setError] = useState(null);
 
-  const set = (k, v) => setForm(f => ({...f, [k]: v}));
-  const inp = (k) => ({ value: form[k], onChange: e => set(k, e.target.value), className:'pm-input' });
-  const sel = (k) => ({ value: form[k], onChange: e => set(k, e.target.value), className:'pm-select' });
+  useEffect(() => {
+    if (isEditMode) {
+      const fetchPatient = async () => {
+        try {
+          const data = await patientService.getPatientById(id);
+          setForm({
+            Full_Name: data.Full_Name || '',
+            Date_Of_Birth: data.Date_Of_Birth ? data.Date_Of_Birth.substring(0, 10) : '',
+            Sex: data.Sex || '',
+            NIC_Passport: data.NIC_Passport || '',
+            Blood_Group: data.Blood_Group || '',
+            Contact_No: data.Contact_No || '',
+            Address: data.Address || '',
+            Hospital_ID: data.Hospital_ID || '',
+            Ward_ID: data.Ward_ID || ''
+          });
+        } catch (err) {
+          setError("Failed to load patient data for editing");
+        } finally {
+          setIsLoadingData(false);
+        }
+      };
+      fetchPatient();
+    }
+  }, [id, isEditMode]);
 
-  const canNext = step < 7;
-  const canBack = step > 1;
+  const handleChange = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      
+      // Convert empty strings to null for optional database integer fields
+      const payload = {
+        ...form,
+        Hospital_ID: form.Hospital_ID === '' ? null : form.Hospital_ID,
+        Ward_ID: form.Ward_ID === '' ? null : form.Ward_ID,
+      };
+
+      if (isEditMode) {
+        await patientService.updatePatient(id, payload);
+        alert('Patient updated successfully!');
+        navigate(`/patients/${id}`);
+      } else {
+        const response = await patientService.createPatient(payload);
+        alert('Patient registered successfully! Patient ID: ' + response.Patient_ID);
+        navigate('/patients');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'register'} patient`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <DashboardLayout>
-      <div className="pm-page">
+      <div className="pm-page" style={{padding:'2rem'}}>
         {/* Header */}
-        <div className="pm-page-header">
+        <div className="pm-page-header" style={{marginBottom:'2rem'}}>
           <div>
             <div className="pm-breadcrumb">
-              <a href="/patients">Patient Management</a><span>/</span>
-              <a href="/patients/list">Patients</a><span>/</span>
-              <span>Register Patient</span>
+              <a href="/patients">Patients</a><span>/</span><span>{isEditMode ? 'Edit Patient' : 'Register New Patient'}</span>
             </div>
-            <h1 className="pm-page-title">Register New Patient</h1>
-            <p className="pm-page-subtitle">Step {step} of {STEPS.length} — {STEPS[step-1].label}</p>
+            <h1 className="pm-page-title">{isEditMode ? 'Edit Patient Details' : 'Register New Patient'}</h1>
+            <p className="pm-page-subtitle">{isEditMode ? 'Update patient details in the database' : 'Enter patient details to register in the database'}</p>
           </div>
         </div>
 
-        {/* Stepper */}
-        <div className="rp-stepper">
-          {STEPS.map((s, idx) => (
-            <div key={s.num} className={`rp-step ${step === s.num ? 'active' : step > s.num ? 'completed' : ''}`}>
-              <div className="rp-step-conn">
-                <div className="rp-step-num">
-                  {step > s.num ? <Check size={14}/> : s.num}
-                </div>
-                {idx < STEPS.length - 1 && <div className="rp-step-line"/>}
-              </div>
-              <div className="rp-step-info">
-                <span className="rp-step-label">{s.label}</span>
-                <span className="rp-step-desc">{s.desc}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        {error && (
+          <div style={{background:'#fee2e2', color:'#ef4444', padding:'1rem', borderRadius:'8px', marginBottom:'1.5rem', display:'flex', alignItems:'center', gap:'0.75rem'}}>
+            <AlertCircle size={20}/> {error}
+          </div>
+        )}
 
-        {/* Form Card */}
-        <div className="pm-card rp-form-card">
-
-          {/* Step 1: Personal Information */}
-          {step === 1 && (
-            <div>
-              <h3 className="pm-section-title">Personal Information</h3>
-              <div className="pm-form-grid-3">
-                <div className="pm-form-group">
-                  <label className="pm-label required">First Name</label>
-                  <input {...inp('firstName')} placeholder="Enter first name"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label required">Last Name</label>
-                  <input {...inp('lastName')} placeholder="Enter last name"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label required">NIC Number</label>
-                  <input {...inp('nic')} placeholder="e.g. 901234567V"/>
-                </div>
+        {isLoadingData ? (
+          <div style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>Loading patient data...</div>
+        ) : (
+          <div className="pm-card" style={{maxWidth: '800px', margin: '0 auto'}}>
+            <form onSubmit={handleSubmit} style={{padding: '2rem'}}>
+              
+              <div className="pm-form-group" style={{marginBottom: '1.5rem'}}>
+                <label className="pm-label required">Full Name</label>
+                <input 
+                  required 
+                  className="pm-input" 
+                  value={form.Full_Name} 
+                  onChange={(e) => handleChange('Full_Name', e.target.value)} 
+                  placeholder="Enter full name"
+                />
               </div>
-              <div className="pm-form-grid-3">
+
+              <div className="pm-form-grid-2" style={{marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
                 <div className="pm-form-group">
-                  <label className="pm-label required">Date of Birth</label>
-                  <input type="date" {...inp('dob')}/>
+                  <label className="pm-label">Date of Birth</label>
+                  <input 
+                    type="date" 
+                    className="pm-input" 
+                    value={form.Date_Of_Birth} 
+                    onChange={(e) => handleChange('Date_Of_Birth', e.target.value)}
+                  />
                 </div>
                 <div className="pm-form-group">
-                  <label className="pm-label required">Gender</label>
-                  <select {...sel('gender')}>
+                  <label className="pm-label">Gender</label>
+                  <select 
+                    className="pm-select" 
+                    value={form.Sex} 
+                    onChange={(e) => handleChange('Sex', e.target.value)}
+                  >
                     <option value="">Select Gender</option>
-                    <option>Male</option><option>Female</option><option>Other</option>
-                  </select>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Nationality</label>
-                  <input {...inp('nationality')} placeholder="Nationality"/>
-                </div>
-              </div>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label">Religion</label>
-                  <select className="pm-select">
-                    <option value="">Select Religion</option>
-                    <option>Buddhist</option><option>Hindu</option>
-                    <option>Muslim</option><option>Christian</option><option>Other</option>
-                  </select>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Civil Status</label>
-                  <select className="pm-select">
-                    <option value="">Select Status</option>
-                    <option>Single</option><option>Married</option>
-                    <option>Divorced</option><option>Widowed</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
               </div>
-              <div className="pm-form-grid-2">
+
+              <div className="pm-form-grid-2" style={{marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
                 <div className="pm-form-group">
-                  <label className="pm-label">Occupation</label>
-                  <input className="pm-input" placeholder="Enter occupation"/>
+                  <label className="pm-label">NIC / Passport Number</label>
+                  <input 
+                    className="pm-input" 
+                    value={form.NIC_Passport} 
+                    onChange={(e) => handleChange('NIC_Passport', e.target.value)} 
+                    placeholder="e.g. 901234567V"
+                  />
                 </div>
                 <div className="pm-form-group">
                   <label className="pm-label">Blood Group</label>
-                  <select className="pm-select">
+                  <select 
+                    className="pm-select" 
+                    value={form.Blood_Group} 
+                    onChange={(e) => handleChange('Blood_Group', e.target.value)}
+                  >
                     <option value="">Select Blood Group</option>
-                    {['A+','A-','B+','B-','O+','O-','AB+','AB-'].map(b=><option key={b}>{b}</option>)}
+                    {['A+','A-','B+','B-','O+','O-','AB+','AB-'].map(b=><option key={b} value={b}>{b}</option>)}
                   </select>
                 </div>
               </div>
-            </div>
-          )}
 
-          {/* Step 2: Contact Information */}
-          {step === 2 && (
-            <div>
-              <h3 className="pm-section-title">Contact Information</h3>
-              <div className="pm-form-group">
-                <label className="pm-label required">Street Address</label>
-                <input {...inp('address')} placeholder="No. Street, Area"/>
-              </div>
-              <div className="pm-form-grid-3">
+              <div className="pm-form-grid-2" style={{marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
                 <div className="pm-form-group">
-                  <label className="pm-label required">City</label>
-                  <input {...inp('city')} placeholder="City"/>
+                  <label className="pm-label">Contact No</label>
+                  <input 
+                    className="pm-input" 
+                    value={form.Contact_No} 
+                    onChange={(e) => handleChange('Contact_No', e.target.value)} 
+                    placeholder="e.g. +94 71 234 5678"
+                  />
                 </div>
                 <div className="pm-form-group">
-                  <label className="pm-label required">District</label>
-                  <select {...sel('district')}>
-                    <option value="">Select District</option>
-                    {['Kandy','Colombo','Gampaha','Galle','Matara','Jaffna','Kurunegala','Ratnapura','Badulla','Trincomalee'].map(d=>(
-                      <option key={d}>{d}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label required">Province</label>
-                  <select {...sel('province')}>
-                    <option value="">Select Province</option>
-                    {['Central','Western','Southern','Northern','Eastern','North Western','Sabaragamuwa','Uva','North Central'].map(p=>(
-                      <option key={p}>{p}</option>
-                    ))}
-                  </select>
+                  <label className="pm-label">Hospital ID</label>
+                  <input 
+                    type="number"
+                    className="pm-input" 
+                    value={form.Hospital_ID} 
+                    onChange={(e) => handleChange('Hospital_ID', e.target.value)} 
+                    placeholder="e.g. 1"
+                  />
                 </div>
               </div>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label required">Mobile Number</label>
-                  <input {...inp('phone')} placeholder="+94 71 234 5678"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Email Address</label>
-                  <input type="email" {...inp('email')} placeholder="patient@email.com"/>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* Step 3: Hospital Details */}
-          {step === 3 && (
-            <div>
-              <h3 className="pm-section-title">Hospital Admission Details</h3>
-              <div className="pm-form-grid-3">
-                <div className="pm-form-group">
-                  <label className="pm-label required">Admission Date</label>
-                  <input type="date" {...inp('admissionDate')}/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Ward Number</label>
-                  <input {...inp('wardNo')} placeholder="e.g. Ward 3B"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Bed Number</label>
-                  <input {...inp('bedNo')} placeholder="e.g. Bed 12"/>
-                </div>
+              <div className="pm-form-group" style={{marginBottom: '1.5rem'}}>
+                <label className="pm-label">Ward ID</label>
+                <input 
+                  type="number"
+                  className="pm-input" 
+                  value={form.Ward_ID} 
+                  onChange={(e) => handleChange('Ward_ID', e.target.value)} 
+                  placeholder="e.g. 1"
+                />
               </div>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label">Admission Type</label>
-                  <select {...sel('admissionType')}>
-                    <option value="">Select Type</option>
-                    <option>Emergency</option><option>Outpatient</option>
-                    <option>Inpatient</option><option>Referral</option>
-                  </select>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Referred By</label>
-                  <input {...inp('referredBy')} placeholder="Referring hospital or doctor"/>
-                </div>
-              </div>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label required">Assigned Doctor</label>
-                  <select {...sel('assignedDoctor')}>
-                    <option value="">Select Doctor</option>
-                    <option>Dr. John Silva — JMO</option>
-                    <option>Dr. Chandima Perera — JMO</option>
-                    <option>Dr. N. Perera — Forensic Pathologist</option>
-                  </select>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Priority Level</label>
-                  <select {...sel('priority')}>
-                    <option value="normal">Normal</option>
-                    <option value="urgent">Urgent</option>
-                    <option value="critical">Critical</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* Step 4: Forensic Case Details */}
-          {step === 4 && (
-            <div>
-              <h3 className="pm-section-title">Forensic Case Details</h3>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label required">Case Number</label>
-                  <input {...inp('caseNo')} placeholder="e.g. C2026-1046"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label required">Case Type</label>
-                  <select {...sel('caseType')}>
-                    <option value="">Select Case Type</option>
-                    <option>Medico-Legal</option><option>Postmortem</option>
-                    <option>Injury Examination</option><option>Toxicology</option>
-                    <option>Sexual Assault</option><option>Child Abuse</option>
-                    <option>Road Traffic Accident</option><option>Occupational Injury</option>
-                  </select>
-                </div>
-              </div>
-              <div className="pm-form-grid-3">
-                <div className="pm-form-group">
-                  <label className="pm-label">Police Station</label>
-                  <input {...inp('policeStation')} placeholder="Name of police station"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Officer Name</label>
-                  <input {...inp('officerName')} placeholder="Investigating officer"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Badge / ID</label>
-                  <input {...inp('officerBadge')} placeholder="Badge number"/>
-                </div>
-              </div>
-              <div className="pm-form-group">
-                <label className="pm-label">Crime Reference Number</label>
-                <input {...inp('crimeRef')} placeholder="e.g. CR2026/KD/00123"/>
-              </div>
-              <div className="pm-form-group">
-                <label className="pm-label">Incident Description</label>
-                <textarea className="pm-textarea" rows={5} placeholder="Describe the incident, circumstances, and reason for forensic examination..."/>
-              </div>
-              <div className="pm-form-group">
-                <label className="pm-label">Initial Clinical Notes</label>
-                <textarea className="pm-textarea" rows={3} placeholder="Clinical observations at time of admission..."/>
-              </div>
-            </div>
-          )}
-
-          {/* Step 5: Documents */}
-          {step === 5 && (
-            <div>
-              <h3 className="pm-section-title">Document Uploads</h3>
-              <div className="rp-upload-grid">
-                {[
-                  { label: 'NIC / Passport Copy',        accept:'image/*,.pdf', hint:'JPG, PNG, or PDF — max 5MB' },
-                  { label: 'Police Warrant / B Report',  accept:'.pdf,.doc,.docx', hint:'PDF or Word document — max 10MB' },
-                  { label: 'Medical Records',            accept:'.pdf,.doc,.jpg', hint:'Any supporting medical documents' },
-                  { label: 'X-Ray / Radiology Images',   accept:'image/*,.pdf', hint:'DICOM, JPG, PNG, or PDF' },
-                ].map((doc, i) => (
-                  <div key={i}>
-                    <label className="pm-label">{doc.label}</label>
-                    <div className="pm-upload-zone" style={{marginTop:'0.4rem'}}>
-                      <Upload size={28} className="pm-upload-zone-icon"/>
-                      <p className="pm-upload-zone-text">Drag & Drop or <span style={{color:'#2563eb'}}>Browse</span></p>
-                      <p className="pm-upload-zone-hint">{doc.hint}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 6: Photo & Biometrics */}
-          {step === 6 && (
-            <div>
-              <h3 className="pm-section-title">Patient Photo & Biometrics</h3>
-              <div className="rp-photo-grid">
-                <div className="rp-photo-capture">
-                  <div className="rp-camera-box">
-                    <Camera size={48} color="#94a3b8"/>
-                    <p style={{color:'#64748b',fontWeight:600,margin:'0.75rem 0 0.25rem'}}>Camera Preview</p>
-                    <p style={{color:'#94a3b8',fontSize:'0.8rem',margin:0}}>Click to activate camera</p>
-                  </div>
-                  <div style={{display:'flex',gap:'0.75rem',justifyContent:'center',marginTop:'1rem'}}>
-                    <button className="pm-btn pm-btn-primary"><Camera size={16}/>Capture Photo</button>
-                    <button className="pm-btn pm-btn-secondary"><Upload size={16}/>Upload Photo</button>
-                  </div>
-                </div>
-                <div className="rp-photo-side">
-                  <div className="pm-upload-zone" style={{marginBottom:'1.25rem'}}>
-                    <Image size={28} className="pm-upload-zone-icon"/>
-                    <p className="pm-upload-zone-text">Upload Patient Photo</p>
-                    <p className="pm-upload-zone-hint">JPG or PNG — min 200×200px — max 3MB</p>
-                  </div>
-                  <div className="rp-biometric-note">
-                    <AlertCircle size={16} color="#f59e0b"/>
-                    <span>Fingerprint capture requires biometric hardware connection. Ensure the device is plugged in before proceeding.</span>
-                  </div>
-                  <button className="pm-btn pm-btn-secondary" style={{width:'100%',justifyContent:'center',marginTop:'1rem'}}>
-                    🔍 Capture Fingerprint
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 7: Emergency Contact */}
-          {step === 7 && (
-            <div>
-              <h3 className="pm-section-title">Emergency Contact (Next of Kin)</h3>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label required">Contact Name</label>
-                  <input {...inp('emergencyName')} placeholder="Full name"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label required">Relationship</label>
-                  <select {...sel('emergencyRelation')}>
-                    <option value="">Select Relationship</option>
-                    <option>Spouse</option><option>Parent</option><option>Child</option>
-                    <option>Sibling</option><option>Guardian</option><option>Other</option>
-                  </select>
-                </div>
-              </div>
-              <div className="pm-form-grid-2">
-                <div className="pm-form-group">
-                  <label className="pm-label required">Phone Number</label>
-                  <input {...inp('emergencyPhone')} placeholder="+94 71 234 5678"/>
-                </div>
-                <div className="pm-form-group">
-                  <label className="pm-label">Email</label>
-                  <input type="email" className="pm-input" placeholder="Emergency contact email"/>
-                </div>
-              </div>
-              <div className="pm-form-group">
+              <div className="pm-form-group" style={{marginBottom: '2rem'}}>
                 <label className="pm-label">Address</label>
-                <textarea {...{value:form.emergencyAddress,onChange:e=>set('emergencyAddress',e.target.value),className:'pm-textarea'}} rows={3} placeholder="Contact address..."/>
+                <textarea 
+                  className="pm-textarea" 
+                  rows={3} 
+                  value={form.Address} 
+                  onChange={(e) => handleChange('Address', e.target.value)} 
+                  placeholder="Enter full address"
+                />
               </div>
 
-              {/* Review Summary */}
-              <div className="rp-review-box">
-                <h4 style={{margin:'0 0 1rem',fontSize:'0.9rem',fontWeight:700,color:'#0f172a'}}>📋 Review Before Submission</h4>
-                <div className="rp-review-grid">
-                  <div className="pm-info-row"><span className="pm-info-label">Patient Name</span><span className="pm-info-value">{form.firstName} {form.lastName}</span></div>
-                  <div className="pm-info-row"><span className="pm-info-label">NIC</span><span className="pm-info-value">{form.nic || '—'}</span></div>
-                  <div className="pm-info-row"><span className="pm-info-label">Gender</span><span className="pm-info-value">{form.gender || '—'}</span></div>
-                  <div className="pm-info-row"><span className="pm-info-label">Case Type</span><span className="pm-info-value">{form.caseType || '—'}</span></div>
-                  <div className="pm-info-row"><span className="pm-info-label">Assigned Doctor</span><span className="pm-info-value">{form.assignedDoctor || '—'}</span></div>
-                  <div className="pm-info-row"><span className="pm-info-label">Priority</span><span className="pm-info-value">{form.priority}</span></div>
-                </div>
+              <div style={{display:'flex', justifyContent:'flex-end', gap:'1rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem'}}>
+                <button type="button" className="pm-btn pm-btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
+                <button type="submit" className="pm-btn pm-btn-primary" disabled={isSubmitting}>
+                  <Check size={16}/> {isSubmitting ? 'Saving...' : (isEditMode ? 'Update Patient' : 'Save Patient')}
+                </button>
               </div>
-            </div>
-          )}
 
-          {/* Navigation Buttons */}
-          <div className="rp-nav-buttons">
-            <div>
-              {canBack && (
-                <button className="pm-btn pm-btn-secondary" onClick={()=>setStep(s=>s-1)}>
-                  <ChevronLeft size={16}/>Previous
-                </button>
-              )}
-            </div>
-            <div style={{display:'flex',gap:'1rem',alignItems:'center'}}>
-              <button className="pm-btn pm-btn-secondary">Save Draft</button>
-              {canNext ? (
-                <button className="pm-btn pm-btn-primary" onClick={()=>setStep(s=>s+1)}>
-                  Next Step<ChevronRight size={16}/>
-                </button>
-              ) : (
-                <button className="pm-btn pm-btn-success" style={{background:'#10b981',color:'white',boxShadow:'0 2px 8px rgba(16,185,129,0.3)'}}>
-                  <Check size={16}/>Register Patient
-                </button>
-              )}
-            </div>
+            </form>
           </div>
-        </div>
+        )}
       </div>
     </DashboardLayout>
   );

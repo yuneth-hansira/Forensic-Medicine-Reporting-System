@@ -1,282 +1,169 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import {
-  FileText, User, Shield, Gavel, Stethoscope, FileUp,
-  Check, ChevronRight, ChevronLeft, Search, UploadCloud,
-  CheckCircle, Plus
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { Link, useParams } from 'react-router-dom';
-
-const steps = [
-  { id: 1, name: 'Case Info', icon: <FileText size={18} /> },
-  { id: 2, name: 'Examinee', icon: <User size={18} /> },
-  { id: 3, name: 'Police', icon: <Shield size={18} /> },
-  { id: 4, name: 'Court', icon: <Gavel size={18} /> },
-  { id: 5, name: 'Doctor', icon: <Stethoscope size={18} /> },
-  { id: 6, name: 'Documents', icon: <FileUp size={18} /> },
-];
+import { AlertCircle, Check } from 'lucide-react';
+import { caseService } from '../../services/caseService';
+import '../patients/patients.css';
 
 const NewCase = () => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
-  
-  const [currentStep, setCurrentStep] = useState(1);
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: isEditMode ? {
-      caseId: id,
-      caseType: 'Medico-Legal',
-      examineeName: 'Nimal Perera',
-    } : {}
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    Case_Type: '',
+    MLEF_No_or_PM_No: '',
+    Case_Status: 'Open',
+    Date_Registered: new Date().toISOString().split('T')[0]
   });
-  
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 6));
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
-  const onSubmit = (data) => {
-    console.log("Case Data Submitted: ", data);
-    nextStep();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(isEditMode);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (isEditMode) {
+      const fetchCase = async () => {
+        try {
+          const data = await caseService.getCaseById(id);
+          setForm({
+            Case_Type: data.Case_Type || '',
+            MLEF_No_or_PM_No: data.MLEF_No_or_PM_No || '',
+            Case_Status: data.Case_Status || 'Open',
+            Date_Registered: data.Date_Registered ? data.Date_Registered.substring(0, 10) : ''
+          });
+        } catch (err) {
+          console.error(err);
+          setError("Failed to load case data for editing");
+        } finally {
+          setIsLoadingData(false);
+        }
+      };
+      fetchCase();
+    }
+  }, [id, isEditMode]);
+
+  const handleChange = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      
+      const payload = {
+        ...form,
+      };
+
+      if (isEditMode) {
+        await caseService.updateCase(id, payload);
+        alert('Case updated successfully!');
+        navigate(`/cases/${id}`);
+      } else {
+        const response = await caseService.createCase(payload);
+        alert('Case registered successfully! Case ID: C-' + response.caseId);
+        navigate('/cases');
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'register'} case`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
-        
-        {/* Breadcrumb & Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
-            <Link to="/cases" className="hover:text-blue-600 transition-colors">Case Management</Link>
-            <ChevronRight size={14} />
-            {isEditMode && (
-              <>
-                <Link to={`/cases/${id}`} className="hover:text-blue-600 transition-colors">{id}</Link>
-                <ChevronRight size={14} />
-              </>
-            )}
-            <span className="text-slate-800 font-medium">
-              {isEditMode ? 'Edit Case' : 'Create New Case'}
-            </span>
-          </div>
-          <h1 className="text-2xl font-bold text-slate-800">
-            {isEditMode ? `Edit Case: ${id}` : 'Create New Case'}
-          </h1>
-        </div>
-
-        {/* Stepper */}
-        <div className="bg-white rounded-[20px] p-6 shadow-sm border border-slate-200/60 mb-8 overflow-x-auto">
-          <div className="flex items-center min-w-max">
-            {steps.map((step, idx) => (
-              <React.Fragment key={step.id}>
-                <div className="flex flex-col items-center relative w-32">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 relative z-10 bg-white
-                    ${currentStep > step.id ? 'border-emerald-500 bg-emerald-500 text-white' : 
-                      currentStep === step.id ? 'border-blue-600 text-blue-600 shadow-[0_0_0_4px_rgba(37,99,235,0.1)]' : 
-                      'border-slate-200 text-slate-400'}`}
-                  >
-                    {currentStep > step.id ? <Check size={20} /> : step.icon}
-                  </div>
-                  <span className={`mt-3 text-xs font-bold ${currentStep === step.id ? 'text-slate-800' : 'text-slate-400'}`}>
-                    {step.name}
-                  </span>
-                </div>
-                {idx < steps.length - 1 && (
-                  <div className={`flex-1 h-[2px] -mt-6 mx-2 transition-all duration-300 ${currentStep > step.id ? 'bg-emerald-500' : 'bg-slate-100'}`} />
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-
-        {/* Form Area */}
-        <div className="bg-white rounded-[20px] shadow-sm border border-slate-200/60">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            
-            <div className="p-8 min-h-[400px]">
-              <AnimatePresence mode="wait">
-                
-                {/* STEP 1: Case Info */}
-                {currentStep === 1 && (
-                  <motion.div
-                    key="step1"
-                    initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                  >
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">Case Information</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Case ID <span className="text-red-500">*</span></label>
-                        <input {...register('caseId', { required: true })} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" placeholder="e.g. C2026-1046" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Case Type <span className="text-red-500">*</span></label>
-                        <select {...register('caseType', { required: true })} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all">
-                          <option value="">Select Case Type</option>
-                          <option>Medico-Legal</option>
-                          <option>Postmortem</option>
-                          <option>Injury Examination</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">MLEF / PM Number</label>
-                        <input {...register('mlefNumber')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" placeholder="MLE-901" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Registration Date</label>
-                        <input type="date" {...register('registrationDate')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 2: Examinee */}
-                {currentStep === 2 && (
-                  <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <div className="flex justify-between items-end mb-6 border-b border-slate-100 pb-4">
-                      <h3 className="text-lg font-bold text-slate-800">Examinee Information</h3>
-                      <button type="button" className="text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg">
-                        Search Existing
-                      </button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
-                        <input {...register('examineeName')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" placeholder="John Doe" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">NIC / Passport</label>
-                        <input {...register('nic')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" placeholder="123456789V" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Gender</label>
-                        <select {...register('gender')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500">
-                          <option>Male</option><option>Female</option><option>Other</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Age</label>
-                        <input type="number" {...register('age')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" placeholder="30" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 3 & 4 Omitted for brevity in mockup, adding quick mock */}
-                {currentStep === 3 && (
-                  <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">Police Information</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Police Station</label>
-                        <input {...register('policeStation')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Officer Name</label>
-                        <input {...register('officerName')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {currentStep === 4 && (
-                   <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                   <h3 className="text-lg font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">Court Information</h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div>
-                       <label className="block text-sm font-semibold text-slate-700 mb-1.5">Court Name</label>
-                       <input {...register('courtName')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-semibold text-slate-700 mb-1.5">Case Number</label>
-                       <input {...register('courtCaseNumber')} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" />
-                     </div>
-                   </div>
-                 </motion.div>
-                )}
-
-                {/* STEP 5: Doctor */}
-                {currentStep === 5 && (
-                  <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">Assign Doctor</h3>
-                    <div className="relative mb-6">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                      <input type="text" placeholder="Search doctor by name or SLMC..." className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500" />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {['Dr. John Silva', 'Dr. N. Perera'].map((doc) => (
-                        <div key={doc} className="p-4 border border-slate-200 rounded-xl flex items-center gap-4 hover:border-blue-500 cursor-pointer transition-colors bg-white">
-                          <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">{doc.charAt(4)}</div>
-                          <div className="flex-1">
-                            <h4 className="font-bold text-slate-800">{doc}</h4>
-                            <p className="text-xs text-slate-500">JMO • Available</p>
-                          </div>
-                          <input type="radio" value={doc} {...register('doctor')} className="w-4 h-4 text-blue-600" />
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* STEP 6: Documents & Review */}
-                {currentStep === 6 && (
-                  <motion.div key="step6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">Documents & Review</h3>
-                    <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer mb-8">
-                      <UploadCloud size={40} className="text-blue-500 mb-3" />
-                      <p className="font-semibold text-slate-700">Drag & Drop files here</p>
-                      <p className="text-xs text-slate-500 mt-1">PDF, JPG, PNG up to 10MB</p>
-                      <button type="button" className="mt-4 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 shadow-sm hover:text-blue-600">Browse Files</button>
-                    </div>
-                    
-                    <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-start gap-3">
-                      <CheckCircle size={20} className="text-emerald-600 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="font-semibold text-emerald-800 text-sm">Ready for Submission</h4>
-                        <p className="text-xs text-emerald-600 mt-1">
-                          All required fields have been completed. Please review the details before {isEditMode ? 'saving changes' : 'creating the case'}.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-              </AnimatePresence>
+      <div className="pm-page" style={{padding:'2rem'}}>
+        <div className="pm-page-header" style={{marginBottom:'2rem'}}>
+          <div>
+            <div className="pm-breadcrumb">
+              <Link to="/cases">Cases</Link><span>/</span><span>{isEditMode ? 'Edit Case' : 'Register New Case'}</span>
             </div>
+            <h1 className="pm-page-title">{isEditMode ? 'Edit Case Details' : 'Register New Case'}</h1>
+            <p className="pm-page-subtitle">{isEditMode ? 'Update case details in the database' : 'Enter case details to register in the database'}</p>
+          </div>
+        </div>
 
-            {/* Navigation Footer */}
-            <div className="p-6 border-t border-slate-100 flex justify-between items-center bg-slate-50/50 rounded-b-[20px]">
-              <button
-                type="button"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-colors ${currentStep === 1 ? 'opacity-50 cursor-not-allowed text-slate-400' : 'text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm'}`}
-              >
-                <ChevronLeft size={16} /> Previous
-              </button>
+        {error && (
+          <div style={{background:'#fee2e2', color:'#ef4444', padding:'1rem', borderRadius:'8px', marginBottom:'1.5rem', display:'flex', alignItems:'center', gap:'0.75rem'}}>
+            <AlertCircle size={20}/> {error}
+          </div>
+        )}
+
+        {isLoadingData ? (
+          <div style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>Loading case data...</div>
+        ) : (
+          <div className="pm-card" style={{maxWidth: '800px', margin: '0 auto'}}>
+            <form onSubmit={handleSubmit} style={{padding: '2rem'}}>
               
-              <div className="flex gap-3">
-                <button type="button" className="px-5 py-2.5 rounded-xl font-medium text-sm text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm transition-colors">
-                  Save Draft
-                </button>
-                {currentStep < 6 ? (
-                  <button
-                    type="button"
-                    onClick={nextStep}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all"
+              <div className="pm-form-grid-2" style={{marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
+                <div className="pm-form-group">
+                  <label className="pm-label required">Case Type</label>
+                  <select 
+                    required
+                    className="pm-select" 
+                    value={form.Case_Type} 
+                    onChange={(e) => handleChange('Case_Type', e.target.value)}
                   >
-                    Next Step <ChevronRight size={16} />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm shadow-emerald-600/20 transition-all"
-                  >
-                    <Check size={16} /> {isEditMode ? 'Save Changes' : 'Create Case'}
-                  </button>
-                )}
+                    <option value="">Select Case Type</option>
+                    <option value="Medico-Legal">Medico-Legal</option>
+                    <option value="Postmortem">Postmortem</option>
+                    <option value="Clinical">Clinical</option>
+                    <option value="Toxicology">Toxicology</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="pm-form-group">
+                  <label className="pm-label required">Ref No (MLEF / PM No)</label>
+                  <input 
+                    required
+                    className="pm-input" 
+                    value={form.MLEF_No_or_PM_No} 
+                    onChange={(e) => handleChange('MLEF_No_or_PM_No', e.target.value)} 
+                    placeholder="e.g. MLE-892"
+                  />
+                </div>
               </div>
-            </div>
 
-          </form>
-        </div>
+              <div className="pm-form-grid-2" style={{marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
+                <div className="pm-form-group">
+                  <label className="pm-label required">Date Registered</label>
+                  <input 
+                    required
+                    type="date" 
+                    className="pm-input" 
+                    value={form.Date_Registered} 
+                    onChange={(e) => handleChange('Date_Registered', e.target.value)}
+                  />
+                </div>
+                <div className="pm-form-group">
+                  <label className="pm-label required">Case Status</label>
+                  <select 
+                    required
+                    className="pm-select" 
+                    value={form.Case_Status} 
+                    onChange={(e) => handleChange('Case_Status', e.target.value)}
+                  >
+                    <option value="Open">Open</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style={{display:'flex', justifyContent:'flex-end', gap:'1rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem'}}>
+                <button type="button" className="pm-btn pm-btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
+                <button type="submit" className="pm-btn pm-btn-primary" disabled={isSubmitting}>
+                  <Check size={16}/> {isSubmitting ? 'Saving...' : (isEditMode ? 'Update Case' : 'Register Case')}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

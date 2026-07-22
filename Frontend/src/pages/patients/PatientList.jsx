@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import {
-  Search, Filter, UserPlus, Eye, Edit3, FileText,
+  Search, Filter, UserPlus, Eye, Edit3, FileText, Trash2,
   Printer, MoreHorizontal, ChevronLeft, ChevronRight,
   Download, RefreshCw, SlidersHorizontal
 } from 'lucide-react';
 import '../patients/patients.css';
 
-const allPatients = [];
+import { patientService } from '../../services/patientService';
 
 const statusMap = {
   active:       { label:'Active',       cls:'pm-badge-active' },
@@ -21,19 +21,45 @@ const ROWS_PER_PAGE = 7;
 
 const PatientList = () => {
   const [query, setQuery]       = useState('');
-  const [status, setStatus]     = useState('');
-  const [caseType, setCaseType] = useState('');
-  const [doctor, setDoctor]     = useState('');
   const [page, setPage]         = useState(1);
   const [selected, setSelected] = useState([]);
 
-  const filtered = allPatients.filter(p => {
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const data = await patientService.getAllPatients();
+        setPatients(data);
+      } catch (err) {
+        console.error("Failed to fetch patients:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPatients();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this patient?")) {
+      try {
+        await patientService.deletePatient(id);
+        setPatients(patients.filter(p => p.Patient_ID !== id));
+        setSelected(selected.filter(x => x !== id));
+      } catch (err) {
+        alert("Failed to delete patient");
+      }
+    }
+  };
+
+  const filtered = patients.filter(p => {
     const q = query.toLowerCase();
-    const matchQ = !q || p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q) || p.nic.toLowerCase().includes(q);
-    const matchS  = !status   || p.status   === status;
-    const matchC  = !caseType || p.caseType === caseType;
-    const matchD  = !doctor   || p.doctor   === doctor;
-    return matchQ && matchS && matchC && matchD;
+    const matchQ = !q || 
+      (p.Full_Name && p.Full_Name.toLowerCase().includes(q)) || 
+      (p.Patient_ID && String(p.Patient_ID).includes(q)) || 
+      (p.NIC_Passport && p.NIC_Passport.toLowerCase().includes(q));
+    return matchQ;
   });
 
   const totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE);
@@ -68,7 +94,7 @@ const PatientList = () => {
         <div className="pm-card">
           {/* Filter Bar */}
           <div className="pm-filter-bar">
-            <div className="pm-search-wrapper" style={{flex:'1.5'}}>
+            <div className="pm-search-wrapper" style={{flex:'1'}}>
               <Search size={17} color="#94a3b8"/>
               <input
                 placeholder="Search by name, patient ID, NIC..."
@@ -76,27 +102,6 @@ const PatientList = () => {
                 onChange={e=>{setQuery(e.target.value);setPage(1);}}
               />
             </div>
-            <select className="pm-filter-select" value={status} onChange={e=>{setStatus(e.target.value);setPage(1);}}>
-              <option value="">All Statuses</option>
-              {['active','pending','completed','in-progress','closed'].map(s=>(
-                <option key={s} value={s}>{statusMap[s].label}</option>
-              ))}
-            </select>
-            <select className="pm-filter-select" value={caseType} onChange={e=>{setCaseType(e.target.value);setPage(1);}}>
-              <option value="">All Case Types</option>
-              {['Medico-Legal','Injury','Postmortem','Toxicology'].map(c=>(
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-            <select className="pm-filter-select" value={doctor} onChange={e=>{setDoctor(e.target.value);setPage(1);}}>
-              <option value="">All Doctors</option>
-              {['Dr. John Silva','Dr. Chandima','Dr. N. Perera'].map(d=>(
-                <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-            <button className="pm-btn pm-btn-secondary" onClick={()=>{setQuery('');setStatus('');setCaseType('');setDoctor('');setPage(1);}}>
-              <SlidersHorizontal size={15}/>Clear
-            </button>
           </div>
 
           {/* Bulk Action Bar */}
@@ -121,16 +126,18 @@ const PatientList = () => {
                   <th>Patient Name</th>
                   <th>NIC</th>
                   <th>Age / Gender</th>
-                  <th>Case Type</th>
-                  <th>Assigned Doctor</th>
-                  <th>Status</th>
-                  <th>Registered Date</th>
+                  <th>Blood Group</th>
+                  <th>Contact No</th>
                   <th style={{textAlign:'center'}}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {paged.length === 0 ? (
-                  <tr><td colSpan={10}>
+                {loading ? (
+                  <tr>
+                    <td colSpan="8" style={{textAlign:'center', padding:'2rem'}}>Loading patients...</td>
+                  </tr>
+                ) : paged.length === 0 ? (
+                  <tr><td colSpan={8}>
                     <div className="pm-empty-state">
                       <Search size={36}/>
                       <h4>No Patients Found</h4>
@@ -138,43 +145,31 @@ const PatientList = () => {
                     </div>
                   </td></tr>
                 ) : paged.map((p,i) => (
-                  <tr key={i} className={selected.includes(p.id) ? 'pl-row-selected' : ''}>
-                    <td><input type="checkbox" checked={selected.includes(p.id)} onChange={()=>toggleSelect(p.id)}/></td>
-                    <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>{p.id}</code></td>
+                  <tr key={i} className={selected.includes(p.Patient_ID) ? 'pl-row-selected' : ''}>
+                    <td><input type="checkbox" checked={selected.includes(p.Patient_ID)} onChange={()=>toggleSelect(p.Patient_ID)}/></td>
+                    <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>PT-{p.Patient_ID}</code></td>
                     <td>
                       <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
                         <div className="pm-avatar-placeholder pm-avatar-sm" style={{fontSize:'0.75rem',width:32,height:32}}>
-                          {p.name.charAt(0)}
+                          {p.Full_Name?.charAt(0) || 'U'}
                         </div>
                         <div>
-                          <div style={{fontWeight:600,color:'#0f172a',fontSize:'0.875rem'}}>{p.name}</div>
-                          <div style={{fontSize:'0.75rem',color:'#94a3b8'}}>{p.phone}</div>
+                          <div style={{fontWeight:600,color:'#0f172a',fontSize:'0.875rem'}}>{p.Full_Name}</div>
+                          <div style={{fontSize:'0.75rem',color:'#94a3b8'}}>{p.Contact_No}</div>
                         </div>
                       </div>
                     </td>
-                    <td style={{fontFamily:'monospace',fontSize:'0.82rem'}}>{p.nic}</td>
-                    <td>{p.age} / {p.gender}</td>
+                    <td style={{fontFamily:'monospace',fontSize:'0.82rem'}}>{p.NIC_Passport || '-'}</td>
+                    <td>{p.Date_Of_Birth ? new Date(p.Date_Of_Birth).toLocaleDateString() : '-'} / {p.Sex || '-'}</td>
+                    <td>{p.Blood_Group || '-'}</td>
+                    <td>{p.Contact_No || '-'}</td>
                     <td>
-                      <span style={{fontSize:'0.78rem',background:'#f1f5f9',color:'#475569',padding:'0.2rem 0.6rem',borderRadius:'20px',fontWeight:600}}>
-                        {p.caseType}
-                      </span>
-                    </td>
-                    <td style={{fontSize:'0.85rem'}}>{p.doctor}</td>
-                    <td><span className={`pm-badge ${statusMap[p.status].cls}`}>{statusMap[p.status].label}</span></td>
-                    <td style={{color:'#94a3b8',fontSize:'0.8rem'}}>{p.date}</td>
-                    <td>
-                      <div className="pm-action-menu" style={{justifyContent:'center'}}>
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem'}} title="View">
+                      <div className="pm-action-menu" style={{justifyContent:'center', gap:'0.5rem'}}>
+                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/patients/${p.Patient_ID}`}>
                           <Eye size={14}/>
                         </button>
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem'}} title="Edit">
-                          <Edit3 size={14}/>
-                        </button>
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem'}} title="Report">
-                          <FileText size={14}/>
-                        </button>
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem'}} title="More">
-                          <MoreHorizontal size={14}/>
+                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(p.Patient_ID)}>
+                          <Trash2 size={14}/>
                         </button>
                       </div>
                     </td>

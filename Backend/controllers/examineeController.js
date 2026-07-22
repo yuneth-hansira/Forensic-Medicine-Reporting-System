@@ -101,3 +101,28 @@ exports.updateExaminee = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+// @desc    Delete an examinee
+// @route   DELETE /api/examinees/:id
+exports.deleteExaminee = async (req, res) => {
+    try {
+        const [result] = await pool.query('DELETE FROM Examinee WHERE Examinee_ID = ?', [req.params.id]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Examinee not found' });
+        }
+        
+        // Audit log
+        if (req.user) {
+            await pool.query(
+                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
+                [req.user.id, 'Delete Examinee', 'Examinee']
+            );
+        }
+        
+        res.json({ message: 'Examinee deleted successfully' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};
