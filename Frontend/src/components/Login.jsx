@@ -11,7 +11,7 @@ import {
   Microscope,
   ShieldCheck
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/authService';
 import './Login.css';
 
@@ -30,12 +30,9 @@ const Login = () => {
     setError('');
 
     try {
-      // Plug and play ready backend API call
-      // const response = await authService.login(username, password);
-      // console.log("Login success", response);
-      
-      // Simulate API call for demonstration since backend might not be up
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Backend API call
+      const response = await authService.login(username, password);
+      console.log("Login success", response);
       
       if (!username || !password) {
         throw new Error('Please enter username and password');
@@ -43,8 +40,8 @@ const Login = () => {
       
       console.log('Login attempt:', { username, rememberMe });
       
-      // Navigate to landing page on success
-      navigate('/home');
+      // Navigate to dashboard on success
+      navigate('/dashboard');
       
     } catch (err) {
       setError(err.message || 'An error occurred during login');
@@ -123,7 +120,6 @@ const Login = () => {
               <div className="form-group">
                 <label>Username</label>
                 <div className="input-wrapper">
-                  <User className="input-icon" size={20} />
                   <input 
                     type="text" 
                     placeholder="Enter your username"
@@ -136,7 +132,6 @@ const Login = () => {
               <div className="form-group">
                 <label>Password</label>
                 <div className="input-wrapper">
-                  <Lock className="input-icon" size={20} />
                   <input 
                     type={showPassword ? "text" : "password"} 
                     placeholder="Enter your password"
@@ -169,6 +164,10 @@ const Login = () => {
                 <Lock size={18} />
                 {loading ? 'Signing in...' : 'Sign In'}
               </button>
+
+              <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.95rem' }}>
+                Don't have an account? <Link to="/register" style={{ color: '#2563eb', fontWeight: '500', textDecoration: 'none' }}>Sign up here</Link>
+              </div>
 
               <div className="divider">or</div>
 

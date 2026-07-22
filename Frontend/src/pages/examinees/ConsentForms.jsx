@@ -7,11 +7,7 @@ import {
 } from 'lucide-react';
 
 
-const dummyConsents = [
-  { id: 'CNS-2026-041', type: 'Medical Examination Consent', date: '20 Jul 2026', signedBy: 'Nimal Perera', witness: 'IP Kumara (Police)', doctor: 'Dr. John Silva', status: 'Signed & Active' },
-  { id: 'CNS-2026-042', type: 'Forensic Photography Consent', date: '20 Jul 2026', signedBy: 'Nimal Perera', witness: 'Nurses Staff', doctor: 'Dr. John Silva', status: 'Signed & Active' },
-  { id: 'CNS-2026-043', type: 'Evidence & DNA Sample Collection', date: '21 Jul 2026', signedBy: 'Nimal Perera', witness: 'Lab Assistant', doctor: 'Dr. John Silva', status: 'Signed & Active' },
-];
+const dummyConsents = [];
 
 const ConsentForms = () => {
   const { id } = useParams();
@@ -60,21 +56,21 @@ const ConsentForms = () => {
             <div className="p-4 rounded-2xl bg-emerald-50 text-emerald-600"><FileCheck size={24} /></div>
             <div>
               <p className="text-slate-500 text-xs font-semibold uppercase">Total Signed Forms</p>
-              <h3 className="text-2xl font-bold text-slate-800">3 Forms</h3>
+              <h3 className="text-2xl font-bold text-slate-800">0 Forms</h3>
             </div>
           </div>
           <div className="bg-white p-6 rounded-[20px] shadow-sm border border-slate-200/60 flex items-center gap-4">
             <div className="p-4 rounded-2xl bg-blue-50 text-blue-600"><Shield size={24} /></div>
             <div>
               <p className="text-slate-500 text-xs font-semibold uppercase">Latest Consent</p>
-              <h3 className="text-sm font-bold text-slate-800">DNA & Sample Collection</h3>
+              <h3 className="text-sm font-bold text-slate-800">—</h3>
             </div>
           </div>
           <div className="bg-white p-6 rounded-[20px] shadow-sm border border-slate-200/60 flex items-center gap-4">
             <div className="p-4 rounded-2xl bg-purple-50 text-purple-600"><Lock size={24} /></div>
             <div>
               <p className="text-slate-500 text-xs font-semibold uppercase">Legal Verification</p>
-              <h3 className="text-sm font-bold text-emerald-600">Digitally Verified & Hashed</h3>
+              <h3 className="text-sm font-bold text-slate-400">No data</h3>
             </div>
           </div>
         </div>
@@ -97,33 +93,41 @@ const ConsentForms = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
-              {dummyConsents.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-blue-600">{item.id}</td>
-                  <td className="px-6 py-4 font-semibold text-slate-800">{item.type}</td>
-                  <td className="px-6 py-4 text-slate-500">{item.date}</td>
-                  <td className="px-6 py-4 text-slate-700">{item.signedBy}</td>
-                  <td className="px-6 py-4 text-slate-500">{item.witness}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-emerald-100 text-emerald-700 font-bold text-xs rounded-full border border-emerald-200">
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg" title="Preview">
-                        <Eye size={16} />
-                      </button>
-                      <button className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg" title="Download PDF">
-                        <Download size={16} />
-                      </button>
-                      <button onClick={() => window.print()} className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg" title="Print">
-                        <Printer size={16} />
-                      </button>
-                    </div>
+              {dummyConsents.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="px-6 py-12 text-center text-slate-500">
+                    No consent forms found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                dummyConsents.map((item) => (
+                  <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 font-bold text-blue-600">{item.id}</td>
+                    <td className="px-6 py-4 font-semibold text-slate-800">{item.type}</td>
+                    <td className="px-6 py-4 text-slate-500">{item.date}</td>
+                    <td className="px-6 py-4 text-slate-700">{item.signedBy}</td>
+                    <td className="px-6 py-4 text-slate-500">{item.witness}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-3 py-1 bg-emerald-100 text-emerald-700 font-bold text-xs rounded-full border border-emerald-200">
+                        {item.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg" title="Preview">
+                          <Eye size={16} />
+                        </button>
+                        <button className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg" title="Download PDF">
+                          <Download size={16} />
+                        </button>
+                        <button onClick={() => window.print()} className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg" title="Print">
+                          <Printer size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

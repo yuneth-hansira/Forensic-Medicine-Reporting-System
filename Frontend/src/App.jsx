@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import PlaceholderPage from './pages/PlaceholderPage';
 
 // Auth & Core
 import Login        from './components/Login';
-import LandingPage  from './pages/LandingPage';
+import Register     from './components/Register';
 import Dashboard    from './pages/Dashboard';
 
 // Patient Management
@@ -34,37 +35,8 @@ import ExamineeProfile  from './pages/examinees/ExamineeProfile';
 import MedicalHistory   from './pages/examinees/MedicalHistory';
 import ConsentForms     from './pages/examinees/ConsentForms';
 
-// Deceased Management
-import DeceasedList         from './pages/deceased/DeceasedList';
-import RegisterDeceased     from './pages/deceased/RegisterDeceased';
-import DeceasedProfile      from './pages/deceased/DeceasedProfile';
-import BodyIdentification   from './pages/deceased/BodyIdentification';
-import NextOfKin            from './pages/deceased/NextOfKin';
-import HospitalInformation  from './pages/deceased/HospitalInformation';
-import BodyRelease          from './pages/deceased/BodyRelease';
-
-// Clinical Examination
-import ClinicalDashboard    from './pages/clinical/ClinicalDashboard';
-import ExternalExamination  from './pages/clinical/ExternalExamination';
-import InternalExamination  from './pages/clinical/InternalExamination';
-import ClinicalFindings     from './pages/clinical/ClinicalFindings';
-import InjuryRecording      from './pages/clinical/InjuryRecording';
-import BodyMap              from './pages/clinical/BodyMap';
-import Measurements         from './pages/clinical/Measurements';
-import Notes                from './pages/clinical/Notes';
-
-// Autopsy Management
-import AutopsyList          from './pages/autopsy/AutopsyList';
-import NewAutopsy           from './pages/autopsy/NewAutopsy';
-import AutopsyDetails       from './pages/autopsy/AutopsyDetails';
-import PostmortemFindings   from './pages/autopsy/PostmortemFindings';
-import CauseOfDeath         from './pages/autopsy/CauseOfDeath';
-import MedicoLegalOpinion   from './pages/autopsy/MedicoLegalOpinion';
-import SpecimensCollected   from './pages/autopsy/SpecimensCollected';
-
-
-
-import DashboardLayout from './layouts/DashboardLayout';
+import DeceasedList     from './pages/admin/DeceasedList';
+import UserProfile      from './pages/UserProfile';
 
 function App() {
   return (
@@ -73,7 +45,7 @@ function App() {
         <Routes>
           {/* ── Auth ── */}
           <Route path="/"     element={<Login />} />
-          <Route path="/home" element={<LandingPage />} />
+          <Route path="/register" element={<Register />} />
 
           {/* ── Dashboard Layout Routes ── */}
           <Route element={<DashboardLayout />}>
@@ -141,6 +113,13 @@ function App() {
             <Route path="/autopsy/:id/specimens"          element={<SpecimensCollected />} />
           </Route>
 
+          {/* ── Administration & Other ────────────────────────── */}
+          <Route path="/deceased"                 element={<DeceasedList />} />
+          <Route path="/clinical-findings"        element={<PlaceholderPage title="Clinical Findings" />} />
+          <Route path="/doctors"                  element={<PlaceholderPage title="Doctor Directory" />} />
+          <Route path="/settings"                 element={<PlaceholderPage title="System Settings" />} />
+          <Route path="/profile"                  element={<UserProfile />} />
+          
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

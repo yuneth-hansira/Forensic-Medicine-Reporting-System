@@ -12,24 +12,19 @@ import {
 
 
 const monthlyData = [
-  { month: 'Feb', cases: 38 }, { month: 'Mar', cases: 52 },
-  { month: 'Apr', cases: 44 }, { month: 'May', cases: 61 },
-  { month: 'Jun', cases: 57 }, { month: 'Jul', cases: 48 },
+  { month: 'Feb', cases: 0 }, { month: 'Mar', cases: 0 },
+  { month: 'Apr', cases: 0 }, { month: 'May', cases: 0 },
+  { month: 'Jun', cases: 0 }, { month: 'Jul', cases: 0 },
 ];
 
 const typeData = [
-  { name: 'Medico-Legal', value: 42, color: '#2563EB' },
-  { name: 'Postmortem', value: 28, color: '#8B5CF6' },
-  { name: 'Injury', value: 18, color: '#F59E0B' },
-  { name: 'Toxicology', value: 12, color: '#10B981' },
+  { name: 'Medico-Legal', value: 0, color: '#2563EB' },
+  { name: 'Postmortem', value: 0, color: '#8B5CF6' },
+  { name: 'Injury', value: 0, color: '#F59E0B' },
+  { name: 'Toxicology', value: 0, color: '#10B981' },
 ];
 
-const recentCases = [
-  { id: 'C2026-1045', type: 'Medico-Legal', examinee: 'Nimal Perera', doctor: 'Dr. John Silva', status: 'Pending',   date: '20 Jul 2026' },
-  { id: 'C2026-1044', type: 'Postmortem',   examinee: 'Unknown',       doctor: 'Dr. N. Perera', status: 'Completed', date: '19 Jul 2026' },
-  { id: 'C2026-1043', type: 'Injury',       examinee: 'Kasun Fernando',  doctor: 'Dr. Chandima', status: 'Emergency', date: '18 Jul 2026' },
-  { id: 'C2026-1042', type: 'Toxicology',   examinee: 'Sahan Wijesinghe',doctor: 'Dr. John Silva',status: 'Pending',  date: '17 Jul 2026' },
-];
+const recentCases = [];
 
 const statusColors = {
   Pending:   'bg-amber-100 text-amber-700 border-amber-200',
@@ -38,10 +33,10 @@ const statusColors = {
 };
 
 const kpis = [
-  { label: 'Total Cases',   value: '1,245', change: '+12%', icon: FileText,     color: 'bg-blue-50   text-blue-600',    border: 'border-blue-100'   },
-  { label: 'Pending',       value: '42',    change: '+3',   icon: Clock,        color: 'bg-amber-50  text-amber-600',   border: 'border-amber-100'  },
-  { label: 'Completed',     value: '856',   change: '+8%',  icon: CheckCircle,  color: 'bg-emerald-50 text-emerald-600',border: 'border-emerald-100'},
-  { label: 'Emergency',     value: '12',    change: '−2',   icon: AlertTriangle,color: 'bg-red-50    text-red-600',     border: 'border-red-100'    },
+  { label: 'Total Cases',   value: '0', change: '0%', icon: FileText,     color: 'bg-blue-50   text-blue-600',    border: 'border-blue-100'   },
+  { label: 'Pending',       value: '0',    change: '0',   icon: Clock,        color: 'bg-amber-50  text-amber-600',   border: 'border-amber-100'  },
+  { label: 'Completed',     value: '0',   change: '0%',  icon: CheckCircle,  color: 'bg-emerald-50 text-emerald-600',border: 'border-emerald-100'},
+  { label: 'Emergency',     value: '0',    change: '0',   icon: AlertTriangle,color: 'bg-red-50    text-red-600',     border: 'border-red-100'    },
 ];
 
 const CaseDashboard = () => {
@@ -87,7 +82,7 @@ const CaseDashboard = () => {
                 <p className="text-slate-500 text-sm font-semibold">{kpi.label}</p>
                 <h3 className="text-2xl font-bold text-slate-800">{kpi.value}</h3>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  <span className={kpi.change.startsWith('+') ? 'text-emerald-500' : 'text-red-500'}>{kpi.change}</span> this month
+                  <span className="text-slate-500">{kpi.change}</span> this month
                 </p>
               </div>
             </motion.div>
@@ -170,28 +165,36 @@ const CaseDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {recentCases.map((c, idx) => (
-                  <motion.tr
-                    key={c.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: idx * 0.07 }}
-                    className="hover:bg-slate-50 transition-colors cursor-pointer"
-                    onClick={() => navigate(`/cases/${c.id}`)}
-                  >
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-blue-600 text-sm">{c.id}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">{c.examinee}</div>
+                {recentCases.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="px-6 py-12 text-center text-slate-500">
+                      No recent cases to display.
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{c.type}</td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{c.doctor}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${statusColors[c.status]}`}>
-                        {c.status}
-                      </span>
-                    </td>
-                  </motion.tr>
-                ))}
+                  </tr>
+                ) : (
+                  recentCases.map((c, idx) => (
+                    <motion.tr
+                      key={c.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: idx * 0.07 }}
+                      className="hover:bg-slate-50 transition-colors cursor-pointer"
+                      onClick={() => navigate(`/cases/${c.id}`)}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-blue-600 text-sm">{c.id}</div>
+                        <div className="text-xs text-slate-400 mt-0.5">{c.examinee}</div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{c.type}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500">{c.doctor}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${statusColors[c.status]}`}>
+                          {c.status}
+                        </span>
+                      </td>
+                    </motion.tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

@@ -13,49 +13,49 @@ import '../patients/patients.css';
 import './PatientAnalytics.css';
 
 const monthlyRegistrations = [
-  {month:'Jan',patients:42,completed:38,pending:4},
-  {month:'Feb',patients:58,completed:51,pending:7},
-  {month:'Mar',patients:71,completed:65,pending:6},
-  {month:'Apr',patients:65,completed:60,pending:5},
-  {month:'May',patients:89,completed:79,pending:10},
-  {month:'Jun',patients:78,completed:72,pending:6},
-  {month:'Jul',patients:95,completed:82,pending:13},
-  {month:'Aug',patients:82,completed:75,pending:7},
-  {month:'Sep',patients:110,completed:98,pending:12},
-  {month:'Oct',patients:98,completed:90,pending:8},
-  {month:'Nov',patients:115,completed:104,pending:11},
-  {month:'Dec',patients:130,completed:118,pending:12},
+  {month:'Jan',patients:0,completed:0,pending:0},
+  {month:'Feb',patients:0,completed:0,pending:0},
+  {month:'Mar',patients:0,completed:0,pending:0},
+  {month:'Apr',patients:0,completed:0,pending:0},
+  {month:'May',patients:0,completed:0,pending:0},
+  {month:'Jun',patients:0,completed:0,pending:0},
+  {month:'Jul',patients:0,completed:0,pending:0},
+  {month:'Aug',patients:0,completed:0,pending:0},
+  {month:'Sep',patients:0,completed:0,pending:0},
+  {month:'Oct',patients:0,completed:0,pending:0},
+  {month:'Nov',patients:0,completed:0,pending:0},
+  {month:'Dec',patients:0,completed:0,pending:0},
 ];
 
 const genderData = [
-  {name:'Male',   value:58,color:'#2563eb'},
-  {name:'Female', value:38,color:'#ec4899'},
-  {name:'Other',  value:4, color:'#94a3b8'},
+  {name:'Male',   value:0,color:'#2563eb'},
+  {name:'Female', value:0,color:'#ec4899'},
+  {name:'Other',  value:0, color:'#94a3b8'},
 ];
 
 const ageData = [
-  {group:'0-18',  count:45},
-  {group:'19-30', count:198},
-  {group:'31-45', count:312},
-  {group:'46-60', count:287},
-  {group:'61-75', count:154},
-  {group:'75+',   count:63},
+  {group:'0-18',  count:0},
+  {group:'19-30', count:0},
+  {group:'31-45', count:0},
+  {group:'46-60', count:0},
+  {group:'61-75', count:0},
+  {group:'75+',   count:0},
 ];
 
 const caseTypeData = [
-  {type:'Medico-Legal',  count:420,color:'#2563eb'},
-  {type:'Injury',        count:285,color:'#10b981'},
-  {type:'Postmortem',    count:198,color:'#8b5cf6'},
-  {type:'Toxicology',    count:142,color:'#f59e0b'},
-  {type:'Sexual Assault',count:98, color:'#ef4444'},
-  {type:'Other',         count:102,color:'#64748b'},
+  {type:'Medico-Legal',  count:0,color:'#2563eb'},
+  {type:'Injury',        count:0,color:'#10b981'},
+  {type:'Postmortem',    count:0,color:'#8b5cf6'},
+  {type:'Toxicology',    count:0,color:'#f59e0b'},
+  {type:'Sexual Assault',count:0, color:'#ef4444'},
+  {type:'Other',         count:0,color:'#64748b'},
 ];
 
 const completionRateData = [
-  {month:'Jan',rate:90},{month:'Feb',rate:88},{month:'Mar',rate:92},
-  {month:'Apr',rate:92},{month:'May',rate:89},{month:'Jun',rate:92},
-  {month:'Jul',rate:86},{month:'Aug',rate:91},{month:'Sep',rate:89},
-  {month:'Oct',rate:92},{month:'Nov',rate:90},{month:'Dec',rate:91},
+  {month:'Jan',rate:0},{month:'Feb',rate:0},{month:'Mar',rate:0},
+  {month:'Apr',rate:0},{month:'May',rate:0},{month:'Jun',rate:0},
+  {month:'Jul',rate:0},{month:'Aug',rate:0},{month:'Sep',rate:0},
+  {month:'Oct',rate:0},{month:'Nov',rate:0},{month:'Dec',rate:0},
 ];
 
 const PatientAnalytics = () => {
@@ -81,32 +81,32 @@ const PatientAnalytics = () => {
             <div className="pm-kpi-icon"><Users size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Total Patients</p>
-              <p className="pm-kpi-value">1,245</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+12.4% vs last year</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0% vs last year</div>
             </div>
           </div>
           <div className="pm-kpi-card green">
             <div className="pm-kpi-icon"><Activity size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Avg. Per Month</p>
-              <p className="pm-kpi-value">86</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+8.2% vs last year</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0% vs last year</div>
             </div>
           </div>
           <div className="pm-kpi-card purple">
             <div className="pm-kpi-icon"><FileText size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Reports Generated</p>
-              <p className="pm-kpi-value">1,087</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+18.7% vs last year</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0% vs last year</div>
             </div>
           </div>
           <div className="pm-kpi-card orange">
             <div className="pm-kpi-icon"><BarChart2 size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Completion Rate</p>
-              <p className="pm-kpi-value">90.3%</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+2.1% vs last year</div>
+              <p className="pm-kpi-value">0%</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0% vs last year</div>
             </div>
           </div>
         </div>

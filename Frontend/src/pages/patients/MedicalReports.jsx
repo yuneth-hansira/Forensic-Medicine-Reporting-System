@@ -8,38 +8,7 @@ import {
 import '../patients/patients.css';
 import './MedicalReports.css';
 
-const reports = [
-  {
-    id:'MLR-2026-0312', type:'Medico-Legal Report', patient:'Nimal Perera',
-    caseNo:'C2026-1045', doctor:'Dr. John Silva',
-    date:'20 Jul 2026', status:'approved', pages:8,
-    desc:'General medico-legal examination report prepared for legal proceedings relating to alleged assault incident at Kandy.'
-  },
-  {
-    id:'PMR-2026-0287', type:'Postmortem Report', patient:'Unknown Male',
-    caseNo:'C2026-1038', doctor:'Dr. N. Perera',
-    date:'18 Jul 2026', status:'pending_approval', pages:12,
-    desc:'Full postmortem examination report including histopathology and toxicology findings. Cause of death: blunt force trauma.'
-  },
-  {
-    id:'IER-2026-0298', type:'Injury Examination Report', patient:'Kasun Fernando',
-    caseNo:'C2026-1044', doctor:'Dr. Chandima',
-    date:'17 Jul 2026', status:'draft', pages:5,
-    desc:'Injury assessment following road traffic accident on Kandy-Colombo highway. Multiple lacerations and fractures documented.'
-  },
-  {
-    id:'CTR-2026-0267', type:'Court Report', patient:'Anjali De Silva',
-    caseNo:'C2026-1043', doctor:'Dr. John Silva',
-    date:'15 Jul 2026', status:'approved', pages:6,
-    desc:'Expert witness court report submitted to the Kandy Magistrate Court case MC/KA/2026/01234.'
-  },
-  {
-    id:'TXR-2026-0241', type:'Toxicology Report', patient:'Sahan Wijesinghe',
-    caseNo:'C2026-1042', doctor:'Dr. N. Perera',
-    date:'14 Jul 2026', status:'approved', pages:9,
-    desc:'Comprehensive toxicology analysis including blood alcohol content, drug screening, and heavy metal profiling results.'
-  },
-];
+const reports = [];
 
 const statusConfig = {
   approved:         { label:'Approved',          cls:'pm-badge-active',      icon:<CheckCircle size={12}/> },

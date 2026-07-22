@@ -4,17 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   FileText, CheckCircle, Clock, AlertTriangle, Search,
   Filter, MoreVertical, Eye, Edit, UserPlus, UploadCloud,
-  XCircle, ChevronLeft, ChevronRight, FileDown, Download
+  XCircle, ChevronLeft, ChevronRight, FileDown, Download, Trash2
 } from 'lucide-react';
 
 
-const dummyCases = [
-  { id: 'C2026-1045', mle: 'MLE-892', type: 'Medico-Legal', examinee: 'Nimal Perera', doctor: 'Dr. John Silva', police: 'Kandy PS', status: 'Pending', date: '20 Jul 2026' },
-  { id: 'C2026-1044', mle: 'PM-412', type: 'Postmortem', examinee: 'Unknown', doctor: 'Dr. N. Perera', police: 'Peradeniya PS', status: 'Completed', date: '19 Jul 2026' },
-  { id: 'C2026-1043', mle: 'MLE-890', type: 'Injury', examinee: 'Kasun Fernando', doctor: 'Dr. Chandima', police: 'Katugastota PS', status: 'Emergency', date: '18 Jul 2026' },
-  { id: 'C2026-1042', mle: 'MLE-889', type: 'Toxicology', examinee: 'Sahan Wijesinghe', doctor: 'Dr. John Silva', police: 'Kandy PS', status: 'Pending', date: '17 Jul 2026' },
-  { id: 'C2026-1041', mle: 'MLE-888', type: 'Medico-Legal', examinee: 'Ruwan Jayasekara', doctor: 'Dr. N. Perera', police: 'Kandy PS', status: 'Completed', date: '16 Jul 2026' },
-];
+const dummyCases = [];
 
 const StatCard = ({ title, count, icon, color }) => (
   <motion.div
@@ -34,6 +28,14 @@ const StatCard = ({ title, count, icon, color }) => (
 const CaseList = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const [cases, setCases] = useState(dummyCases);
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this case?")) {
+      setCases(cases.filter(c => c.id !== id));
+      alert(`Case ${id} deleted.`);
+    }
+  };
 
   const statusColors = {
     Pending: 'bg-amber-100 text-amber-700 border-amber-200',
@@ -66,10 +68,10 @@ const CaseList = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <StatCard title="Total Cases" count="1,245" icon={<FileText size={24} />} color="bg-blue-50 text-blue-600" />
-          <StatCard title="Pending" count="42" icon={<Clock size={24} />} color="bg-amber-50 text-amber-600" />
-          <StatCard title="Completed" count="856" icon={<CheckCircle size={24} />} color="bg-emerald-50 text-emerald-600" />
-          <StatCard title="Emergency" count="12" icon={<AlertTriangle size={24} />} color="bg-red-50 text-red-600" />
+          <StatCard title="Total Cases" count="0" icon={<FileText size={24} />} color="bg-blue-50 text-blue-600" />
+          <StatCard title="Pending" count="0" icon={<Clock size={24} />} color="bg-amber-50 text-amber-600" />
+          <StatCard title="Completed" count="0" icon={<CheckCircle size={24} />} color="bg-emerald-50 text-emerald-600" />
+          <StatCard title="Emergency" count="0" icon={<AlertTriangle size={24} />} color="bg-red-50 text-red-600" />
         </div>
 
         {/* Table Section */}
@@ -108,52 +110,54 @@ const CaseList = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {dummyCases.map((caseItem, idx) => (
-                  <motion.tr
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    key={caseItem.id}
-                    className="hover:bg-slate-50/80 transition-colors group"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-blue-600">{caseItem.id}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">{caseItem.mle}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-slate-700">{caseItem.type}</td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-slate-800">{caseItem.examinee}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{caseItem.doctor}</td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{caseItem.police}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusColors[caseItem.status]}`}>
-                        {caseItem.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-500">{caseItem.date}</td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link to={`/cases/${caseItem.id}`} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                          <Eye size={16} />
-                        </Link>
-                        <Link to={`/cases/${caseItem.id}/edit`} className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors">
-                          <Edit size={16} />
-                        </Link>
-                        <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
-                          <MoreVertical size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
+                  {cases.map((caseItem, idx) => (
+                    <motion.tr
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      key={caseItem.id}
+                      className="hover:bg-slate-50/80 transition-colors group"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-blue-600">{caseItem.id}</div>
+                        <div className="text-xs text-slate-400 mt-0.5">{caseItem.mle}</div>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-slate-700">{caseItem.type}</td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-semibold text-slate-800">{caseItem.examinee}</div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{caseItem.doctor}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500">{caseItem.police}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusColors[caseItem.status]}`}>
+                          {caseItem.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-500">{caseItem.date}</td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Link to={`/cases/${caseItem.id}`} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View">
+                            <Eye size={16} />
+                          </Link>
+                          <Link to={`/cases/${caseItem.id}/edit`} className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
+                            <Edit size={16} />
+                          </Link>
+                          <button 
+                            onClick={() => handleDelete(caseItem.id)}
+                            className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
               </tbody>
             </table>
           </div>
 
           {/* Pagination */}
           <div className="p-5 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-sm text-slate-500">Showing 1 to 5 of 1,245 cases</span>
+            <span className="text-sm text-slate-500">Showing 0 to 0 of 0 cases</span>
             <div className="flex gap-1">
               <button className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:bg-slate-50"><ChevronLeft size={16} /></button>
               <button className="w-9 h-9 border border-blue-600 bg-blue-600 text-white rounded-lg text-sm font-medium">1</button>

@@ -13,28 +13,22 @@ import '../patients/patients.css';
 import './PatientDashboard.css';
 
 const areaData = [
-  { month: 'Jan', patients: 42 }, { month: 'Feb', patients: 58 },
-  { month: 'Mar', patients: 71 }, { month: 'Apr', patients: 65 },
-  { month: 'May', patients: 89 }, { month: 'Jun', patients: 78 },
-  { month: 'Jul', patients: 95 }, { month: 'Aug', patients: 82 },
-  { month: 'Sep', patients: 110 },{ month: 'Oct', patients: 98 },
-  { month: 'Nov', patients: 115 },{ month: 'Dec', patients: 130 },
+  { month: 'Jan', patients: 0 }, { month: 'Feb', patients: 0 },
+  { month: 'Mar', patients: 0 }, { month: 'Apr', patients: 0 },
+  { month: 'May', patients: 0 }, { month: 'Jun', patients: 0 },
+  { month: 'Jul', patients: 0 }, { month: 'Aug', patients: 0 },
+  { month: 'Sep', patients: 0 }, { month: 'Oct', patients: 0 },
+  { month: 'Nov', patients: 0 }, { month: 'Dec', patients: 0 },
 ];
 
 const caseTypeData = [
-  { name: 'Medico-Legal', value: 38, color: '#2563eb' },
-  { name: 'Postmortem',   value: 22, color: '#8b5cf6' },
-  { name: 'Injury',       value: 25, color: '#10b981' },
-  { name: 'Toxicology',   value: 15, color: '#f59e0b' },
+  { name: 'Medico-Legal', value: 0, color: '#2563eb' },
+  { name: 'Postmortem',   value: 0, color: '#8b5cf6' },
+  { name: 'Injury',       value: 0, color: '#10b981' },
+  { name: 'Toxicology',   value: 0, color: '#f59e0b' },
 ];
 
-const recentPatients = [
-  { id: 'PT-2026-1045', name: 'Nimal Perera',    age: 34, gender: 'Male',   caseType: 'Medico-Legal',  status: 'active',      doctor: 'Dr. John Silva',  date: '20 Jul 2026' },
-  { id: 'PT-2026-1044', name: 'Kasun Fernando',  age: 28, gender: 'Male',   caseType: 'Injury',        status: 'pending',     doctor: 'Dr. Chandima',    date: '20 Jul 2026' },
-  { id: 'PT-2026-1043', name: 'Anjali De Silva', age: 45, gender: 'Female', caseType: 'Postmortem',    status: 'completed',   doctor: 'Dr. N. Perera',   date: '19 Jul 2026' },
-  { id: 'PT-2026-1042', name: 'Sahan Wijesiri',  age: 52, gender: 'Male',   caseType: 'Toxicology',    status: 'in-progress', doctor: 'Dr. John Silva',  date: '19 Jul 2026' },
-  { id: 'PT-2026-1041', name: 'Ruwan Jayasekara',age: 38, gender: 'Male',   caseType: 'Medico-Legal',  status: 'completed',   doctor: 'Dr. Chandima',    date: '18 Jul 2026' },
-];
+const recentPatients = [];
 
 const statusMap = {
   active:      { label: 'Active',      cls: 'pm-badge-active' },
@@ -71,32 +65,32 @@ const PatientDashboard = () => {
             <div className="pm-kpi-icon"><Users size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Total Patients</p>
-              <p className="pm-kpi-value">1,245</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+12 today</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0 today</div>
             </div>
           </div>
           <div className="pm-kpi-card orange">
             <div className="pm-kpi-icon"><Clock size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Pending Reports</p>
-              <p className="pm-kpi-value">38</p>
-              <div className="pm-kpi-trend down"><TrendingUp size={13}/>-3 since yesterday</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend down"><TrendingUp size={13}/>-0 since yesterday</div>
             </div>
           </div>
           <div className="pm-kpi-card purple">
             <div className="pm-kpi-icon"><Activity size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Today's Cases</p>
-              <p className="pm-kpi-value">14</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+5 new</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0 new</div>
             </div>
           </div>
           <div className="pm-kpi-card green">
             <div className="pm-kpi-icon"><CheckCircle size={24}/></div>
             <div className="pm-kpi-info">
               <p className="pm-kpi-label">Completed Cases</p>
-              <p className="pm-kpi-value">296</p>
-              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+15 this week</div>
+              <p className="pm-kpi-value">0</p>
+              <div className="pm-kpi-trend up"><TrendingUp size={13}/>+0 this week</div>
             </div>
           </div>
         </div>
@@ -202,34 +196,42 @@ const PatientDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {recentPatients.map((p,i) => (
-                  <tr key={i}>
-                    <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>{p.id}</code></td>
-                    <td>
-                      <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
-                        <div className="pm-avatar-placeholder pm-avatar-sm" style={{fontSize:'0.75rem'}}>
-                          {p.name.charAt(0)}
-                        </div>
-                        <span style={{fontWeight:600,color:'#0f172a'}}>{p.name}</span>
-                      </div>
-                    </td>
-                    <td>{p.age} / {p.gender}</td>
-                    <td><span style={{fontSize:'0.78rem',fontWeight:600,color:'#475569'}}>{p.caseType}</span></td>
-                    <td>{p.doctor}</td>
-                    <td><span className={`pm-badge ${statusMap[p.status].cls}`}>{statusMap[p.status].label}</span></td>
-                    <td style={{color:'#94a3b8',fontSize:'0.8rem'}}>{p.date}</td>
-                    <td>
-                      <div className="pm-action-menu">
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.65rem'}}>
-                          <Eye size={14}/>
-                        </button>
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.65rem'}}>
-                          <MoreHorizontal size={14}/>
-                        </button>
-                      </div>
+                {recentPatients.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" style={{textAlign:'center', padding:'3rem', color:'#64748b'}}>
+                      No recent patients found.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  recentPatients.map((p,i) => (
+                    <tr key={i}>
+                      <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>{p.id}</code></td>
+                      <td>
+                        <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                          <div className="pm-avatar-placeholder pm-avatar-sm" style={{fontSize:'0.75rem'}}>
+                            {p.name.charAt(0)}
+                          </div>
+                          <span style={{fontWeight:600,color:'#0f172a'}}>{p.name}</span>
+                        </div>
+                      </td>
+                      <td>{p.age} / {p.gender}</td>
+                      <td><span style={{fontSize:'0.78rem',fontWeight:600,color:'#475569'}}>{p.caseType}</span></td>
+                      <td>{p.doctor}</td>
+                      <td><span className={`pm-badge ${statusMap[p.status].cls}`}>{statusMap[p.status].label}</span></td>
+                      <td style={{color:'#94a3b8',fontSize:'0.8rem'}}>{p.date}</td>
+                      <td>
+                        <div className="pm-action-menu">
+                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.65rem'}}>
+                            <Eye size={14}/>
+                          </button>
+                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.65rem'}}>
+                            <MoreHorizontal size={14}/>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
