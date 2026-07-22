@@ -6,6 +6,7 @@ import PlaceholderPage from './pages/PlaceholderPage';
 import Login        from './components/Login';
 import Register     from './components/Register';
 import Dashboard    from './pages/Dashboard';
+import CalendarPage from './pages/CalendarPage';
 
 // Patient Management
 import PatientDashboard      from './pages/patients/PatientDashboard';
@@ -124,6 +125,7 @@ function App() {
 
           {/* ── Main Dashboard ── */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/calendar"  element={<CalendarPage />} />
 
           {/* ── Patient Management ─────────────────────────── */}
           <Route path="/patients"                element={<PatientDashboard />} />

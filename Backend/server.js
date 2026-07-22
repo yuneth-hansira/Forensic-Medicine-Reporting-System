@@ -42,6 +42,7 @@ app.use('/api/wards', require('./routes/wardRoutes'));
 app.use('/api/body-id', require('./routes/bodyIdRoutes'));
 app.use('/api/next-of-kin', require('./routes/kinRoutes'));
 app.use('/api/audit-logs', require('./routes/auditLogRoutes'));
+app.use('/api/calendar', require('./routes/calendarRoutes'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

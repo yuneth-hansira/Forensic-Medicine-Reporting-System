@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Users, Folder, Clock, CheckCircle, 
   FlaskConical, FileText, Building2, Calendar,
@@ -19,6 +20,7 @@ import './Dashboard.css';
 
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [profileName, setProfileName] = useState('...');
   const [profileRole, setProfileRole] = useState('...');
@@ -83,7 +85,12 @@ const Dashboard = () => {
             <h2>Welcome back, <span className="highlight">{profileName}</span></h2>
             <p>{profileRole}</p>
           </div>
-          <div className="date-display">
+          <div 
+            className="date-display" 
+            onClick={() => navigate('/calendar')} 
+            style={{ cursor: 'pointer' }}
+            title="View Full Calendar"
+          >
             <Calendar size={18} className="date-icon" />
             <span className="date-text">
               <strong>{formatDate(currentDateTime)}</strong>, {formatDay(currentDateTime)} • {formatTime(currentDateTime)}
@@ -190,7 +197,7 @@ const Dashboard = () => {
                 <Folder size={24} className="action-icon text-blue" />
                 <span>Search Case</span>
               </button>
-              <button className="action-btn">
+              <button className="action-btn" onClick={() => navigate('/calendar')}>
                 <Calendar size={24} className="action-icon text-pink" />
                 <span>View Calendar</span>
               </button>
