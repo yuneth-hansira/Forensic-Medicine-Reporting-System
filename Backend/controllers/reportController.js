@@ -8,7 +8,7 @@ exports.getReports = async (req, res) => {
         const [records] = await pool.query(`
             SELECT r.*, 
                    c.MLEF_No_or_PM_No as FMMS_Case_Number,
-                   d.Full_Name as Doctor_Name
+                   d.Name as Doctor_Name
             FROM Report r
             LEFT JOIN \`Case\` c ON r.Case_ID = c.Case_ID
             LEFT JOIN Doctor d ON r.Doctor_ID = d.Doctor_ID
@@ -113,6 +113,8 @@ exports.deleteReport = async (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Report not found' });
         }
+
+        
 
         res.json({ message: 'Report deleted successfully' });
     } catch (err) {

@@ -64,12 +64,7 @@ exports.createDeceased = async (req, res) => {
             [Case_ID, Hospital_ID, Ward_ID, Full_Name, Sex, Age, BHT_No, Date_Of_Death || null, Place_Of_Death, Death_Type]
         );
         
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Create Deceased', 'Deceased']
-            );
-        }
+        
         
         res.status(201).json({ message: 'Deceased created successfully', deceasedId: result.insertId });
     } catch (err) {
@@ -101,12 +96,7 @@ exports.updateDeceased = async (req, res) => {
             return res.status(404).json({ message: 'Deceased not found' });
         }
         
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Update Deceased', 'Deceased']
-            );
-        }
+        
         
         res.json({ message: 'Deceased updated successfully' });
     } catch (err) {
@@ -128,12 +118,7 @@ exports.deleteDeceased = async (req, res) => {
             return res.status(404).json({ message: 'Deceased not found' });
         }
         
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Delete Deceased', 'Deceased']
-            );
-        }
+        
         
         res.json({ message: 'Deceased deleted successfully' });
     } catch (err) {

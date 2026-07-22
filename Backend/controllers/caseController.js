@@ -70,13 +70,7 @@ exports.createCase = async (req, res) => {
             );
         }
         
-        // Audit log
-        if (req.user) {
-            await connection.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Create Case', 'Case']
-            );
-        }
+        
         
         await connection.commit();
         res.status(201).json({ message: 'Case created successfully', caseId });
@@ -105,13 +99,7 @@ exports.updateCase = async (req, res) => {
             return res.status(404).json({ message: 'Case not found' });
         }
         
-        // Audit log
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Update Case', 'Case']
-            );
-        }
+        
         
         res.json({ message: 'Case updated successfully' });
     } catch (err) {
@@ -130,13 +118,7 @@ exports.deleteCase = async (req, res) => {
             return res.status(404).json({ message: 'Case not found' });
         }
         
-        // Audit log
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Delete Case', 'Case']
-            );
-        }
+        
         
         res.json({ message: 'Case deleted successfully' });
     } catch (err) {

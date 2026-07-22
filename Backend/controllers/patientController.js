@@ -29,7 +29,7 @@ exports.createPatient = async (req, res) => {
         
         const [result] = await pool.query(
             'INSERT INTO Patient (Full_Name, Sex, Date_Of_Birth, NIC_Passport, Blood_Group, Contact_No, Address, Hospital_ID, Ward_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [Full_Name, Sex, Date_Of_Birth || null, NIC_Passport || null, Blood_Group || null, Contact_No || null, Address || null, Hospital_ID || null, Ward_ID || null]
+            [Full_Name, Sex || null, Date_Of_Birth || null, NIC_Passport || null, Blood_Group || null, Contact_No || null, Address || null, Hospital_ID || null, Ward_ID || null]
         );
         
         res.status(201).json({ 
@@ -52,7 +52,7 @@ exports.updatePatient = async (req, res) => {
 
         const [result] = await pool.query(
             'UPDATE Patient SET Full_Name = ?, Sex = ?, Date_Of_Birth = ?, NIC_Passport = ?, Blood_Group = ?, Contact_No = ?, Address = ?, Hospital_ID = ?, Ward_ID = ? WHERE Patient_ID = ?',
-            [Full_Name, Sex, Date_Of_Birth || null, NIC_Passport || null, Blood_Group || null, Contact_No || null, Address || null, Hospital_ID || null, Ward_ID || null, patientId]
+            [Full_Name, Sex || null, Date_Of_Birth || null, NIC_Passport || null, Blood_Group || null, Contact_No || null, Address || null, Hospital_ID || null, Ward_ID || null, patientId]
         );
 
         if (result.affectedRows === 0) {

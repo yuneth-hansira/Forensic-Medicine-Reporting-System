@@ -3,7 +3,8 @@ import {
   Home, Users, FolderOpen, ShieldAlert, Activity, 
   FileText, Shield, Gavel, Users2, Building2, Clock,
   Settings, UserCircle, LogOut, Scale,
-  List, UserPlus, Calendar, AlertCircle, BarChart2, FileCheck
+  List, UserPlus, Calendar, AlertCircle, BarChart2, FileCheck,
+  FlaskConical, Search, Archive, Microscope, ArrowRightCircle
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
@@ -24,6 +25,17 @@ const navItems = [
     { name: 'Clinical Findings',   icon: FileText,   path: '/clinical-findings' },
     { name: 'Injuries',            icon: AlertCircle,path: '/injuries' },
     { name: 'Documents',           icon: ClipboardList,path: '/documents' },
+  ]},
+  { section: 'INVESTIGATIONS', items: [
+    { name: 'Investigations',      icon: Search,     path: '/investigations' },
+    { name: 'Exhibits',            icon: Archive,    path: '/exhibits' },
+    { name: 'Referrals',           icon: ArrowRightCircle, path: '/referrals' },
+  ]},
+  { section: 'FORENSIC & LAB', items: [
+    { name: 'PM Findings',         icon: ClipboardList, path: '/pm-findings' },
+    { name: 'Specimens',           icon: FlaskConical, path: '/specimens' },
+    { name: 'Histopathology',      icon: Microscope, path: '/histopathology' },
+    { name: 'Toxicology',          icon: FlaskConical, path: '/toxicology' },
   ]},
   { section: 'MEDICAL & REPORTS', items: [
     { name: 'Consents',            icon: FileCheck,  path: '/consents' },

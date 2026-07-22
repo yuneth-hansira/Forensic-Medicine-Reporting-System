@@ -57,13 +57,7 @@ exports.createExaminee = async (req, res) => {
             [Case_ID, Full_Name, Sex, Age, NIC_Passport, Address]
         );
         
-        // Audit log
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Create Examinee', 'Examinee']
-            );
-        }
+        
         
         res.status(201).json({ message: 'Examinee created successfully', examineeId: result.insertId });
     } catch (err) {
@@ -87,13 +81,7 @@ exports.updateExaminee = async (req, res) => {
             return res.status(404).json({ message: 'Examinee not found' });
         }
         
-        // Audit log
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Update Examinee', 'Examinee']
-            );
-        }
+        
         
         res.json({ message: 'Examinee updated successfully' });
     } catch (err) {
@@ -112,13 +100,7 @@ exports.deleteExaminee = async (req, res) => {
             return res.status(404).json({ message: 'Examinee not found' });
         }
         
-        // Audit log
-        if (req.user) {
-            await pool.query(
-                'INSERT INTO Audit_Log (User_ID, Action, Table_Affected) VALUES (?, ?, ?)',
-                [req.user.id, 'Delete Examinee', 'Examinee']
-            );
-        }
+        
         
         res.json({ message: 'Examinee deleted successfully' });
     } catch (err) {

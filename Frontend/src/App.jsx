@@ -74,7 +74,42 @@ import NextOfKinProfile from './pages/admin/NextOfKinProfile';
 import SystemUsers from './pages/admin/SystemUsers';
 import RegisterSystemUser from './pages/admin/RegisterSystemUser';
 import SystemUserProfile from './pages/admin/SystemUserProfile';
+import Doctors from './pages/admin/Doctors';
+import RegisterDoctor from './pages/admin/RegisterDoctor';
+import DoctorProfile from './pages/admin/DoctorProfile';
+import AuditLogs from './pages/admin/AuditLogs';
+import RegisterAuditLog from './pages/admin/RegisterAuditLog';
+import AuditLogProfile from './pages/admin/AuditLogProfile';
 import UserProfile      from './pages/UserProfile';
+
+// ── Additional Forensic & Case Modules ──
+import PMFindings from './pages/cases/PMFindings';
+import RegisterPMFinding from './pages/cases/RegisterPMFinding';
+import PMFindingProfile from './pages/cases/PMFindingProfile';
+
+import Specimens from './pages/cases/Specimens';
+import RegisterSpecimen from './pages/cases/RegisterSpecimen';
+import SpecimenProfile from './pages/cases/SpecimenProfile';
+
+import HistopathologyReports from './pages/cases/HistopathologyReports';
+import RegisterHistopathology from './pages/cases/RegisterHistopathology';
+import HistopathologyProfile from './pages/cases/HistopathologyProfile';
+
+import ToxicologyReports from './pages/cases/ToxicologyReports';
+import RegisterToxicology from './pages/cases/RegisterToxicology';
+import ToxicologyProfile from './pages/cases/ToxicologyProfile';
+
+import Investigations from './pages/cases/Investigations';
+import RegisterInvestigation from './pages/cases/RegisterInvestigation';
+import InvestigationProfile from './pages/cases/InvestigationProfile';
+
+import Exhibits from './pages/cases/Exhibits';
+import RegisterExhibit from './pages/cases/RegisterExhibit';
+import ExhibitProfile from './pages/cases/ExhibitProfile';
+
+import Referrals from './pages/cases/Referrals';
+import RegisterReferral from './pages/cases/RegisterReferral';
+import ReferralProfile from './pages/cases/ReferralProfile';
 
 function App() {
   return (
@@ -128,7 +163,10 @@ function App() {
           <Route path="/clinical-findings/register" element={<RegisterClinicalFindings />} />
           <Route path="/clinical-findings/:id"    element={<ClinicalFindingsProfile />} />
           <Route path="/clinical-findings/:id/edit" element={<RegisterClinicalFindings />} />
-          <Route path="/doctors"                  element={<PlaceholderPage title="Doctor Directory" />} />
+          <Route path="/doctors"                  element={<Doctors />} />
+          <Route path="/doctors/register"         element={<RegisterDoctor />} />
+          <Route path="/doctors/:id"              element={<DoctorProfile />} />
+          <Route path="/doctors/:id/edit"         element={<RegisterDoctor />} />
           <Route path="/settings"                 element={<PlaceholderPage title="System Settings" />} />
           <Route path="/profile"                  element={<UserProfile />} />
           
@@ -177,7 +215,45 @@ function App() {
           <Route path="/users/register"           element={<RegisterSystemUser />} />
           <Route path="/users/:id"                element={<SystemUserProfile />} />
           <Route path="/users/:id/edit"           element={<RegisterSystemUser />} />
-          <Route path="/audit-logs"               element={<PlaceholderPage title="Audit Logs" />} />
+          <Route path="/audit-logs"               element={<AuditLogs />} />
+          <Route path="/audit-logs/register"      element={<RegisterAuditLog />} />
+          <Route path="/audit-logs/:id"           element={<AuditLogProfile />} />
+          <Route path="/audit-logs/:id/edit"      element={<RegisterAuditLog />} />
+          
+          <Route path="/pm-findings"              element={<PMFindings />} />
+          <Route path="/pm-findings/register"     element={<RegisterPMFinding />} />
+          <Route path="/pm-findings/:id"          element={<PMFindingProfile />} />
+          <Route path="/pm-findings/:id/edit"     element={<RegisterPMFinding />} />
+          
+          <Route path="/specimens"                element={<Specimens />} />
+          <Route path="/specimens/register"       element={<RegisterSpecimen />} />
+          <Route path="/specimens/:id"            element={<SpecimenProfile />} />
+          <Route path="/specimens/:id/edit"       element={<RegisterSpecimen />} />
+          
+          <Route path="/histopathology"           element={<HistopathologyReports />} />
+          <Route path="/histopathology/register"  element={<RegisterHistopathology />} />
+          <Route path="/histopathology/:id"       element={<HistopathologyProfile />} />
+          <Route path="/histopathology/:id/edit"  element={<RegisterHistopathology />} />
+          
+          <Route path="/toxicology"               element={<ToxicologyReports />} />
+          <Route path="/toxicology/register"      element={<RegisterToxicology />} />
+          <Route path="/toxicology/:id"           element={<ToxicologyProfile />} />
+          <Route path="/toxicology/:id/edit"      element={<RegisterToxicology />} />
+          
+          <Route path="/investigations"           element={<Investigations />} />
+          <Route path="/investigations/register"  element={<RegisterInvestigation />} />
+          <Route path="/investigations/:id"       element={<InvestigationProfile />} />
+          <Route path="/investigations/:id/edit"  element={<RegisterInvestigation />} />
+          
+          <Route path="/exhibits"                 element={<Exhibits />} />
+          <Route path="/exhibits/register"        element={<RegisterExhibit />} />
+          <Route path="/exhibits/:id"             element={<ExhibitProfile />} />
+          <Route path="/exhibits/:id/edit"        element={<RegisterExhibit />} />
+          
+          <Route path="/referrals"                element={<Referrals />} />
+          <Route path="/referrals/register"       element={<RegisterReferral />} />
+          <Route path="/referrals/:id"            element={<ReferralProfile />} />
+          <Route path="/referrals/:id/edit"       element={<RegisterReferral />} />
           
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />
