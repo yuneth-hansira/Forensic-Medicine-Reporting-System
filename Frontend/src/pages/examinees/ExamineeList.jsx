@@ -6,7 +6,7 @@ import {
   Printer, MoreVertical, ChevronLeft, ChevronRight, FileDown,
   Clock, Activity, CheckCircle, Shield, Download, FileCheck, UserCheck
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const dummyExaminees = [
   { id: 'EX-2026-0891', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', nic: '890123456V', name: 'Nimal Perera', gender: 'Male', age: 34, phone: '+94 71 234 5678', caseId: 'C2026-1045', doctor: 'Dr. John Silva', date: '20 Jul 2026', status: 'Pending Examination' },
@@ -45,8 +45,7 @@ const ExamineeList = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -200,8 +199,7 @@ const ExamineeList = () => {
 
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default ExamineeList;

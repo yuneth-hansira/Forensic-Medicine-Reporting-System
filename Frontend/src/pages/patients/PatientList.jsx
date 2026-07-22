@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   Search, Filter, UserPlus, Eye, Edit3, FileText,
   Printer, MoreHorizontal, ChevronLeft, ChevronRight,
@@ -56,8 +56,7 @@ const PatientList = () => {
     setSelected(s => s.length === paged.length ? [] : paged.map(p=>p.id));
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         {/* Header */}
         <div className="pm-page-header">
           <div>
@@ -210,8 +209,7 @@ const PatientList = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default PatientList;

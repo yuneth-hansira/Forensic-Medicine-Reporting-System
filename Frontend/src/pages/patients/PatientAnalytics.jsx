@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   BarChart2, Users, FileText, Activity, TrendingUp,
   Download, Filter, Calendar, PieChart as PieIcon
@@ -60,8 +60,7 @@ const completionRateData = [
 
 const PatientAnalytics = () => {
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         <div className="pm-page-header">
           <div>
             <div className="pm-breadcrumb">
@@ -215,8 +214,7 @@ const PatientAnalytics = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default PatientAnalytics;

@@ -6,7 +6,7 @@ import {
   User, Shield, Stethoscope, Clock, AlertTriangle,
   Gavel, ChevronRight, Check, Activity, FileDown, Users
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const TABS = [
   { id: 'overview',  label: 'Overview',         icon: <FileText size={16} /> },
@@ -263,8 +263,7 @@ const CaseDetails = () => {
   const caseId = id || 'C2026-1045';
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -423,8 +422,7 @@ const CaseDetails = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default CaseDetails;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronRight, UploadCloud, Search, Filter, FileText, Image as ImageIcon, File, Download, Trash2, Eye } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const documents = [
   { id: 1, name: 'Police_Referral_PR2026.pdf', type: 'PDF', category: 'Police Documents', size: '2.4 MB', date: '20 Jul 2026', user: 'Admin' },
@@ -24,8 +24,7 @@ const CaseDocuments = () => {
   const [search, setSearch] = useState('');
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -153,8 +152,7 @@ const CaseDocuments = () => {
         )}
 
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default CaseDocuments;

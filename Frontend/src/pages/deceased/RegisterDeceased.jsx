@@ -6,7 +6,6 @@ import { Save, ArrowRight, ArrowLeft, FileText } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import Stepper from '../../components/common/Stepper';
 import UploadArea from '../../components/common/UploadArea';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const steps = [
@@ -156,8 +155,7 @@ const RegisterDeceased = () => {
   const StepContent = STEPS_CONTENT[currentStep];
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title={isEdit ? 'Edit Deceased Record' : 'Register Deceased'}
           description={isEdit ? 'Update the deceased record details' : 'Complete all steps to register a new body'}
@@ -227,8 +225,7 @@ const RegisterDeceased = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default RegisterDeceased;

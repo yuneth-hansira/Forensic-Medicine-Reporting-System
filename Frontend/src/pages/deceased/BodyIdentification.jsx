@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 
 import PageHeader from '../../components/common/PageHeader';
 import UploadArea from '../../components/common/UploadArea';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const METHODS = [
@@ -20,8 +19,7 @@ const BodyIdentification = () => {
   const [activeMethod, setActiveMethod] = useState(null);
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title="Body Identification"
           breadcrumbs={[{ label: 'Dashboard' }, { label: 'Deceased' }, { label: 'Profile' }, { label: 'Identification' }]}
@@ -126,8 +124,7 @@ const BodyIdentification = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default BodyIdentification;

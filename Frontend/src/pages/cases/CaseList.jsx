@@ -6,7 +6,7 @@ import {
   Filter, MoreVertical, Eye, Edit, UserPlus, UploadCloud,
   XCircle, ChevronLeft, ChevronRight, FileDown, Download
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const dummyCases = [
   { id: 'C2026-1045', mle: 'MLE-892', type: 'Medico-Legal', examinee: 'Nimal Perera', doctor: 'Dr. John Silva', police: 'Kandy PS', status: 'Pending', date: '20 Jul 2026' },
@@ -43,8 +43,7 @@ const CaseList = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -165,8 +164,7 @@ const CaseList = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 const PlusIcon = ({ size }) => (

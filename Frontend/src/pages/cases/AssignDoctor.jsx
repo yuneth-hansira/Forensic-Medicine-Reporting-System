@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ChevronRight, Stethoscope, Clock, ShieldCheck, Check } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const doctors = [
   { id: 1, name: 'Dr. John Silva', spec: 'Judicial Medical Officer', slmc: '23451', cases: 12, available: true, initials: 'JS' },
@@ -17,8 +17,7 @@ const AssignDoctor = () => {
   const navigate = useNavigate();
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -106,8 +105,7 @@ const AssignDoctor = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 const CheckCircleIcon = () => (

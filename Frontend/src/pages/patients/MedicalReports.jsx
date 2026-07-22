@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   FileText, Download, Printer, Eye, CheckCircle,
   Clock, AlertCircle, Plus, Search, Filter,
@@ -68,8 +68,7 @@ const MedicalReports = () => {
   });
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         <div className="pm-page-header">
           <div>
             <div className="pm-breadcrumb">
@@ -292,8 +291,7 @@ const MedicalReports = () => {
           )}
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default MedicalReports;

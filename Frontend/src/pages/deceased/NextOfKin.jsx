@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import PageHeader from '../../components/common/PageHeader';
 import StatusBadge from '../../components/common/StatusBadge';
 import MedicalTable from '../../components/common/MedicalTable';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const INITIAL_KIN = [
@@ -54,8 +53,7 @@ const NextOfKin = () => {
   const verifiedCount = kinList.filter(k => k.verified).length;
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title="Next of Kin"
           description="Manage family members and verification status"
@@ -165,8 +163,7 @@ const NextOfKin = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default NextOfKin;

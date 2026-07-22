@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   User, Phone, Building2, FolderOpen, Upload,
   Camera, Users, Check, ChevronRight, ChevronLeft,
@@ -37,8 +37,7 @@ const RegisterPatient = () => {
   const canBack = step > 1;
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         {/* Header */}
         <div className="pm-page-header">
           <div>
@@ -420,8 +419,7 @@ const RegisterPatient = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default RegisterPatient;

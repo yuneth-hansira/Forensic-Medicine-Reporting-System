@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronRight, CheckCircle, FileText, Lock, AlertTriangle, Fingerprint, Activity, Download } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const CloseCase = () => {
   const navigate = useNavigate();
@@ -10,8 +10,7 @@ const CloseCase = () => {
   const [signature, setSignature] = useState('');
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -113,8 +112,7 @@ const CloseCase = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default CloseCase;

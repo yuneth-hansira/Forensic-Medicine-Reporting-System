@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronRight, FilePlus, UserCheck, Stethoscope, FlaskConical, FileText, CheckCircle } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const timelineEvents = [
   { id: 1, date: '20 Jul 2026', time: '10:15 AM', title: 'Case Registered', user: 'Admin Clerk', role: 'Clerk', desc: 'Case C2026-1045 registered in the system via Kandy Police Station referral.', icon: <FilePlus size={20} />, color: 'bg-blue-100 text-blue-600 border-blue-200' },
@@ -14,8 +14,7 @@ const timelineEvents = [
 
 const CaseTimeline = () => {
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -86,8 +85,7 @@ const CaseTimeline = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default CaseTimeline;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   Calendar, Clock, ChevronLeft, ChevronRight, Plus,
   Video, User, Check, X, RefreshCw, Filter, Search,
@@ -43,8 +43,7 @@ const AppointmentManagement = () => {
   const filtered = filter === 'all' ? appointments : appointments.filter(a=>a.status===filter);
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         <div className="pm-page-header">
           <div>
             <div className="pm-breadcrumb">
@@ -186,8 +185,7 @@ const AppointmentManagement = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default AppointmentManagement;

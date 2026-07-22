@@ -6,7 +6,7 @@ import {
   AlertTriangle, Shield, Calendar, FileDown, Plus, Filter,
   Eye, Paperclip, Activity
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const historyTimeline = [
   { id: 1, type: 'Forensic Case', title: 'Road Traffic Accident (MLEF Examination)', date: '20 Jul 2026', doctor: 'Dr. John Silva', category: 'Forensic', detail: 'Patient examined following RTA. Forehead laceration and forearm contusions documented under Case C2026-1045.', badgeColor: 'bg-blue-100 text-blue-700 border-blue-200' },
@@ -22,8 +22,7 @@ const MedicalHistory = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -122,8 +121,7 @@ const MedicalHistory = () => {
         </div>
 
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default MedicalHistory;

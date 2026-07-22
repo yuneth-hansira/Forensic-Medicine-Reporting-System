@@ -6,7 +6,7 @@ const Header = ({ toggleSidebar }) => {
   return (
     <header className="main-header">
       <div className="header-left">
-        <button className="menu-btn" onClick={toggleSidebar}>
+        <button type="button" className="menu-btn" onClick={toggleSidebar}>
           <Menu size={24} />
         </button>
         <h1 className="page-title">Dashboard</h1>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   User, Phone, MapPin, Calendar, FileText, Activity,
   Shield, Edit3, Printer, Download, Share2, QrCode,
@@ -34,8 +34,7 @@ const PatientProfile = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         {/* Breadcrumb & Actions */}
         <div className="pm-page-header">
           <div>
@@ -276,8 +275,7 @@ const PatientProfile = () => {
           </div>
         )}
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 // Inline tag helpers

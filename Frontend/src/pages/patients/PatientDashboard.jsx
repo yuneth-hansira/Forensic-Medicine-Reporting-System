@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   Users, FolderOpen, Clock, CheckCircle, TrendingUp,
   UserPlus, Search, FileText, Calendar, Activity,
@@ -47,8 +47,7 @@ const PatientDashboard = () => {
   const [activeTab, setActiveTab] = useState('all');
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         {/* Header */}
         <div className="pm-page-header">
           <div>
@@ -236,8 +235,7 @@ const PatientDashboard = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default PatientDashboard;

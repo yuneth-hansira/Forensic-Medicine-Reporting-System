@@ -8,7 +8,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-import DashboardLayout from '../layouts/DashboardLayout';
+
 import './Dashboard.css';
 
 const monthlyData = [
@@ -35,8 +35,7 @@ const pieData = [
 
 const Dashboard = () => {
   return (
-    <DashboardLayout>
-      <div className="dashboard-content">
+    <div className="dashboard-content">
         
         {/* Welcome Section */}
         <div className="welcome-section">
@@ -539,8 +538,7 @@ const Dashboard = () => {
         </div>
 
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 // Simple Eye icon wrapper since it wasn't imported at top

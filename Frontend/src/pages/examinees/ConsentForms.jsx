@@ -5,7 +5,7 @@ import {
   Shield, CheckCircle, FileText, Download, Printer, Plus,
   ChevronRight, Eye, PenTool, Lock, Check, FileCheck, X
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const dummyConsents = [
   { id: 'CNS-2026-041', type: 'Medical Examination Consent', date: '20 Jul 2026', signedBy: 'Nimal Perera', witness: 'IP Kumara (Police)', doctor: 'Dr. John Silva', status: 'Signed & Active' },
@@ -24,8 +24,7 @@ const ConsentForms = () => {
   const [doctorSigned, setDoctorSigned] = useState(false);
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -226,8 +225,7 @@ const ConsentForms = () => {
         </AnimatePresence>
 
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default ConsentForms;

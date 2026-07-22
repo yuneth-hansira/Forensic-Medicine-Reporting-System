@@ -4,7 +4,6 @@ import { Check, FileCheck, PenTool, Printer, AlertTriangle, CheckCircle2 } from 
 import { motion } from 'framer-motion';
 
 import PageHeader from '../../components/common/PageHeader';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const CHECKLIST_ITEMS = [
@@ -31,8 +30,7 @@ const BodyRelease = () => {
   const toggle = (key) => setChecklist(prev => ({ ...prev, [key]: !prev[key] }));
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title="Body Release"
           description="Complete the checklist and fill in release authorization details"
@@ -199,8 +197,7 @@ const BodyRelease = () => {
           </div>
         )}
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default BodyRelease;

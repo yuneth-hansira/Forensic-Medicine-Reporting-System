@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   User, Activity, FlaskConical, FileText, Image,
   Clipboard, Clock, Stethoscope, Plus, Eye, Edit3,
@@ -33,8 +33,7 @@ const PatientDetails = () => {
   const [tab, setTab] = useState('overview');
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         {/* Header */}
         <div className="pdt-patient-banner pm-card">
           <div style={{display:'flex',alignItems:'center',gap:'1.25rem',flex:1}}>
@@ -235,8 +234,7 @@ const PatientDetails = () => {
           </div>
         )}
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default PatientDetails;

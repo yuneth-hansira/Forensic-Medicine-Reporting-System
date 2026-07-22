@@ -6,7 +6,7 @@ import {
   Check, ChevronRight, ChevronLeft, Search, UploadCloud,
   CheckCircle, Plus
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import { Link, useParams } from 'react-router-dom';
 
 const steps = [
@@ -39,8 +39,7 @@ const NewCase = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Breadcrumb & Header */}
         <div className="mb-8">
@@ -278,8 +277,7 @@ const NewCase = () => {
           </form>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default NewCase;

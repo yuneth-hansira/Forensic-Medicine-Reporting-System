@@ -7,7 +7,7 @@ import {
   MapPin, Heart, AlertTriangle, Building2, Calendar, FolderOpen,
   CheckCircle, Plus, ExternalLink
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const TABS = [
   { id: 'overview',  label: 'Overview',          icon: <User size={16} /> },
@@ -26,8 +26,7 @@ const ExamineeProfile = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
@@ -326,8 +325,7 @@ const ExamineeProfile = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default ExamineeProfile;

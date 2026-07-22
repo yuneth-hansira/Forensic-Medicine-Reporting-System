@@ -4,7 +4,6 @@ import { Activity, Clock, User, Calendar, Phone, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import PageHeader from '../../components/common/PageHeader';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const TIMELINE = [
@@ -28,8 +27,7 @@ const HospitalInformation = () => {
   const { id } = useParams();
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title="Hospital Information"
           description="Admission details, medical notes, and transfer history"
@@ -103,8 +101,7 @@ const HospitalInformation = () => {
           </p>
         </motion.div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default HospitalInformation;

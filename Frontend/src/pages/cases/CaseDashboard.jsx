@@ -9,7 +9,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const monthlyData = [
   { month: 'Feb', cases: 38 }, { month: 'Mar', cases: 52 },
@@ -48,8 +48,7 @@ const CaseDashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -226,8 +225,7 @@ const CaseDashboard = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default CaseDashboard;

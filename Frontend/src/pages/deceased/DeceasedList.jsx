@@ -7,7 +7,6 @@ import PageHeader from '../../components/common/PageHeader';
 import StatisticsCard from '../../components/common/StatisticsCard';
 import MedicalTable from '../../components/common/MedicalTable';
 import StatusBadge from '../../components/common/StatusBadge';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const mockData = [
@@ -45,8 +44,7 @@ const DeceasedList = () => {
   ];
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title="Deceased Management"
           description="Manage deceased profiles, identifications, and body releases"
@@ -117,8 +115,7 @@ const DeceasedList = () => {
           </div>
         </motion.div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default DeceasedList;

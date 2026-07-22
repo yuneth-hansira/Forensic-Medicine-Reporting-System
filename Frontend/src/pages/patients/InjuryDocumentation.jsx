@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 import {
   AlertTriangle, MapPin, Upload, Camera, ZoomIn, ZoomOut,
   RotateCcw, Plus, X, ChevronDown, Save, FileText
@@ -52,8 +52,7 @@ const InjuryDocumentation = () => {
   const selectedPin = pins.find(p => p.id === selected);
 
   return (
-    <DashboardLayout>
-      <div className="pm-page">
+    <div className="pm-page">
         <div className="pm-page-header">
           <div>
             <div className="pm-breadcrumb">
@@ -287,8 +286,7 @@ const InjuryDocumentation = () => {
 
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default InjuryDocumentation;

@@ -7,7 +7,7 @@ import {
   Check, ChevronRight, ChevronLeft, UploadCloud, CheckCircle,
   Save, AlertCircle
 } from 'lucide-react';
-import DashboardLayout from '../../layouts/DashboardLayout';
+
 
 const steps = [
   { id: 1, name: 'Personal',  icon: <User size={18} /> },
@@ -93,8 +93,7 @@ const RegisterExaminee = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-8 bg-slate-50 min-h-screen font-sans">
+    <div className="p-8 bg-slate-50 min-h-screen font-sans">
         
         {/* Breadcrumb & Title */}
         <div className="mb-8">
@@ -425,8 +424,7 @@ const RegisterExaminee = () => {
           </form>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default RegisterExaminee;

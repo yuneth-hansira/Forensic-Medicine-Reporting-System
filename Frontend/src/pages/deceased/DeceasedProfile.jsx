@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 
 import PageHeader from '../../components/common/PageHeader';
 import StatusBadge from '../../components/common/StatusBadge';
-import DashboardLayout from '../../layouts/DashboardLayout';
 import './deceased.css';
 
 const TAB_LIST = [
@@ -37,8 +36,7 @@ const DeceasedProfile = () => {
   ];
 
   return (
-    <DashboardLayout>
-      <div className="deceased-inner">
+    <div className="deceased-inner">
         <PageHeader
           title="Deceased Profile"
           breadcrumbs={[{ label: 'Dashboard' }, { label: 'Deceased' }, { label: 'C2026-1045' }]}
@@ -202,8 +200,7 @@ const DeceasedProfile = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
-  );
+    );
 };
 
 export default DeceasedProfile;
