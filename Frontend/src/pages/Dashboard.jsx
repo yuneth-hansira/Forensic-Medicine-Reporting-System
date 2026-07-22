@@ -6,25 +6,31 @@ import {
 } from 'lucide-react';
 import { 
   Tooltip as RechartsTooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
+  PieChart, Pie, Cell, Legend,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid
 } from 'recharts';
 import DashboardLayout from '../layouts/DashboardLayout';
 import userService from '../services/userService';
+import api from '../services/api';
 import './Dashboard.css';
 
 
 
-const pieData = [
-  { name: 'Pending', value: 0, color: '#3b82f6' },
-  { name: 'In Progress', value: 0, color: '#f59e0b' },
-  { name: 'Completed', value: 0, color: '#8b5cf6' },
-  { name: 'Court Submitted', value: 0, color: '#10b981' },
-];
+
 
 const Dashboard = () => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [profileName, setProfileName] = useState('...');
   const [profileRole, setProfileRole] = useState('...');
+  const [stats, setStats] = useState({
+    totalPatients: 0,
+    activeCases: 0,
+    pendingCases: 0,
+    completedCases: 0,
+    usersCount: 0
+  });
+  const [dashboardPieData, setDashboardPieData] = useState([]);
+  const [timelineData, setTimelineData] = useState([]);
 
   useEffect(() => {
     // Clock
@@ -41,6 +47,24 @@ const Dashboard = () => {
          setProfileRole(data.Designation || data.Role || 'Staff Member');
       }
     }).catch(err => console.error('Failed to load profile:', err));
+
+    // Fetch Dashboard Stats
+    api.get('/dashboard').then(response => {
+      if (response.data && response.data.stats) {
+        setStats(response.data.stats);
+        if (response.data.pieData) {
+           setDashboardPieData(response.data.pieData);
+        }
+        if (response.data.monthlyCases) {
+           const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+           const formattedTimeline = response.data.monthlyCases.map((count, index) => ({
+             name: months[index],
+             cases: count
+           }));
+           setTimelineData(formattedTimeline);
+        }
+      }
+    }).catch(err => console.error('Failed to load dashboard stats:', err));
 
     return () => clearInterval(timer);
   }, []);
@@ -72,23 +96,35 @@ const Dashboard = () => {
           <div className="stat-card blue">
             <div className="stat-header">
               <Users size={24} className="stat-icon" />
-              <span className="stat-title">Total Patients</span>
+              <span className="stat-title">Total Users</span>
             </div>
-            <div className="stat-value">0</div>
+            <div className="stat-value">{stats.usersCount}</div>
             <div className="stat-footer neutral">
-              <span>0 today</span>
+              <span>Active accounts</span>
               <Activity size={14} />
             </div>
           </div>
           
+          <div className="stat-card teal">
+            <div className="stat-header">
+              <Users size={24} className="stat-icon" />
+              <span className="stat-title">Total Patients</span>
+            </div>
+            <div className="stat-value">{stats.totalPatients}</div>
+            <div className="stat-footer neutral">
+              <span>All registered</span>
+              <Activity size={14} />
+            </div>
+          </div>
+
           <div className="stat-card green">
             <div className="stat-header">
               <Folder size={24} className="stat-icon" />
               <span className="stat-title">Active Cases</span>
             </div>
-            <div className="stat-value">0</div>
+            <div className="stat-value">{stats.activeCases}</div>
             <div className="stat-footer neutral">
-              <span>0 today</span>
+              <span>In progress</span>
               <Activity size={14} />
             </div>
           </div>
@@ -98,9 +134,9 @@ const Dashboard = () => {
               <Clock size={24} className="stat-icon" />
               <span className="stat-title">Pending Cases</span>
             </div>
-            <div className="stat-value">0</div>
+            <div className="stat-value">{stats.pendingCases}</div>
             <div className="stat-footer neutral">
-              <span>0 today</span>
+              <span>Awaiting action</span>
               <Activity size={14} />
             </div>
           </div>
@@ -110,47 +146,13 @@ const Dashboard = () => {
               <CheckCircle size={24} className="stat-icon" />
               <span className="stat-title">Completed Cases</span>
             </div>
-            <div className="stat-value">0</div>
+            <div className="stat-value">{stats.completedCases}</div>
             <div className="stat-footer neutral">
-              <span>0 today</span>
+              <span>Closed cases</span>
               <Activity size={14} />
             </div>
           </div>
 
-          <div className="stat-card red">
-            <div className="stat-header">
-              <FlaskConical size={24} className="stat-icon" />
-              <span className="stat-title">Evidence Items</span>
-            </div>
-            <div className="stat-value">0</div>
-            <div className="stat-footer neutral">
-              <span>0 today</span>
-              <Activity size={14} />
-            </div>
-          </div>
-
-          <div className="stat-card teal">
-            <div className="stat-header">
-              <FileText size={24} className="stat-icon" />
-              <span className="stat-title">Reports Generated</span>
-            </div>
-            <div className="stat-value">0</div>
-            <div className="stat-footer neutral">
-              <span>0 today</span>
-              <Activity size={14} />
-            </div>
-          </div>
-
-          <div className="stat-card blue-grey">
-            <div className="stat-header">
-              <Building2 size={24} className="stat-icon" />
-              <span className="stat-title">Departments</span>
-            </div>
-            <div className="stat-value">6</div>
-            <div className="stat-footer neutral">
-              <span>—</span>
-            </div>
-          </div>
         </div>
 
         {/* Middle Section: Quick Actions & Charts */}
@@ -202,7 +204,7 @@ const Dashboard = () => {
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie
-                    data={pieData}
+                    data={dashboardPieData}
                     cx="50%"
                     cy="50%"
                     innerRadius={60}
@@ -210,7 +212,7 @@ const Dashboard = () => {
                     paddingAngle={5}
                     dataKey="value"
                   >
-                    {pieData.map((entry, index) => (
+                    {dashboardPieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -218,20 +220,66 @@ const Dashboard = () => {
                 </PieChart>
               </ResponsiveContainer>
               <div className="pie-center-text">
-                <span className="pie-total">0</span>
+                <span className="pie-total">{dashboardPieData.reduce((acc, curr) => acc + curr.value, 0)}</span>
                 <span className="pie-label">Total Cases</span>
               </div>
             </div>
             <div className="custom-legend">
-              {pieData.map((item, index) => (
-                <div className="legend-item" key={index}>
-                  <div className="legend-indicator" style={{ backgroundColor: item.color }}></div>
-                  <span className="legend-name">{item.name}</span>
-                  <span className="legend-value">{item.value} 
-                    <span className="legend-percent">(0%)</span>
-                  </span>
-                </div>
-              ))}
+              {dashboardPieData.map((item, index) => {
+                const total = dashboardPieData.reduce((acc, curr) => acc + curr.value, 0);
+                const percent = total > 0 ? Math.round((item.value / total) * 100) : 0;
+                return (
+                  <div className="legend-item" key={index}>
+                    <div className="legend-indicator" style={{ backgroundColor: item.color }}></div>
+                    <span className="legend-name">{item.name}</span>
+                    <span className="legend-value">{item.value} 
+                      <span className="legend-percent">({percent}%)</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          {/* Timeline Chart */}
+          <div className="card timeline-card">
+            <h3 className="card-title">Cases Timeline (This Year)</h3>
+            <div className="chart-container" style={{ height: '300px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorCases" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: '#64748b', fontSize: 12 }}
+                    dy={10}
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: '#64748b', fontSize: 12 }}
+                  />
+                  <RechartsTooltip 
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="cases" 
+                    stroke="#3b82f6" 
+                    strokeWidth={3}
+                    fillOpacity={1} 
+                    fill="url(#colorCases)" 
+                    activeDot={{ r: 6, fill: '#3b82f6', stroke: '#fff', strokeWidth: 2 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </div>
 

@@ -21,13 +21,9 @@ exports.getDashboardData = async (req, res) => {
             else pendingCases += row.count; // Default unknown to pending
         });
 
-        // 3. Exhibits
-        const [[{ totalExhibits }]] = await pool.query('SELECT COUNT(*) as totalExhibits FROM Exhibit');
-        const exhibitsCount = totalExhibits;
-
-        // 4. Reports
-        const [[{ totalReports }]] = await pool.query('SELECT COUNT(*) as totalReports FROM Report');
-        const reportsGenerated = totalReports;
+        // 3. System Users
+        const [[{ totalUsers }]] = await pool.query('SELECT COUNT(*) as totalUsers FROM User');
+        const usersCount = totalUsers;
         
         // 5. Monthly Cases Data (Current Year)
         const [monthlyCasesDB] = await pool.query(`
@@ -84,8 +80,7 @@ exports.getDashboardData = async (req, res) => {
                 activeCases,
                 pendingCases,
                 completedCases,
-                exhibitsCount,
-                reportsGenerated
+                usersCount
             },
             pieData: [
                 { name: 'Pending', value: pendingCases, color: '#3b82f6' },
