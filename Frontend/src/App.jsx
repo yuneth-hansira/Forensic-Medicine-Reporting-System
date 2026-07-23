@@ -7,6 +7,7 @@ import Login        from './components/Login';
 import Register     from './components/Register';
 import Dashboard    from './pages/Dashboard';
 import CalendarPage from './pages/CalendarPage';
+import CalendarEventsPage from './pages/CalendarEventsPage';
 
 // Patient Management
 import PatientDashboard      from './pages/patients/PatientDashboard';
@@ -130,6 +131,7 @@ function App() {
           <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO', 'Nurse']} />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calendar"  element={<CalendarPage />} />
+            <Route path="/calendar/events/:date" element={<CalendarEventsPage />} />
             <Route path="/profile"   element={<UserProfile />} />
 
             {/* Patient Management */}

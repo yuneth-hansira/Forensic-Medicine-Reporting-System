@@ -12,6 +12,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid
 } from 'recharts';
 import DashboardLayout from '../layouts/DashboardLayout';
+import CalendarWidget from '../components/CalendarWidget';
 import userService from '../services/userService';
 import api from '../services/api';
 import './Dashboard.css';
@@ -304,6 +305,13 @@ const Dashboard = () => {
             </div>
           </div>
 
+        </div>
+
+        {/* Bottom Section */}
+        <div className="bottom-section" style={{marginTop: '1.5rem'}}>
+          <div className="card">
+            <CalendarWidget />
+          </div>
         </div>
 
       </div>

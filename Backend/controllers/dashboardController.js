@@ -313,3 +313,41 @@ exports.getStatisticalReport = async (req, res) => {
         res.status(500).json({ message: 'Server error generating statistical report' });
     }
 };
+
+// @desc    Get Calendar Events (Case registrations and Court trials)
+// @route   GET /api/dashboard/calendar
+// @access  Private
+exports.getCalendarEvents = async (req, res) => {
+    try {
+        const [registeredCases] = await pool.query(`
+            SELECT Date_Registered as date, Case_ID as id, 'Case Registered' as title, 'registered' as type 
+            FROM \`Case\` WHERE Date_Registered IS NOT NULL
+        `);
+        
+        const [courtTrials] = await pool.query(`
+            SELECT Date_Of_Trial as date, Case_ID as id, 'Court Trial' as title, 'court' as type 
+            FROM Court_info WHERE Date_Of_Trial IS NOT NULL
+        `);
+
+        // Format dates correctly as YYYY-MM-DD in local time to avoid timezone drift
+        const events = [...registeredCases, ...courtTrials].map(e => {
+            const d = new Date(e.date);
+            // Check if valid date
+            if (isNaN(d.getTime())) return null;
+            
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+
+            return {
+                ...e,
+                date: `${year}-${month}-${day}`
+            };
+        }).filter(e => e !== null);
+
+        res.json(events);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error fetching calendar events' });
+    }
+};

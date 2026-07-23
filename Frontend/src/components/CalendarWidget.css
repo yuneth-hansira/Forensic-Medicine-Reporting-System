@@ -1,0 +1,107 @@
+.calendar-widget {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 100%;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-title {
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+
+.calendar-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.calendar-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: #334155;
+  border-radius: 6px;
+  cursor: default;
+  position: relative;
+}
+
+.calendar-day:not(.empty):hover {
+  background-color: #f1f5f9;
+}
+
+.calendar-day.today {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.has-events:hover {
+  background-color: #e2e8f0;
+}
+
+.day-number {
+  z-index: 1;
+}
+
+.day-dots {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.dot.registered {
+  background-color: #f59e0b; /* Orange for registration */
+}
+
+.dot.court {
+  background-color: #10b981; /* Green for court trial */
+}
+
+.calendar-day.today .dot.registered { background-color: #fcd34d; }
+.calendar-day.today .dot.court { background-color: #6ee7b7; }
