@@ -13,7 +13,7 @@
 }
 
 .sidebar.closed {
-  width: 0;
+  width: 80px;
 }
 
 .sidebar-header {
@@ -207,4 +207,64 @@
   bottom: -20px;
   opacity: 0.03;
   z-index: 1;
+}
+
+/* =========================================
+   Collapsed (Icon-Only) Sidebar Styles
+   ========================================= */
+
+.sidebar.closed .logo-text,
+.sidebar.closed .sidebar-search-input,
+.sidebar.closed .nav-group-title,
+.sidebar.closed .nav-item span,
+.sidebar.closed .version,
+.sidebar.closed .copyright {
+  display: none;
+}
+
+.sidebar.closed .sidebar-header {
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.sidebar.closed .sidebar-search-box {
+  padding: 0.6rem;
+  justify-content: center;
+  border: transparent;
+  background-color: transparent;
+}
+.sidebar.closed .sidebar-search-box .search-icon {
+  margin-right: 0;
+}
+.sidebar.closed .sidebar-search-box:focus-within,
+.sidebar.closed .sidebar-search-box:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: transparent;
+}
+
+.sidebar.closed .sidebar-nav-container {
+  padding: 1.5rem 0.5rem;
+}
+
+.sidebar.closed .nav-group {
+  margin-bottom: 1rem;
+}
+
+.sidebar.closed .nav-item {
+  justify-content: center;
+  padding: 0.8rem 0;
+}
+.sidebar.closed .nav-item .nav-icon {
+  margin: 0;
+}
+
+.sidebar.closed .dashboard-btn {
+  justify-content: center;
+  padding: 0.8rem 0;
+}
+
+.sidebar.closed .sidebar-footer {
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: center;
 }

@@ -62,7 +62,7 @@ const navItems = [
   ]}
 ];
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const navContainerRef = useRef(null);
@@ -99,7 +99,7 @@ const Sidebar = ({ isOpen }) => {
   return (
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-header">
-        <Scale className="logo-icon" size={28} />
+        <Scale className="logo-icon" size={28} onClick={toggleSidebar} style={{cursor: 'pointer'}} title="Toggle Sidebar" />
         <div className="logo-text">
           <h2>Forensic Medical</h2>
           <p>Database Management System</p>
