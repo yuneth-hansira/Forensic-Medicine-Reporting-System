@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 const pool = require('./config/db');
 
 async function initializeDatabase() {
