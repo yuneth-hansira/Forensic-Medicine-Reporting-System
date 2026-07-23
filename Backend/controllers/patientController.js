@@ -27,14 +27,18 @@ exports.createPatient = async (req, res) => {
     try {
         const { Full_Name, Sex, Date_Of_Birth, NIC_Passport, Blood_Group, Contact_No, Address, Hospital_ID, Ward_ID } = req.body;
         
-        const [result] = await pool.query(
-            'INSERT INTO Patient (Full_Name, Sex, Date_Of_Birth, NIC_Passport, Blood_Group, Contact_No, Address, Hospital_ID, Ward_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [Full_Name, Sex || null, Date_Of_Birth || null, NIC_Passport || null, Blood_Group || null, Contact_No || null, Address || null, Hospital_ID || null, Ward_ID || null]
+        // Calculate next ID manually to ensure strictly 1-by-1 increment without gaps
+        const [rows] = await pool.query('SELECT COALESCE(MAX(Patient_ID), 0) + 1 AS nextId FROM Patient');
+        const nextId = rows[0].nextId;
+
+        await pool.query(
+            'INSERT INTO Patient (Patient_ID, Full_Name, Sex, Date_Of_Birth, NIC_Passport, Blood_Group, Contact_No, Address, Hospital_ID, Ward_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [nextId, Full_Name, Sex || null, Date_Of_Birth || null, NIC_Passport || null, Blood_Group || null, Contact_No || null, Address || null, Hospital_ID || null, Ward_ID || null]
         );
         
         res.status(201).json({ 
             message: 'Patient registered successfully', 
-            Patient_ID: result.insertId 
+            Patient_ID: nextId 
         });
     } catch (err) {
         console.error(err);

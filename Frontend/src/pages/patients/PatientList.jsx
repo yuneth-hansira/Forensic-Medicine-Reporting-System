@@ -22,7 +22,6 @@ const ROWS_PER_PAGE = 7;
 const PatientList = () => {
   const [query, setQuery]       = useState('');
   const [page, setPage]         = useState(1);
-  const [selected, setSelected] = useState([]);
 
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +45,6 @@ const PatientList = () => {
       try {
         await patientService.deletePatient(id);
         setPatients(patients.filter(p => p.Patient_ID !== id));
-        setSelected(selected.filter(x => x !== id));
       } catch (err) {
         alert("Failed to delete patient");
       }
@@ -65,11 +63,6 @@ const PatientList = () => {
   const totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE);
   const paged      = filtered.slice((page-1)*ROWS_PER_PAGE, page*ROWS_PER_PAGE);
 
-  const toggleSelect = (id) =>
-    setSelected(s => s.includes(id) ? s.filter(x=>x!==id) : [...s,id]);
-  const toggleAll = () =>
-    setSelected(s => s.length === paged.length ? [] : paged.map(p=>p.id));
-
   return (
     <DashboardLayout>
       <div className="pm-page">
@@ -83,8 +76,6 @@ const PatientList = () => {
             <p className="pm-page-subtitle">{filtered.length} patients found</p>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-secondary"><Download size={16}/>Export</button>
-            <button className="pm-btn pm-btn-secondary"><RefreshCw size={16}/>Refresh</button>
             <button className="pm-btn pm-btn-primary" onClick={()=>window.location.href='/patients/register'}>
               <UserPlus size={16}/>Register Patient
             </button>
@@ -104,24 +95,11 @@ const PatientList = () => {
             </div>
           </div>
 
-          {/* Bulk Action Bar */}
-          {selected.length > 0 && (
-            <div className="pl-bulk-bar">
-              <span>{selected.length} selected</span>
-              <button className="pm-btn pm-btn-secondary pm-btn-sm"><FileText size={14}/>Generate Reports</button>
-              <button className="pm-btn pm-btn-secondary pm-btn-sm"><Printer size={14}/>Print</button>
-              <button className="pm-btn pm-btn-danger pm-btn-sm">Archive</button>
-            </div>
-          )}
-
           {/* Table */}
           <div className="pm-table-wrapper">
             <table className="pm-table">
               <thead>
                 <tr>
-                  <th style={{width:'40px'}}>
-                    <input type="checkbox" onChange={toggleAll} checked={selected.length===paged.length && paged.length>0}/>
-                  </th>
                   <th>Patient ID</th>
                   <th>Patient Name</th>
                   <th>NIC</th>
@@ -134,10 +112,10 @@ const PatientList = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="8" style={{textAlign:'center', padding:'2rem'}}>Loading patients...</td>
+                    <td colSpan="7" style={{textAlign:'center', padding:'2rem'}}>Loading patients...</td>
                   </tr>
                 ) : paged.length === 0 ? (
-                  <tr><td colSpan={8}>
+                  <tr><td colSpan={7}>
                     <div className="pm-empty-state">
                       <Search size={36}/>
                       <h4>No Patients Found</h4>
@@ -145,8 +123,7 @@ const PatientList = () => {
                     </div>
                   </td></tr>
                 ) : paged.map((p,i) => (
-                  <tr key={i} className={selected.includes(p.Patient_ID) ? 'pl-row-selected' : ''}>
-                    <td><input type="checkbox" checked={selected.includes(p.Patient_ID)} onChange={()=>toggleSelect(p.Patient_ID)}/></td>
+                  <tr key={i}>
                     <td><code style={{fontSize:'0.78rem',color:'#2563eb',fontWeight:600}}>PT-{p.Patient_ID}</code></td>
                     <td>
                       <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>

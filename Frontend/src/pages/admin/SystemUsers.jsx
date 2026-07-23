@@ -43,7 +43,6 @@ const SystemUsers = () => {
     const search = searchTerm.toLowerCase();
     return (
       (r.Username && r.Username.toLowerCase().includes(search)) ||
-      (r.Doctor_Name && r.Doctor_Name.toLowerCase().includes(search)) ||
       (r.Role && r.Role.toLowerCase().includes(search))
     );
   });
@@ -57,7 +56,7 @@ const SystemUsers = () => {
               <Link to="/users">System Users</Link><span>/</span><span>All Users</span>
             </div>
             <h1 className="pm-page-title">System Users</h1>
-            <p className="pm-page-subtitle">Manage user access and doctor profiles</p>
+            <p className="pm-page-subtitle">Manage user access and profiles</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
             <Link to="/users/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
@@ -88,7 +87,6 @@ const SystemUsers = () => {
                 <tr>
                   <th style={{textAlign:'left'}}>User ID</th>
                   <th style={{textAlign:'left'}}>Username</th>
-                  <th style={{textAlign:'left'}}>Doctor Name</th>
                   <th style={{textAlign:'left'}}>Role</th>
                   <th style={{textAlign:'left'}}>Access Level</th>
                   <th style={{textAlign:'center'}}>Actions</th>
@@ -98,13 +96,12 @@ const SystemUsers = () => {
                 {loading ? (
                   <tr><td colSpan="6" style={{textAlign:'center', padding:'2rem'}}>Loading...</td></tr>
                 ) : filteredRecords.length === 0 ? (
-                  <tr><td colSpan="6" style={{textAlign:'center', padding:'2rem', color:'#64748b'}}>No users found.</td></tr>
+                  <tr><td colSpan="5" style={{textAlign:'center', padding:'2rem', color:'#64748b'}}>No users found.</td></tr>
                 ) : (
                   filteredRecords.map(r => (
                     <tr key={r.User_ID}>
                       <td style={{fontWeight:600}}>USR-{r.User_ID}</td>
                       <td><code style={{color:'#0f172a'}}>{r.Username}</code></td>
-                      <td style={{fontWeight:500, color:'#0f172a'}}>{r.Doctor_Name || '-'}</td>
                       <td>
                         <span style={{
                             display:'inline-flex', alignItems:'center', gap:'0.25rem', padding:'0.15rem 0.5rem', 

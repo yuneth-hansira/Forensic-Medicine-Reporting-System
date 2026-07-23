@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { AlertCircle, Check } from 'lucide-react';
 import { deceasedService } from '../../services/deceasedService';
+import { hospitalService } from '../../services/hospitalService';
+import { wardService } from '../../services/wardService';
 import '../patients/patients.css';
 
 const RegisterDeceased = () => {
@@ -26,6 +28,25 @@ const RegisterDeceased = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(isEditMode);
   const [error, setError] = useState(null);
+
+  const [hospitals, setHospitals] = useState([]);
+  const [wards, setWards] = useState([]);
+
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [hData, wData] = await Promise.all([
+          hospitalService.getAllHospitals(),
+          wardService.getAllWards()
+        ]);
+        setHospitals(hData);
+        setWards(wData);
+      } catch (err) {
+        console.error("Failed to load hospitals/wards");
+      }
+    };
+    fetchMasterData();
+  }, []);
 
   useEffect(() => {
     if (isEditMode) {
@@ -56,7 +77,11 @@ const RegisterDeceased = () => {
   }, [id, isEditMode]);
 
   const handleChange = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    if (field === 'Hospital_ID') {
+      setForm(prev => ({ ...prev, Hospital_ID: value, Ward_ID: '' }));
+    } else {
+      setForm(prev => ({ ...prev, [field]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -213,24 +238,37 @@ const RegisterDeceased = () => {
 
               <div className="pm-form-grid-2" style={{marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
                 <div className="pm-form-group">
-                  <label className="pm-label">Hospital ID (Optional)</label>
-                  <input 
-                    type="number"
-                    className="pm-input" 
+                  <label className="pm-label">Hospital (Optional)</label>
+                  <select 
+                    className="pm-select" 
                     value={form.Hospital_ID} 
                     onChange={(e) => handleChange('Hospital_ID', e.target.value)} 
-                    placeholder="e.g. 1"
-                  />
+                  >
+                    <option value="">Select Hospital</option>
+                    {hospitals.map(h => (
+                      <option key={h.Hospital_ID} value={h.Hospital_ID}>
+                        H-{h.Hospital_ID} {h.Hospital_Name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="pm-form-group">
-                  <label className="pm-label">Ward ID (Optional)</label>
-                  <input 
-                    type="number"
-                    className="pm-input" 
+                  <label className="pm-label">Ward (Optional)</label>
+                  <select 
+                    className="pm-select" 
                     value={form.Ward_ID} 
                     onChange={(e) => handleChange('Ward_ID', e.target.value)} 
-                    placeholder="e.g. 5"
-                  />
+                    disabled={!form.Hospital_ID}
+                  >
+                    <option value="">Select Ward</option>
+                    {wards
+                      .filter(w => w.Hospital_ID.toString() === form.Hospital_ID.toString())
+                      .map(w => (
+                      <option key={w.Ward_ID} value={w.Ward_ID}>
+                        Ward {w.Ward_No} - {w.Ward_Name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

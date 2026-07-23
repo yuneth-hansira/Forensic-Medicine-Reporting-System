@@ -65,7 +65,7 @@ const SystemUserProfile = () => {
             </div>
             <div className="pp-hero-info">
               <div style={{display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
-                <h2 className="pp-name">{record.Doctor_Name || record.Username}</h2>
+                <h2 className="pp-name">{record.Username}</h2>
               </div>
               <p className="pp-sub">
                 @{record.Username} | Role: {record.Role}
@@ -110,32 +110,6 @@ const SystemUserProfile = () => {
                   <span className="pm-info-value">{record.Access_Level || '-'}</span>
                 </div>
               </div>
-
-              {!isAdmin && (
-                <>
-                  <hr style={{borderColor:'#e2e8f0', margin:'1rem 0'}}/>
-                  <h4 style={{fontSize: '1rem', fontWeight: 600, color: '#0f172a', marginBottom: '0.5rem'}}><Briefcase size={16} style={{marginRight:6,verticalAlign:'middle'}}/> Professional Profile</h4>
-                  
-                  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '1rem'}}>
-                    <div>
-                        <span className="pm-info-label" style={{display:'block', marginBottom:'0.25rem'}}>Full Name</span>
-                        <span className="pm-info-value">{record.Doctor_Name || '-'}</span>
-                    </div>
-                    <div>
-                        <span className="pm-info-label" style={{display:'block', marginBottom:'0.25rem'}}>Designation</span>
-                        <span className="pm-info-value">{record.Designation || '-'}</span>
-                    </div>
-                    <div>
-                        <span className="pm-info-label" style={{display:'block', marginBottom:'0.25rem'}}>SLMC Registration No</span>
-                        <span className="pm-info-value">{record.SLMC_Reg_No || '-'}</span>
-                    </div>
-                    <div>
-                        <span className="pm-info-label" style={{display:'block', marginBottom:'0.25rem'}}>Contact Number</span>
-                        <span className="pm-info-value">{record.Contact_No || '-'}</span>
-                    </div>
-                  </div>
-                </>
-              )}
 
             </div>
           </div>
