@@ -14,11 +14,7 @@ const RegisterSystemUser = () => {
     Username: '',
     Password: '',
     Role: 'JMO',
-    Access_Level: 'Standard',
-    Doctor_Name: '',
-    Designation: '',
-    SLMC_Reg_No: '',
-    Contact_No: ''
+    Access_Level: 'Standard'
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,11 +30,7 @@ const RegisterSystemUser = () => {
             Username: data.Username || '',
             Password: '', // leave empty for edit unless they want to change it
             Role: data.Role || 'JMO',
-            Access_Level: data.Access_Level || 'Standard',
-            Doctor_Name: data.Doctor_Name || '',
-            Designation: data.Designation || '',
-            SLMC_Reg_No: data.SLMC_Reg_No || '',
-            Contact_No: data.Contact_No || ''
+            Access_Level: data.Access_Level || 'Standard'
           });
         } catch (err) {
           console.error(err);
@@ -92,7 +84,7 @@ const RegisterSystemUser = () => {
               <Link to="/users">System Users</Link><span>/</span><span>{isEditMode ? 'Edit User' : 'Add User'}</span>
             </div>
             <h1 className="pm-page-title">{isEditMode ? 'Edit System User' : 'Register System User'}</h1>
-            <p className="pm-page-subtitle">{isEditMode ? 'Update user credentials and profile' : 'Create a new user account'}</p>
+            <p className="pm-page-subtitle">{isEditMode ? 'Update user credentials' : 'Create a new user account'}</p>
           </div>
         </div>
 
@@ -163,54 +155,7 @@ const RegisterSystemUser = () => {
                 </div>
               </div>
 
-              {form.Role !== 'Admin' && (
-                  <>
-                    <h3 style={{fontSize:'1.1rem', fontWeight:600, color:'#0f172a', marginBottom:'1rem', borderBottom:'1px solid #e2e8f0', paddingBottom:'0.5rem', marginTop: '2rem'}}>Doctor/Staff Profile</h3>
-                    
-                    <div className="pm-form-grid-2" style={{marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
-                        <div className="pm-form-group">
-                            <label className="pm-label required">Full Name</label>
-                            <input 
-                                required={form.Role !== 'Admin'}
-                                className="pm-input" 
-                                value={form.Doctor_Name} 
-                                onChange={(e) => handleChange('Doctor_Name', e.target.value)} 
-                                placeholder="Dr. John Doe"
-                            />
-                        </div>
-                        <div className="pm-form-group">
-                            <label className="pm-label">Designation</label>
-                            <input 
-                                className="pm-input" 
-                                value={form.Designation} 
-                                onChange={(e) => handleChange('Designation', e.target.value)} 
-                                placeholder="e.g. Chief Medical Officer"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="pm-form-grid-2" style={{marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>
-                        <div className="pm-form-group">
-                            <label className="pm-label">SLMC Registration No</label>
-                            <input 
-                                className="pm-input" 
-                                value={form.SLMC_Reg_No} 
-                                onChange={(e) => handleChange('SLMC_Reg_No', e.target.value)} 
-                                placeholder="e.g. 12345"
-                            />
-                        </div>
-                        <div className="pm-form-group">
-                            <label className="pm-label">Contact Number</label>
-                            <input 
-                                className="pm-input" 
-                                value={form.Contact_No} 
-                                onChange={(e) => handleChange('Contact_No', e.target.value)} 
-                                placeholder="e.g. +94 77 123 4567"
-                            />
-                        </div>
-                    </div>
-                  </>
-              )}
 
               <div style={{display:'flex', justifyContent:'flex-end', gap:'1rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem'}}>
                 <button type="button" className="pm-btn pm-btn-secondary" onClick={() => navigate(-1)}>Cancel</button>
