@@ -5,7 +5,15 @@ exports.getUserProfile = async (req, res) => {
     try {
         const userId = req.user.id;
         
-        const [users] = await pool.query('SELECT User_ID, Username, Role, Access_Level FROM User WHERE User_ID = ?', [userId]);
+        const [users] = await pool.query(`
+            SELECT u.User_ID, u.Username, u.Role, u.Access_Level, 
+                   COALESCE(d.Name, u.Full_Name) as Name,
+                   COALESCE(d.Contact_No, u.Contact_No) as Contact_No,
+                   d.SLMC_Reg_No
+            FROM User u
+            LEFT JOIN Doctor d ON u.User_ID = d.User_ID
+            WHERE u.User_ID = ?
+        `, [userId]);
         
         if (users.length === 0) {
             return res.status(404).json({ message: 'User not found' });
@@ -24,7 +32,7 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { Username } = req.body;
+        const { Username, Name, Contact_No, SLMC_Reg_No } = req.body;
         
         const [users] = await pool.query('SELECT Role FROM User WHERE User_ID = ?', [userId]);
         if (users.length === 0) {
@@ -36,8 +44,26 @@ exports.updateUserProfile = async (req, res) => {
         await connection.beginTransaction();
 
         try {
-            if (Username) {
-                await connection.query('UPDATE User SET Username = ? WHERE User_ID = ?', [Username, userId]);
+            // Update User table
+            await connection.query(
+                'UPDATE User SET Username = COALESCE(?, Username), Full_Name = ?, Contact_No = ? WHERE User_ID = ?', 
+                [Username, Name, Contact_No, userId]
+            );
+
+            // If Doctor or JMO, update Doctor table
+            if (role === 'Doctor' || role === 'JMO') {
+                const [docs] = await connection.query('SELECT Doctor_ID FROM Doctor WHERE User_ID = ?', [userId]);
+                if (docs.length > 0) {
+                    await connection.query(
+                        'UPDATE Doctor SET Name = ?, Contact_No = ?, SLMC_Reg_No = ? WHERE User_ID = ?',
+                        [Name, Contact_No, SLMC_Reg_No, userId]
+                    );
+                } else {
+                    await connection.query(
+                        'INSERT INTO Doctor (User_ID, Name, Contact_No, SLMC_Reg_No) VALUES (?, ?, ?, ?)',
+                        [userId, Name, Contact_No, SLMC_Reg_No]
+                    );
+                }
             }
 
             await connection.commit();
