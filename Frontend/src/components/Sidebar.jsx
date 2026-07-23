@@ -15,50 +15,50 @@ const ClipboardList = FileText;
 
 const navItems = [
   { section: 'MAIN', items: [
-    { name: 'Patients',            icon: Users,      path: '/patients' },
-    { name: 'Cases',               icon: FolderOpen, path: '/cases' },
-    { name: 'Examinees',           icon: Users,      path: '/examinees' },
-    { name: 'Deceased',            icon: Shield,     path: '/deceased' },
+    { name: 'Patients',            icon: Users,      path: '/patients', allowedRoles: ['Admin', 'JMO', 'Nurse'] },
+    { name: 'Cases',               icon: FolderOpen, path: '/cases', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Examinees',           icon: Users,      path: '/examinees', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Deceased',            icon: Shield,     path: '/deceased', allowedRoles: ['Admin', 'JMO'] },
   ]},
   { section: 'CASE DETAILS', items: [
-    { name: 'Police Info',         icon: ShieldAlert,path: '/police-info' },
-    { name: 'Court Info',          icon: Gavel,      path: '/court-info' },
-    { name: 'Clinical Findings',   icon: FileText,   path: '/clinical-findings' },
-    { name: 'Injuries',            icon: AlertCircle,path: '/injuries' },
-    { name: 'Documents',           icon: ClipboardList,path: '/documents' },
+    { name: 'Police Info',         icon: ShieldAlert,path: '/police-info', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Court Info',          icon: Gavel,      path: '/court-info', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Clinical Findings',   icon: FileText,   path: '/clinical-findings', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Injuries',            icon: AlertCircle,path: '/injuries', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Documents',           icon: ClipboardList,path: '/documents', allowedRoles: ['Admin', 'JMO'] },
   ]},
   { section: 'INVESTIGATIONS', items: [
-    { name: 'Investigations',      icon: Search,     path: '/investigations' },
-    { name: 'Exhibits',            icon: Archive,    path: '/exhibits' },
-    { name: 'Referrals',           icon: ArrowRightCircle, path: '/referrals' },
+    { name: 'Investigations',      icon: Search,     path: '/investigations', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Exhibits',            icon: Archive,    path: '/exhibits', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Referrals',           icon: ArrowRightCircle, path: '/referrals', allowedRoles: ['Admin', 'JMO'] },
   ]},
   { section: 'FORENSIC & LAB', items: [
-    { name: 'PM Findings',         icon: ClipboardList, path: '/pm-findings' },
-    { name: 'Specimens',           icon: FlaskConical, path: '/specimens' },
-    { name: 'Histopathology',      icon: Microscope, path: '/histopathology' },
-    { name: 'Toxicology',          icon: FlaskConical, path: '/toxicology' },
+    { name: 'PM Findings',         icon: ClipboardList, path: '/pm-findings', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Specimens',           icon: FlaskConical, path: '/specimens', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Histopathology',      icon: Microscope, path: '/histopathology', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Toxicology',          icon: FlaskConical, path: '/toxicology', allowedRoles: ['Admin', 'JMO'] },
   ]},
   { section: 'MEDICAL & REPORTS', items: [
-    { name: 'Consents',            icon: FileCheck,  path: '/consents' },
-    { name: 'Reports',             icon: ClipboardList, path: '/reports' },
-    { name: 'Certificates',        icon: FileText,   path: '/certificates' },
+    { name: 'Consents',            icon: FileCheck,  path: '/consents', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Reports',             icon: ClipboardList, path: '/reports', allowedRoles: ['Admin', 'JMO', 'Nurse'] },
+    { name: 'Certificates',        icon: FileText,   path: '/certificates', allowedRoles: ['Admin', 'JMO'] },
   ]},
   { section: 'HOSPITALIZATION', items: [
-    { name: 'Hospitals',           icon: Building2,  path: '/hospitals' },
-    { name: 'Wards',               icon: Building2,  path: '/wards' },
+    { name: 'Hospitals',           icon: Building2,  path: '/hospitals', allowedRoles: ['Admin'] },
+    { name: 'Wards',               icon: Building2,  path: '/wards', allowedRoles: ['Admin'] },
   ]},
   { section: 'DECEASED INFO', items: [
-    { name: 'Body Identification', icon: Users,      path: '/body-id' },
-    { name: 'Next of Kin',         icon: Users2,     path: '/next-of-kin' },
+    { name: 'Body Identification', icon: Users,      path: '/body-id', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Next of Kin',         icon: Users2,     path: '/next-of-kin', allowedRoles: ['Admin', 'JMO'] },
   ]},
   { section: 'ADMINISTRATION', items: [
-    { name: 'Users',               icon: UserCircle, path: '/users' },
-    { name: 'Doctors',             icon: Users2,     path: '/doctors' },
-    { name: 'Audit Logs',          icon: List,       path: '/audit-logs' },
+    { name: 'Users',               icon: UserCircle, path: '/users', allowedRoles: ['Admin'] },
+    { name: 'Doctors',             icon: Users2,     path: '/doctors', allowedRoles: ['Admin'] },
+    { name: 'Audit Logs',          icon: List,       path: '/audit-logs', allowedRoles: ['Admin'] },
   ]},
   { section: 'ACCOUNT', items: [
-    { name: 'Profile', icon: UserCircle, path: '/profile' },
-    { name: 'Logout',  icon: LogOut,     path: '/logout', action: true },
+    { name: 'Profile', icon: UserCircle, path: '/profile', allowedRoles: ['Admin', 'JMO', 'Nurse'] },
+    { name: 'Logout',  icon: LogOut,     path: '/logout', action: true, allowedRoles: ['Admin', 'JMO', 'Nurse'] },
   ]}
 ];
 
@@ -126,8 +126,12 @@ const Sidebar = ({ isOpen }) => {
         )}
 
         {navItems.map((group, idx) => {
+          const user = authService.getUser();
+          const userRole = user ? (user.role || user.Role) : null;
+          
           const filteredItems = group.items.filter(item => 
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (!item.allowedRoles || item.allowedRoles.includes(userRole))
           );
           
           if (filteredItems.length === 0) return null;

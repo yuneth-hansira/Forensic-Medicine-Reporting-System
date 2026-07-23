@@ -195,6 +195,61 @@
 .text-teal { color: #14b8a6; }
 .text-pink { color: #ec4899; }
 
+/* Reports Grid */
+.reports-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.report-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.report-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transform: translateX(3px);
+}
+
+.report-btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.report-btn-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.report-btn-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.report-btn-desc {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
 /* Charts */
 .chart-container {
   width: 100%;

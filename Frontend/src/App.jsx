@@ -84,6 +84,7 @@ import AuditLogs from './pages/admin/AuditLogs';
 import RegisterAuditLog from './pages/admin/RegisterAuditLog';
 import AuditLogProfile from './pages/admin/AuditLogProfile';
 import UserProfile      from './pages/UserProfile';
+import ReportViewer     from './pages/other/ReportViewer';
 
 // ── Additional Forensic & Case Modules ──
 import PMFindings from './pages/cases/PMFindings';
@@ -114,154 +115,161 @@ import Referrals from './pages/cases/Referrals';
 import RegisterReferral from './pages/cases/RegisterReferral';
 import ReferralProfile from './pages/cases/ReferralProfile';
 
+import PrivateRoute from './components/PrivateRoute';
+
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          {/* ── Auth ── */}
+          {/* ── Auth (Public) ── */}
           <Route path="/"     element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* ── Main Dashboard ── */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/calendar"  element={<CalendarPage />} />
+          {/* ── All Authenticated Users ── */}
+          <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO', 'Nurse']} />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/calendar"  element={<CalendarPage />} />
+            <Route path="/profile"   element={<UserProfile />} />
 
-          {/* ── Patient Management ─────────────────────────── */}
-          <Route path="/patients"                element={<PatientDashboard />} />
-          <Route path="/patients/list"           element={<PatientList />} />
-          <Route path="/patients/register"       element={<RegisterPatient />} />
-          <Route path="/patients/:id"            element={<PatientProfile />} />
-          <Route path="/patients/:id/details"    element={<PatientDetails />} />
-          <Route path="/patients/:id/edit"       element={<RegisterPatient />} />
-          <Route path="/patients/:id/injuries"   element={<InjuryDocumentation />} />
-          <Route path="/patients/reports"        element={<MedicalReports />} />
-          <Route path="/patients/appointments"   element={<AppointmentManagement />} />
-          <Route path="/patients/analytics"      element={<PatientAnalytics />} />
+            {/* Patient Management */}
+            <Route path="/patients"                element={<PatientDashboard />} />
+            <Route path="/patients/list"           element={<PatientList />} />
+            <Route path="/patients/register"       element={<RegisterPatient />} />
+            <Route path="/patients/:id"            element={<PatientProfile />} />
+            <Route path="/patients/:id/details"    element={<PatientDetails />} />
+            <Route path="/patients/:id/edit"       element={<RegisterPatient />} />
+            <Route path="/patients/:id/injuries"   element={<InjuryDocumentation />} />
+            <Route path="/patients/reports"        element={<MedicalReports />} />
+            <Route path="/patients/appointments"   element={<AppointmentManagement />} />
+            <Route path="/patients/analytics"      element={<PatientAnalytics />} />
 
-          {/* ── Case Management ───────────────────────────── */}
-          <Route path="/cases"                    element={<CaseDashboard />} />
-          <Route path="/cases/list"              element={<CaseList />} />
-          <Route path="/cases/register"           element={<NewCase />} />
-          <Route path="/cases/:id"                element={<CaseDetails />} />
-          <Route path="/cases/:id/edit"           element={<NewCase />} />
-          <Route path="/cases/:id/assign"         element={<AssignDoctor />} />
-          <Route path="/cases/:id/timeline"       element={<CaseTimeline />} />
-          <Route path="/cases/:id/documents"      element={<CaseDocuments />} />
-          <Route path="/cases/:id/close"          element={<CloseCase />} />
+            {/* Reports Viewer */}
+            <Route path="/reports/view/:type"      element={<ReportViewer />} />
+          </Route>
 
-          {/* ── Examinee Management ────────────────────────── */}
-          <Route path="/examinees"                element={<ExamineeList />} />
-          <Route path="/examinees/register"       element={<RegisterExaminee />} />
-          <Route path="/examinees/:id"            element={<ExamineeProfile />} />
-          <Route path="/examinees/:id/edit"       element={<RegisterExaminee />} />
-          <Route path="/examinees/:id/history"    element={<MedicalHistory />} />
-          <Route path="/examinees/:id/consent"    element={<ConsentForms />} />
+          {/* ── JMO and Admin Only ── */}
+          <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO']} />}>
+            {/* Case Management */}
+            <Route path="/cases"                    element={<CaseDashboard />} />
+            <Route path="/cases/list"              element={<CaseList />} />
+            <Route path="/cases/register"           element={<NewCase />} />
+            <Route path="/cases/:id"                element={<CaseDetails />} />
+            <Route path="/cases/:id/edit"           element={<NewCase />} />
+            <Route path="/cases/:id/assign"         element={<AssignDoctor />} />
+            <Route path="/cases/:id/timeline"       element={<CaseTimeline />} />
+            <Route path="/cases/:id/documents"      element={<CaseDocuments />} />
+            <Route path="/cases/:id/close"          element={<CloseCase />} />
+            <Route path="/police-info"              element={<PoliceInfo />} />
+            <Route path="/police-info/register"     element={<RegisterPoliceInfo />} />
+            <Route path="/police-info/:id"          element={<PoliceInfoProfile />} />
+            <Route path="/police-info/:id/edit"     element={<RegisterPoliceInfo />} />
+            <Route path="/court-info"               element={<CourtInfo />} />
+            <Route path="/court-info/register"      element={<RegisterCourtInfo />} />
+            <Route path="/court-info/:id/edit"      element={<RegisterCourtInfo />} />
+            <Route path="/clinical-findings"        element={<ClinicalFindings />} />
+            <Route path="/clinical-findings/register" element={<RegisterClinicalFindings />} />
+            <Route path="/clinical-findings/:id"    element={<ClinicalFindingsProfile />} />
+            <Route path="/clinical-findings/:id/edit" element={<RegisterClinicalFindings />} />
+            <Route path="/injuries"                 element={<Injuries />} />
+            <Route path="/injuries/register"        element={<RegisterInjury />} />
+            <Route path="/injuries/:id"             element={<InjuryProfile />} />
+            <Route path="/injuries/:id/edit"        element={<RegisterInjury />} />
+            <Route path="/documents"                element={<Documents />} />
+            <Route path="/documents/register"       element={<RegisterDocument />} />
+            <Route path="/documents/:id"            element={<DocumentProfile />} />
+            <Route path="/documents/:id/edit"       element={<RegisterDocument />} />
+            <Route path="/consents"                 element={<Consents />} />
+            <Route path="/consents/register"        element={<RegisterConsent />} />
+            <Route path="/consents/:id"             element={<ConsentProfile />} />
+            <Route path="/consents/:id/edit"        element={<RegisterConsent />} />
+            <Route path="/reports"                  element={<Reports />} />
+            <Route path="/reports/register"         element={<RegisterReport />} />
+            <Route path="/reports/:id"              element={<ReportProfile />} />
+            <Route path="/reports/:id/edit"         element={<RegisterReport />} />
+            <Route path="/certificates"             element={<Certificates />} />
+            <Route path="/certificates/register"    element={<RegisterCertificate />} />
+            <Route path="/certificates/:id"         element={<CertificateProfile />} />
+            <Route path="/certificates/:id/edit"    element={<RegisterCertificate />} />
 
-          {/* ── Administration & Other ────────────────────────── */}
-          <Route path="/deceased"                 element={<DeceasedList />} />
-          <Route path="/deceased/register"        element={<RegisterDeceased />} />
-          <Route path="/deceased/:id"             element={<DeceasedProfile />} />
-          <Route path="/deceased/:id/edit"        element={<RegisterDeceased />} />
-          <Route path="/clinical-findings"        element={<ClinicalFindings />} />
-          <Route path="/clinical-findings/register" element={<RegisterClinicalFindings />} />
-          <Route path="/clinical-findings/:id"    element={<ClinicalFindingsProfile />} />
-          <Route path="/clinical-findings/:id/edit" element={<RegisterClinicalFindings />} />
-          <Route path="/doctors"                  element={<Doctors />} />
-          <Route path="/doctors/register"         element={<RegisterDoctor />} />
-          <Route path="/doctors/:id"              element={<DoctorProfile />} />
-          <Route path="/doctors/:id/edit"         element={<RegisterDoctor />} />
-          <Route path="/settings"                 element={<PlaceholderPage title="System Settings" />} />
-          <Route path="/profile"                  element={<UserProfile />} />
-          
-          {/* ── Additional Database Modules ───────────────────────── */}
-          <Route path="/police-info"              element={<PoliceInfo />} />
-          <Route path="/police-info/register"     element={<RegisterPoliceInfo />} />
-          <Route path="/police-info/:id"          element={<PoliceInfoProfile />} />
-          <Route path="/police-info/:id/edit"     element={<RegisterPoliceInfo />} />
-          <Route path="/court-info"               element={<CourtInfo />} />
-          <Route path="/court-info/register"      element={<RegisterCourtInfo />} />
-          <Route path="/court-info/:id/edit"      element={<RegisterCourtInfo />} />
-          <Route path="/injuries"                 element={<Injuries />} />
-          <Route path="/injuries/register"        element={<RegisterInjury />} />
-          <Route path="/injuries/:id"             element={<InjuryProfile />} />
-          <Route path="/injuries/:id/edit"        element={<RegisterInjury />} />
-          <Route path="/documents"                element={<Documents />} />
-          <Route path="/documents/register"       element={<RegisterDocument />} />
-          <Route path="/documents/:id"            element={<DocumentProfile />} />
-          <Route path="/documents/:id/edit"       element={<RegisterDocument />} />
-          <Route path="/consents"                 element={<Consents />} />
-          <Route path="/consents/register"        element={<RegisterConsent />} />
-          <Route path="/consents/:id"             element={<ConsentProfile />} />
-          <Route path="/consents/:id/edit"        element={<RegisterConsent />} />
-          <Route path="/reports"                  element={<Reports />} />
-          <Route path="/reports/register"         element={<RegisterReport />} />
-          <Route path="/reports/:id"              element={<ReportProfile />} />
-          <Route path="/reports/:id/edit"         element={<RegisterReport />} />
-          <Route path="/certificates"             element={<Certificates />} />
-          <Route path="/certificates/register"    element={<RegisterCertificate />} />
-          <Route path="/certificates/:id"         element={<CertificateProfile />} />
-          <Route path="/certificates/:id/edit"    element={<RegisterCertificate />} />
-          <Route path="/hospitals"                element={<Hospitals />} />
-          <Route path="/hospitals/register"       element={<RegisterHospital />} />
-          <Route path="/hospitals/:id"            element={<HospitalProfile />} />
-          <Route path="/hospitals/:id/edit"       element={<RegisterHospital />} />
-          <Route path="/wards"                    element={<Wards />} />
-          <Route path="/wards/register"           element={<RegisterWard />} />
-          <Route path="/wards/:id"                element={<WardProfile />} />
-          <Route path="/wards/:id/edit"           element={<RegisterWard />} />
-          <Route path="/body-id"                  element={<BodyIdentifications />} />
-          <Route path="/body-id/register"         element={<RegisterBodyIdentification />} />
-          <Route path="/body-id/:id"              element={<BodyIdentificationProfile />} />
-          <Route path="/body-id/:id/edit"         element={<RegisterBodyIdentification />} />
-          <Route path="/next-of-kin"              element={<NextOfKin />} />
-          <Route path="/next-of-kin/register"     element={<RegisterNextOfKin />} />
-          <Route path="/next-of-kin/:id"          element={<NextOfKinProfile />} />
-          <Route path="/next-of-kin/:id/edit"     element={<RegisterNextOfKin />} />
-          <Route path="/users"                    element={<SystemUsers />} />
-          <Route path="/users/register"           element={<RegisterSystemUser />} />
-          <Route path="/users/:id"                element={<SystemUserProfile />} />
-          <Route path="/users/:id/edit"           element={<RegisterSystemUser />} />
-          <Route path="/audit-logs"               element={<AuditLogs />} />
-          <Route path="/audit-logs/register"      element={<RegisterAuditLog />} />
-          <Route path="/audit-logs/:id"           element={<AuditLogProfile />} />
-          <Route path="/audit-logs/:id/edit"      element={<RegisterAuditLog />} />
-          
-          <Route path="/pm-findings"              element={<PMFindings />} />
-          <Route path="/pm-findings/register"     element={<RegisterPMFinding />} />
-          <Route path="/pm-findings/:id"          element={<PMFindingProfile />} />
-          <Route path="/pm-findings/:id/edit"     element={<RegisterPMFinding />} />
-          
-          <Route path="/specimens"                element={<Specimens />} />
-          <Route path="/specimens/register"       element={<RegisterSpecimen />} />
-          <Route path="/specimens/:id"            element={<SpecimenProfile />} />
-          <Route path="/specimens/:id/edit"       element={<RegisterSpecimen />} />
-          
-          <Route path="/histopathology"           element={<HistopathologyReports />} />
-          <Route path="/histopathology/register"  element={<RegisterHistopathology />} />
-          <Route path="/histopathology/:id"       element={<HistopathologyProfile />} />
-          <Route path="/histopathology/:id/edit"  element={<RegisterHistopathology />} />
-          
-          <Route path="/toxicology"               element={<ToxicologyReports />} />
-          <Route path="/toxicology/register"      element={<RegisterToxicology />} />
-          <Route path="/toxicology/:id"           element={<ToxicologyProfile />} />
-          <Route path="/toxicology/:id/edit"      element={<RegisterToxicology />} />
-          
-          <Route path="/investigations"           element={<Investigations />} />
-          <Route path="/investigations/register"  element={<RegisterInvestigation />} />
-          <Route path="/investigations/:id"       element={<InvestigationProfile />} />
-          <Route path="/investigations/:id/edit"  element={<RegisterInvestigation />} />
-          
-          <Route path="/exhibits"                 element={<Exhibits />} />
-          <Route path="/exhibits/register"        element={<RegisterExhibit />} />
-          <Route path="/exhibits/:id"             element={<ExhibitProfile />} />
-          <Route path="/exhibits/:id/edit"        element={<RegisterExhibit />} />
-          
-          <Route path="/referrals"                element={<Referrals />} />
-          <Route path="/referrals/register"       element={<RegisterReferral />} />
-          <Route path="/referrals/:id"            element={<ReferralProfile />} />
-          <Route path="/referrals/:id/edit"       element={<RegisterReferral />} />
-          
+            {/* Examinees */}
+            <Route path="/examinees"                element={<ExamineeList />} />
+            <Route path="/examinees/register"       element={<RegisterExaminee />} />
+            <Route path="/examinees/:id"            element={<ExamineeProfile />} />
+            <Route path="/examinees/:id/edit"       element={<RegisterExaminee />} />
+            <Route path="/examinees/:id/history"    element={<MedicalHistory />} />
+            <Route path="/examinees/:id/consent"    element={<ConsentForms />} />
+
+            {/* Deceased & Mortuary */}
+            <Route path="/deceased"                 element={<DeceasedList />} />
+            <Route path="/deceased/register"        element={<RegisterDeceased />} />
+            <Route path="/deceased/:id"             element={<DeceasedProfile />} />
+            <Route path="/deceased/:id/edit"        element={<RegisterDeceased />} />
+            <Route path="/body-id"                  element={<BodyIdentifications />} />
+            <Route path="/body-id/register"         element={<RegisterBodyIdentification />} />
+            <Route path="/body-id/:id"              element={<BodyIdentificationProfile />} />
+            <Route path="/body-id/:id/edit"         element={<RegisterBodyIdentification />} />
+            <Route path="/next-of-kin"              element={<NextOfKin />} />
+            <Route path="/next-of-kin/register"     element={<RegisterNextOfKin />} />
+            <Route path="/next-of-kin/:id"          element={<NextOfKinProfile />} />
+            <Route path="/next-of-kin/:id/edit"     element={<RegisterNextOfKin />} />
+
+            {/* Forensic & Lab */}
+            <Route path="/pm-findings"              element={<PMFindings />} />
+            <Route path="/pm-findings/register"     element={<RegisterPMFinding />} />
+            <Route path="/pm-findings/:id"          element={<PMFindingProfile />} />
+            <Route path="/pm-findings/:id/edit"     element={<RegisterPMFinding />} />
+            <Route path="/specimens"                element={<Specimens />} />
+            <Route path="/specimens/register"       element={<RegisterSpecimen />} />
+            <Route path="/specimens/:id"            element={<SpecimenProfile />} />
+            <Route path="/specimens/:id/edit"       element={<RegisterSpecimen />} />
+            <Route path="/histopathology"           element={<HistopathologyReports />} />
+            <Route path="/histopathology/register"  element={<RegisterHistopathology />} />
+            <Route path="/histopathology/:id"       element={<HistopathologyProfile />} />
+            <Route path="/histopathology/:id/edit"  element={<RegisterHistopathology />} />
+            <Route path="/toxicology"               element={<ToxicologyReports />} />
+            <Route path="/toxicology/register"      element={<RegisterToxicology />} />
+            <Route path="/toxicology/:id"           element={<ToxicologyProfile />} />
+            <Route path="/toxicology/:id/edit"      element={<RegisterToxicology />} />
+            <Route path="/investigations"           element={<Investigations />} />
+            <Route path="/investigations/register"  element={<RegisterInvestigation />} />
+            <Route path="/investigations/:id"       element={<InvestigationProfile />} />
+            <Route path="/investigations/:id/edit"  element={<RegisterInvestigation />} />
+            <Route path="/exhibits"                 element={<Exhibits />} />
+            <Route path="/exhibits/register"        element={<RegisterExhibit />} />
+            <Route path="/exhibits/:id"             element={<ExhibitProfile />} />
+            <Route path="/exhibits/:id/edit"        element={<RegisterExhibit />} />
+            <Route path="/referrals"                element={<Referrals />} />
+            <Route path="/referrals/register"       element={<RegisterReferral />} />
+            <Route path="/referrals/:id"            element={<ReferralProfile />} />
+            <Route path="/referrals/:id/edit"       element={<RegisterReferral />} />
+          </Route>
+
+          {/* ── Admin Only ── */}
+          <Route element={<PrivateRoute allowedRoles={['Admin']} />}>
+            <Route path="/hospitals"                element={<Hospitals />} />
+            <Route path="/hospitals/register"       element={<RegisterHospital />} />
+            <Route path="/hospitals/:id"            element={<HospitalProfile />} />
+            <Route path="/hospitals/:id/edit"       element={<RegisterHospital />} />
+            <Route path="/wards"                    element={<Wards />} />
+            <Route path="/wards/register"           element={<RegisterWard />} />
+            <Route path="/wards/:id"                element={<WardProfile />} />
+            <Route path="/wards/:id/edit"           element={<RegisterWard />} />
+            <Route path="/users"                    element={<SystemUsers />} />
+            <Route path="/users/register"           element={<RegisterSystemUser />} />
+            <Route path="/users/:id"                element={<SystemUserProfile />} />
+            <Route path="/users/:id/edit"           element={<RegisterSystemUser />} />
+            <Route path="/doctors"                  element={<Doctors />} />
+            <Route path="/doctors/register"         element={<RegisterDoctor />} />
+            <Route path="/doctors/:id"              element={<DoctorProfile />} />
+            <Route path="/doctors/:id/edit"         element={<RegisterDoctor />} />
+            <Route path="/audit-logs"               element={<AuditLogs />} />
+            <Route path="/audit-logs/register"      element={<RegisterAuditLog />} />
+            <Route path="/audit-logs/:id"           element={<AuditLogProfile />} />
+            <Route path="/audit-logs/:id/edit"      element={<RegisterAuditLog />} />
+            <Route path="/settings"                 element={<PlaceholderPage title="System Settings" />} />
+          </Route>
+
           {/* ── Catch-All ── */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

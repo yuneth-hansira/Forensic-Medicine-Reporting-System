@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Users, Folder, Clock, CheckCircle, 
   FlaskConical, FileText, Building2, Calendar,
-  UserPlus, FilePlus, Activity, Search
+  UserPlus, FilePlus, Activity, Search,
+  BarChart3, Gavel, Download
 } from 'lucide-react';
 import { 
   Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -165,41 +166,54 @@ const Dashboard = () => {
         {/* Middle Section: Quick Actions & Charts */}
         <div className="middle-section">
           
-          {/* Quick Actions */}
+          {/* Reports */}
           <div className="card quick-actions-card">
-            <h3 className="card-title">Quick Actions</h3>
-            <div className="actions-grid">
-              <button className="action-btn">
-                <UserPlus size={24} className="action-icon text-blue" />
-                <span>Register Patient</span>
+            <h3 className="card-title"><FileText size={18} style={{marginRight:'0.5rem'}}/> Reports</h3>
+            <div className="reports-grid">
+              <button className="report-btn" onClick={() => navigate('/reports/view/daily')}>
+                <div className="report-btn-icon" style={{backgroundColor:'#eff6ff', color:'#3b82f6'}}>
+                  <Calendar size={22} />
+                </div>
+                <div className="report-btn-info">
+                  <span className="report-btn-title">Daily Case Report</span>
+                  <span className="report-btn-desc">Today's registered cases</span>
+                </div>
               </button>
-              <button className="action-btn">
-                <FilePlus size={24} className="action-icon text-green" />
-                <span>Create New Case</span>
+              <button className="report-btn" onClick={() => navigate('/reports/view/monthly')}>
+                <div className="report-btn-icon" style={{backgroundColor:'#f5f3ff', color:'#8b5cf6'}}>
+                  <BarChart3 size={22} />
+                </div>
+                <div className="report-btn-info">
+                  <span className="report-btn-title">Monthly Report</span>
+                  <span className="report-btn-desc">This month's summary</span>
+                </div>
               </button>
-              <button className="action-btn">
-                <Activity size={24} className="action-icon text-purple" />
-                <span>Add Examination</span>
+              <button className="report-btn" onClick={() => navigate('/reports/view/pending')}>
+                <div className="report-btn-icon" style={{backgroundColor:'#fffbeb', color:'#f59e0b'}}>
+                  <Clock size={22} />
+                </div>
+                <div className="report-btn-info">
+                  <span className="report-btn-title">Pending Cases</span>
+                  <span className="report-btn-desc">Awaiting action</span>
+                </div>
               </button>
-              <button className="action-btn">
-                <FlaskConical size={24} className="action-icon text-red" />
-                <span>Add Evidence</span>
+              <button className="report-btn" onClick={() => navigate('/reports/view/court')}>
+                <div className="report-btn-icon" style={{backgroundColor:'#ecfdf5', color:'#10b981'}}>
+                  <Gavel size={22} />
+                </div>
+                <div className="report-btn-info">
+                  <span className="report-btn-title">Court Report</span>
+                  <span className="report-btn-desc">Court submissions & trials</span>
+                </div>
               </button>
-              <button className="action-btn">
-                <FileText size={24} className="action-icon text-orange" />
-                <span>Generate Report</span>
-              </button>
-              <button className="action-btn">
-                <Search size={24} className="action-icon text-teal" />
-                <span>Search Patient</span>
-              </button>
-              <button className="action-btn">
-                <Folder size={24} className="action-icon text-blue" />
-                <span>Search Case</span>
-              </button>
-              <button className="action-btn" onClick={() => navigate('/calendar')}>
-                <Calendar size={24} className="action-icon text-pink" />
-                <span>View Calendar</span>
+              <button className="report-btn" onClick={() => navigate('/reports/view/statistical')}>
+                <div className="report-btn-icon" style={{backgroundColor:'#fef2f2', color:'#ef4444'}}>
+                  <BarChart3 size={22} />
+                </div>
+                <div className="report-btn-info">
+                  <span className="report-btn-title">Statistical Report</span>
+                  <span className="report-btn-desc">Overall analytics</span>
+                </div>
               </button>
             </div>
           </div>
