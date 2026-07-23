@@ -44,7 +44,6 @@ const SystemUsers = () => {
   };
 
   const filteredRecords = records.filter(r => {
-    if (r.Role === 'Doctor') return false;
     const search = searchTerm.toLowerCase();
     return (
       (r.Username && r.Username.toLowerCase().includes(search)) ||

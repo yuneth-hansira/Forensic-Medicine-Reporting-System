@@ -99,16 +99,35 @@ exports.updateDoctor = async (req, res) => {
 // @route   DELETE /api/doctors/:id
 // @access  Private
 exports.deleteDoctor = async (req, res) => {
+    const connection = await pool.getConnection();
     try {
-        const [result] = await pool.query('DELETE FROM Doctor WHERE Doctor_ID = ?', [req.params.id]);
+        await connection.beginTransaction();
+
+        // 1. Find associated User_ID
+        const [docs] = await connection.query('SELECT User_ID FROM Doctor WHERE Doctor_ID = ?', [req.params.id]);
         
-        if (result.affectedRows === 0) {
+        if (docs.length === 0) {
+            await connection.rollback();
             return res.status(404).json({ message: 'Doctor not found' });
         }
+        
+        const userId = docs[0].User_ID;
 
-        res.json({ message: 'Doctor deleted successfully' });
+        // 2. Delete Doctor record
+        await connection.query('DELETE FROM Doctor WHERE Doctor_ID = ?', [req.params.id]);
+        
+        // 3. Delete associated User record if it exists
+        if (userId) {
+            await connection.query('DELETE FROM User WHERE User_ID = ?', [userId]);
+        }
+
+        await connection.commit();
+        res.json({ message: 'Doctor and associated user account deleted successfully' });
     } catch (err) {
+        await connection.rollback();
         console.error(err);
         res.status(500).json({ message: 'Server error deleting doctor' });
+    } finally {
+        connection.release();
     }
 };

@@ -138,6 +138,13 @@ exports.createUser = async (req, res) => {
         
         const userId = userResult.insertId;
 
+        if (Role === 'Doctor') {
+            await connection.query(
+                'INSERT INTO Doctor (User_ID, Name) VALUES (?, ?)',
+                [userId, Username] // Use username as initial name
+            );
+        }
+
         await connection.commit();
         res.status(201).json({ message: 'User created successfully', User_ID: userId });
     } catch (err) {
@@ -195,16 +202,28 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+    const connection = await pool.getConnection();
     try {
-        const [result] = await pool.query('DELETE FROM User WHERE User_ID = ?', [req.params.id]);
+        await connection.beginTransaction();
+
+        // 1. Delete associated Doctor record (if any)
+        await connection.query('DELETE FROM Doctor WHERE User_ID = ?', [req.params.id]);
+
+        // 2. Delete the User
+        const [result] = await connection.query('DELETE FROM User WHERE User_ID = ?', [req.params.id]);
         
         if (result.affectedRows === 0) {
+            await connection.rollback();
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json({ message: 'User deleted successfully' });
+        await connection.commit();
+        res.json({ message: 'User and any associated profiles deleted successfully' });
     } catch (err) {
+        await connection.rollback();
         console.error(err);
         res.status(500).json({ message: 'Server error deleting user' });
+    } finally {
+        connection.release();
     }
 };
