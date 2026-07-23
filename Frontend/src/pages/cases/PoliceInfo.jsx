@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { policeInfoService } from '../../services/policeInfoService';
 import '../patients/patients.css'; // Reusing table styles
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const ROWS_PER_PAGE = 10;
 
 const PoliceInfo = () => {
+  const user = authService.getUser();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');

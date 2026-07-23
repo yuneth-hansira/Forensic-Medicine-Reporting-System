@@ -6,8 +6,11 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { doctorService } from '../../services/doctorService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const Doctors = () => {
+  const user = authService.getUser();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

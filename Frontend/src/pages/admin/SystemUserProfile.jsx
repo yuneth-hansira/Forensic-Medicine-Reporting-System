@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { userService } from '../../services/userService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const SystemUserProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -36,6 +39,18 @@ const SystemUserProfile = () => {
 
   const isAdmin = record.Role === 'Admin';
 
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await userService.deleteUser(id);
+        window.location.href = '/users';
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete user.");
+      }
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="pm-page">
@@ -48,10 +63,17 @@ const SystemUserProfile = () => {
             </div>
             <h1 className="pm-page-title">User Profile</h1>
           </div>
-          <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/users/${record.User_ID}/edit`}>
-              <Edit3 size={16}/>Edit User
-            </button>
+          <div className="pm-header-actions" style={{display: 'flex', gap: '0.5rem'}}>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/users/${record.User_ID}/edit`}>
+                <Edit3 size={16}/>Edit User
+              </button>
+            )}
+            {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary" style={{color: '#ef4444', borderColor: '#fee2e2'}} onClick={handleDelete}>
+                Delete User
+              </button>
+            )}
           </div>
         </div>
 

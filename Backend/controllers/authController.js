@@ -41,6 +41,7 @@ exports.login = async (req, res) => {
                 id: user.User_ID,
                 username: user.Username,
                 role: user.Role,
+                access_level: user.Access_Level,
                 doctorId: doctorInfo ? doctorInfo.Doctor_ID : null
             }
         };
@@ -75,6 +76,7 @@ exports.departmentLogin = async (req, res) => {
                 id: 999, // System user or auth stub
                 username: `dept_${departmentId}`,
                 role: 'Admin',
+                access_level: 'Full',
                 doctorId: null
             }
         };

@@ -6,8 +6,11 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { caseService } from '../../services/caseService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const CaseDashboard = () => {
+  const user = authService.getUser();
   const [recentCases, setRecentCases] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,9 +49,11 @@ const CaseDashboard = () => {
             <h1 className="pm-page-title">Case Management</h1>
             <p className="pm-page-subtitle">Overview of forensic cases</p>
           </div>
-          <Link to="/cases/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-            <Plus size={18}/> Register Case
-          </Link>
+          {canCreate(user) && user?.Role !== 'Nurse' && (
+            <Link to="/cases/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+              <Plus size={18}/> Register Case
+            </Link>
+          )}
         </div>
 
         <div className="pm-card" style={{marginTop:'2rem'}}>
@@ -91,9 +96,11 @@ const CaseDashboard = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/cases/${c.Case_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(c.Case_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && user?.Role !== 'Nurse' && (
+                            <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(c.Case_ID)}>
+                              <Trash2 size={14}/>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

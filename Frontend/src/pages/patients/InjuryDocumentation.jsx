@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import '../patients/patients.css';
 import './InjuryDocumentation.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const INJURY_TYPES   = ['Laceration','Contusion','Abrasion','Fracture','Burn','Stab Wound','Gunshot','Bruise','Swelling','Other'];
 const SEVERITIES     = [
@@ -20,6 +22,7 @@ const defaultPins = [];
 const severityColor = { Minor:'#10b981', Moderate:'#f59e0b', Severe:'#ef4444', Critical:'#7c3aed' };
 
 const InjuryDocumentation = () => {
+  const user = authService.getUser();
   const [pins, setPins]       = useState(defaultPins);
   const [bodySide, setBodySide] = useState('front');
   const [selected, setSelected] = useState(null);

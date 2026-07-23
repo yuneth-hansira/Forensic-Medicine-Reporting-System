@@ -20,6 +20,7 @@ const statusMap = {
 const ROWS_PER_PAGE = 7;
 
 const PatientList = () => {
+  const user = authService.getUser();
   const [query, setQuery]       = useState('');
   const [page, setPage]         = useState(1);
 

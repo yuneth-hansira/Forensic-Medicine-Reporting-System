@@ -4,8 +4,11 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { AlertCircle, Check } from 'lucide-react';
 import { clinicalFindingsService } from '../../services/clinicalFindingsService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const RegisterClinicalFindings = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();

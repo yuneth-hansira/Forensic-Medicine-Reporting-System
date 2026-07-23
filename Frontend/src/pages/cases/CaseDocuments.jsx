@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronRight, UploadCloud, Search, Filter, FileText, Image as ImageIcon, File, Download, Trash2, Eye } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const documents = [];
 
@@ -13,6 +15,7 @@ const getIcon = (type) => {
 };
 
 const CaseDocuments = () => {
+  const user = authService.getUser();
   const [view, setView] = useState('grid');
   const [search, setSearch] = useState('');
 

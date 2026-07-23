@@ -6,8 +6,11 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { deceasedService } from '../../services/deceasedService';
 import '../patients/patients.css'; // Using shared styles
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const DeceasedList = () => {
+  const user = authService.getUser();
   const [deceasedList, setDeceasedList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

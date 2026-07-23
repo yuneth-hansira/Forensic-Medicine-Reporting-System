@@ -4,8 +4,11 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { AlertCircle, Check } from 'lucide-react';
 import { userService } from '../../services/userService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const RegisterSystemUser = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
@@ -113,17 +116,31 @@ const RegisterSystemUser = () => {
                     placeholder="jdoe"
                   />
                 </div>
-                <div className="pm-form-group">
-                  <label className={isEditMode ? "pm-label" : "pm-label required"}>Password</label>
-                  <input 
-                    required={!isEditMode}
-                    type="password"
-                    className="pm-input" 
-                    value={form.Password} 
-                    onChange={(e) => handleChange('Password', e.target.value)} 
-                    placeholder={isEditMode ? "Leave empty to keep current password" : "Enter a strong password"}
-                  />
-                </div>
+                {(!isEditMode || user?.id?.toString() === id) ? (
+                  <div className="pm-form-group">
+                    <label className={isEditMode ? "pm-label" : "pm-label required"}>Password</label>
+                    <input 
+                      required={!isEditMode}
+                      type="password"
+                      className="pm-input" 
+                      value={form.Password} 
+                      onChange={(e) => handleChange('Password', e.target.value)} 
+                      placeholder={isEditMode ? "Leave empty to keep current password" : "Enter a strong password"}
+                    />
+                  </div>
+                ) : (
+                  <div className="pm-form-group">
+                    <label className="pm-label">Password</label>
+                    <input 
+                      disabled
+                      type="password"
+                      className="pm-input" 
+                      value="********"
+                      title="You can only change your own password"
+                      style={{backgroundColor: '#f1f5f9', color: '#94a3b8', cursor: 'not-allowed'}}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="pm-form-grid-2" style={{marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem'}}>

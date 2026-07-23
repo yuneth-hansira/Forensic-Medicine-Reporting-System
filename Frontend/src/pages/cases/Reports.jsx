@@ -6,8 +6,11 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { reportService } from '../../services/reportService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const Reports = () => {
+  const user = authService.getUser();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,9 +63,11 @@ const Reports = () => {
             <p className="pm-page-subtitle">View and manage medical reports linked to cases</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/reports/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> Add Report
-            </Link>
+            {canCreate(user) && user?.Role !== 'Nurse' && (
+              <Link to="/reports/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                <Plus size={18}/> Add Report
+              </Link>
+            )}
           </div>
         </div>
 
@@ -112,9 +117,11 @@ const Reports = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/reports/${r.Report_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Report_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && user?.Role !== 'Nurse' && (
+                            <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Report_ID)}>
+                              <Trash2 size={14}/>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

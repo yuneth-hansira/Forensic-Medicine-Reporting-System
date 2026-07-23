@@ -5,12 +5,16 @@ import {
 } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { userService } from '../../services/userService';
+import { authService } from '../../services/authService';
+import { canCreate, canDelete } from '../../utils/permissions';
 import '../patients/patients.css';
 
 const SystemUsers = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const user = authService.getUser();
 
   const fetchRecords = async () => {
     try {
@@ -60,9 +64,11 @@ const SystemUsers = () => {
             <p className="pm-page-subtitle">Manage user access and profiles</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/users/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> Add User
-            </Link>
+            {canCreate(user) && (
+              <Link to="/users/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                <Plus size={18}/> Add User
+              </Link>
+            )}
           </div>
         </div>
 
@@ -119,9 +125,11 @@ const SystemUsers = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/users/${r.User_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.User_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+                            <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.User_ID)}>
+                              <Trash2 size={14}/>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

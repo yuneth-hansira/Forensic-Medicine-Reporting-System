@@ -7,6 +7,8 @@ import {
   Eye, Paperclip, Activity
 } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const historyTimeline = [
   { id: 1, type: 'Forensic Case', title: 'Road Traffic Accident (MLEF Examination)', date: '20 Jul 2026', doctor: 'Dr. John Silva', category: 'Forensic', detail: 'Patient examined following RTA. Forehead laceration and forearm contusions documented under Case C2026-1045.', badgeColor: 'bg-blue-100 text-blue-700 border-blue-200' },
@@ -17,6 +19,7 @@ const historyTimeline = [
 ];
 
 const MedicalHistory = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const examineeId = id || 'EX-2026-0891';
   const [searchTerm, setSearchTerm] = useState('');

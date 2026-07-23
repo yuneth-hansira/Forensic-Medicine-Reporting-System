@@ -6,8 +6,11 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { examineeService } from '../../services/examineeService';
 import '../patients/patients.css'; // Using shared styles
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const ExamineeList = () => {
+  const user = authService.getUser();
   const [examinees, setExaminees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

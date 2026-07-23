@@ -7,8 +7,11 @@ import { hospitalService } from '../../services/hospitalService';
 import { wardService } from '../../services/wardService';
 import '../patients/patients.css';
 import './RegisterPatient.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const RegisterPatient = () => {
+  const user = authService.getUser();
   const [form, setForm] = useState({
     Full_Name: '',
     Date_Of_Birth: '',

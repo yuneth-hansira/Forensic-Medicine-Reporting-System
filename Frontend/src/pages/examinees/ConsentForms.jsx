@@ -6,10 +6,13 @@ import {
   ChevronRight, Eye, PenTool, Lock, Check, FileCheck, X
 } from 'lucide-react';
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const dummyConsents = [];
 
 const ConsentForms = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const examineeId = id || 'EX-2026-0891';
   const [showModal, setShowModal] = useState(false);

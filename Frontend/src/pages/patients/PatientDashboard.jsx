@@ -4,8 +4,11 @@ import { UserPlus, ArrowUpRight, Eye, Edit3, Trash2, Search } from 'lucide-react
 import { patientService } from '../../services/patientService';
 import '../patients/patients.css';
 import './PatientDashboard.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const PatientDashboard = () => {
+  const user = authService.getUser();
   const [recentPatients, setRecentPatients] = useState([]);
   const [loading, setLoading] = useState(true);
 

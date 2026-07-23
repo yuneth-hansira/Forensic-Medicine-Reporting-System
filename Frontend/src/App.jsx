@@ -146,15 +146,19 @@ function App() {
 
             {/* Reports Viewer */}
             <Route path="/reports/view/:type"      element={<ReportViewer />} />
+            <Route path="/reports"                 element={<Reports />} />
+            <Route path="/reports/:id"             element={<ReportProfile />} />
+            
+            {/* Case Viewer */}
+            <Route path="/cases"                    element={<CaseDashboard />} />
+            <Route path="/cases/list"              element={<CaseList />} />
+            <Route path="/cases/:id"                element={<CaseDetails />} />
           </Route>
 
           {/* ── JMO and Admin Only ── */}
           <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO']} />}>
             {/* Case Management */}
-            <Route path="/cases"                    element={<CaseDashboard />} />
-            <Route path="/cases/list"              element={<CaseList />} />
             <Route path="/cases/register"           element={<NewCase />} />
-            <Route path="/cases/:id"                element={<CaseDetails />} />
             <Route path="/cases/:id/edit"           element={<NewCase />} />
             <Route path="/cases/:id/assign"         element={<AssignDoctor />} />
             <Route path="/cases/:id/timeline"       element={<CaseTimeline />} />
@@ -183,9 +187,7 @@ function App() {
             <Route path="/consents/register"        element={<RegisterConsent />} />
             <Route path="/consents/:id"             element={<ConsentProfile />} />
             <Route path="/consents/:id/edit"        element={<RegisterConsent />} />
-            <Route path="/reports"                  element={<Reports />} />
             <Route path="/reports/register"         element={<RegisterReport />} />
-            <Route path="/reports/:id"              element={<ReportProfile />} />
             <Route path="/reports/:id/edit"         element={<RegisterReport />} />
             <Route path="/certificates"             element={<Certificates />} />
             <Route path="/certificates/register"    element={<RegisterCertificate />} />

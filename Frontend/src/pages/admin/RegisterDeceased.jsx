@@ -6,8 +6,11 @@ import { deceasedService } from '../../services/deceasedService';
 import { hospitalService } from '../../services/hospitalService';
 import { wardService } from '../../services/wardService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const RegisterDeceased = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();

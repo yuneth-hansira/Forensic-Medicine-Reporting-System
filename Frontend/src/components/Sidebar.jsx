@@ -16,7 +16,7 @@ const ClipboardList = FileText;
 const navItems = [
   { section: 'MAIN', items: [
     { name: 'Patients',            icon: Users,      path: '/patients', allowedRoles: ['Admin', 'JMO', 'Nurse'] },
-    { name: 'Cases',               icon: FolderOpen, path: '/cases', allowedRoles: ['Admin', 'JMO'] },
+    { name: 'Cases',               icon: FolderOpen, path: '/cases', allowedRoles: ['Admin', 'JMO', 'Nurse'] },
     { name: 'Examinees',           icon: Users,      path: '/examinees', allowedRoles: ['Admin', 'JMO'] },
     { name: 'Deceased',            icon: Shield,     path: '/deceased', allowedRoles: ['Admin', 'JMO'] },
   ]},

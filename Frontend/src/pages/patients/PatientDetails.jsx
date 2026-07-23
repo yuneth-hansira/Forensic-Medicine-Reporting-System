@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import '../patients/patients.css';
 import './PatientDetails.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = [
   { id:'overview',     label:'Overview',              icon:<User size={15}/> },
@@ -30,6 +32,7 @@ const patient = {
 };
 
 const PatientDetails = () => {
+  const user = authService.getUser();
   const [tab, setTab] = useState('overview');
 
   return (
