@@ -63,9 +63,11 @@ const Documents = () => {
             <p className="pm-page-subtitle">View and manage document records linked to cases</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/documents/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> Add Document
-            </Link>
+            {canCreate(user) && (
+              <Link to="/documents/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                            <Plus size={18}/> Add Document
+                          </Link>
+            )}
           </div>
         </div>
 
@@ -125,9 +127,11 @@ const Documents = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/documents/${r.Document_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Document_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Document_ID)}>
+                                          <Trash2 size={14}/>
+                                        </button>
+            )}
                         </div>
                       </td>
                     </tr>

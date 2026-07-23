@@ -66,7 +66,9 @@ const PatientDetails = () => {
               </div>
             ))}
             <div style={{display:'flex',gap:'0.5rem',alignItems:'center'}}>
+              {canEdit(user) && (
               <button className="pm-btn pm-btn-secondary pm-btn-sm"><Edit3 size={13}/>Edit</button>
+            )}
               <button className="pm-btn pm-btn-primary pm-btn-sm"><FileText size={13}/>Report</button>
             </div>
           </div>

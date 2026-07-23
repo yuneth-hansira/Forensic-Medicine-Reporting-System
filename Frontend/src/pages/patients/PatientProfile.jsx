@@ -7,10 +7,13 @@ import {
 import { patientService } from '../../services/patientService';
 import '../patients/patients.css';
 import './PatientProfile.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const PatientProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [patient, setPatient] = useState(null);
@@ -49,9 +52,11 @@ const PatientProfile = () => {
             <h1 className="pm-page-title">Patient Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/patients/${patient.Patient_ID}/edit`}>
-              <Edit3 size={16}/>Edit Patient
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/patients/${patient.Patient_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Patient
+                          </button>
+            )}
           </div>
         </div>
 

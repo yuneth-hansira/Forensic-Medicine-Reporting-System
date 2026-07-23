@@ -63,9 +63,11 @@ const HistopathologyReports = () => {
             <p className="pm-page-subtitle">Manage tissue examinations and pathology findings</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/histopathology/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> New Report
-            </Link>
+            {canCreate(user) && (
+              <Link to="/histopathology/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                            <Plus size={18}/> New Report
+                          </Link>
+            )}
           </div>
         </div>
 
@@ -116,9 +118,11 @@ const HistopathologyReports = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/histopathology/${r.Histo_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Histo_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Histo_ID)}>
+                                          <Trash2 size={14}/>
+                                        </button>
+            )}
                         </div>
                       </td>
                     </tr>

@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { certificateService } from '../../services/certificateService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview', 'Details'];
 
 const CertificateProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const CertificateProfile = () => {
             <h1 className="pm-page-title">Certificate Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/certificates/${record.Receipt_ID}/edit`}>
-              <Edit3 size={16}/>Edit Certificate
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/certificates/${record.Receipt_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Certificate
+                          </button>
+            )}
           </div>
         </div>
 

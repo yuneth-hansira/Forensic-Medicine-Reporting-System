@@ -34,6 +34,7 @@ import RegisterPoliceInfo from './pages/cases/RegisterPoliceInfo';
 import PoliceInfoProfile from './pages/cases/PoliceInfoProfile';
 import CourtInfo      from './pages/cases/CourtInfo';
 import RegisterCourtInfo from './pages/cases/RegisterCourtInfo';
+import CourtInfoProfile from './pages/cases/CourtInfoProfile';
 import ClinicalFindings from './pages/cases/ClinicalFindings';
 import RegisterClinicalFindings from './pages/cases/RegisterClinicalFindings';
 import ClinicalFindingsProfile from './pages/cases/ClinicalFindingsProfile';
@@ -128,7 +129,7 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           {/* ── All Authenticated Users ── */}
-          <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO', 'Nurse']} />}>
+          <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO', 'Nurse', 'Doctor']} />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calendar"  element={<CalendarPage />} />
             <Route path="/calendar/events/:date" element={<CalendarEventsPage />} />
@@ -158,7 +159,7 @@ function App() {
           </Route>
 
           {/* ── JMO and Admin Only ── */}
-          <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO']} />}>
+          <Route element={<PrivateRoute allowedRoles={['Admin', 'JMO', 'Doctor']} />}>
             {/* Case Management */}
             <Route path="/cases/register"           element={<NewCase />} />
             <Route path="/cases/:id/edit"           element={<NewCase />} />
@@ -172,6 +173,7 @@ function App() {
             <Route path="/police-info/:id/edit"     element={<RegisterPoliceInfo />} />
             <Route path="/court-info"               element={<CourtInfo />} />
             <Route path="/court-info/register"      element={<RegisterCourtInfo />} />
+            <Route path="/court-info/:id"           element={<CourtInfoProfile />} />
             <Route path="/court-info/:id/edit"      element={<RegisterCourtInfo />} />
             <Route path="/clinical-findings"        element={<ClinicalFindings />} />
             <Route path="/clinical-findings/register" element={<RegisterClinicalFindings />} />

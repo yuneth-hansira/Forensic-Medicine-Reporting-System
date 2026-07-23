@@ -3,6 +3,7 @@ export const canCreate = (user) => {
   const role = user.Role || user.role;
   const accessLevel = user.Access_Level || user.access_level;
   if (role === 'Admin') return true;
+  if (role === 'Doctor') return false;
   return ['Standard', 'Elevated', 'Full'].includes(accessLevel);
 };
 
@@ -11,6 +12,7 @@ export const canEdit = (user) => {
   const role = user.Role || user.role;
   const accessLevel = user.Access_Level || user.access_level;
   if (role === 'Admin') return true;
+  if (role === 'Doctor') return false;
   return ['Elevated', 'Full'].includes(accessLevel);
 };
 
@@ -19,5 +21,6 @@ export const canDelete = (user) => {
   const role = user.Role || user.role;
   const accessLevel = user.Access_Level || user.access_level;
   if (role === 'Admin') return true;
+  if (role === 'Doctor') return false;
   return accessLevel === 'Full';
 };

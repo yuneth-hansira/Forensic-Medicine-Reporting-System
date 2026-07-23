@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { toxicologyService } from '../../services/toxicologyService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const ToxicologyProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const ToxicologyProfile = () => {
             <h1 className="pm-page-title">Toxicology Report Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/toxicology/${record.Toxicology_ID}/edit`}>
-              <Edit3 size={16}/>Edit Report
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/toxicology/${record.Toxicology_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Report
+                          </button>
+            )}
           </div>
         </div>
 

@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { deceasedService } from '../../services/deceasedService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const DeceasedProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [deceased, setDeceased] = useState(null);
@@ -47,9 +50,11 @@ const DeceasedProfile = () => {
             <h1 className="pm-page-title">Deceased Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/deceased/${deceased.Deceased_ID}/edit`}>
-              <Edit3 size={16}/>Edit Record
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/deceased/${deceased.Deceased_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Record
+                          </button>
+            )}
           </div>
         </div>
 

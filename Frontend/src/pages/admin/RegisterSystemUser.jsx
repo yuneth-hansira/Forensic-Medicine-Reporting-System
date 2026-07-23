@@ -153,6 +153,7 @@ const RegisterSystemUser = () => {
                     onChange={(e) => handleChange('Role', e.target.value)}
                   >
                     <option value="JMO">JMO</option>
+                    <option value="Doctor">Doctor</option>
                     <option value="Admin">Admin</option>
                     <option value="Nurse">Nurse</option>
                   </select>

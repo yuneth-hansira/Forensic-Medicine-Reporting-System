@@ -51,9 +51,11 @@ const PatientDashboard = () => {
             <p className="pm-page-subtitle">View recent patients or register a new one</p>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href='/patients/register'}>
-              <UserPlus size={16}/>Register New Patient
-            </button>
+            {canCreate(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href='/patients/register'}>
+                            <UserPlus size={16}/>Register New Patient
+                          </button>
+            )}
           </div>
         </div>
 
@@ -118,9 +120,11 @@ const PatientDashboard = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/patients/${p.Patient_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(p.Patient_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(p.Patient_ID)}>
+                                          <Trash2 size={14}/>
+                                        </button>
+            )}
                         </div>
                       </td>
                     </tr>

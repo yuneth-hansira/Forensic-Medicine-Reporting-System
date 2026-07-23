@@ -63,9 +63,11 @@ const BodyIdentifications = () => {
             <p className="pm-page-subtitle">View and manage records of identified deceased individuals</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/body-id/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> Add Record
-            </Link>
+            {canCreate(user) && (
+              <Link to="/body-id/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                            <Plus size={18}/> Add Record
+                          </Link>
+            )}
           </div>
         </div>
 
@@ -115,9 +117,11 @@ const BodyIdentifications = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/body-id/${r.Identification_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Identification_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Identification_ID)}>
+                                          <Trash2 size={14}/>
+                                        </button>
+            )}
                         </div>
                       </td>
                     </tr>

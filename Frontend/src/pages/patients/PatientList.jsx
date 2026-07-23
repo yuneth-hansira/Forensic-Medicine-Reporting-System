@@ -6,6 +6,7 @@ import {
   Download, RefreshCw, SlidersHorizontal
 } from 'lucide-react';
 import '../patients/patients.css';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 import { patientService } from '../../services/patientService';
 
@@ -77,9 +78,11 @@ const PatientList = () => {
             <p className="pm-page-subtitle">{filtered.length} patients found</p>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={()=>window.location.href='/patients/register'}>
-              <UserPlus size={16}/>Register Patient
-            </button>
+            {canCreate(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={()=>window.location.href='/patients/register'}>
+                            <UserPlus size={16}/>Register Patient
+                          </button>
+            )}
           </div>
         </div>
 
@@ -146,9 +149,11 @@ const PatientList = () => {
                         <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/patients/${p.Patient_ID}`}>
                           <Eye size={14}/>
                         </button>
-                        <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(p.Patient_ID)}>
-                          <Trash2 size={14}/>
-                        </button>
+                        {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(p.Patient_ID)}>
+                                        <Trash2 size={14}/>
+                                      </button>
+            )}
                       </div>
                     </td>
                   </tr>

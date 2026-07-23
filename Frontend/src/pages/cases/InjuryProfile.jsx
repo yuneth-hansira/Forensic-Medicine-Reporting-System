@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { injuryService } from '../../services/injuryService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const InjuryProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const InjuryProfile = () => {
             <h1 className="pm-page-title">Injury Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/injuries/${record.Injury_ID}/edit`}>
-              <Edit3 size={16}/>Edit Injury
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/injuries/${record.Injury_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Injury
+                          </button>
+            )}
           </div>
         </div>
 

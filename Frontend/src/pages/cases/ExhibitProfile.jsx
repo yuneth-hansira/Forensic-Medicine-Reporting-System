@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { exhibitService } from '../../services/exhibitService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const ExhibitProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const ExhibitProfile = () => {
             <h1 className="pm-page-title">Exhibit Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/exhibits/${record.Exhibit_ID}/edit`}>
-              <Edit3 size={16}/>Edit Exhibit
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/exhibits/${record.Exhibit_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Exhibit
+                          </button>
+            )}
           </div>
         </div>
 

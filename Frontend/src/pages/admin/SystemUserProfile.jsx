@@ -7,7 +7,7 @@ import {
 import { userService } from '../../services/userService';
 import '../patients/patients.css';
 import { authService } from '../../services/authService';
-import { canEdit, canDelete } from '../../utils/permissions';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 

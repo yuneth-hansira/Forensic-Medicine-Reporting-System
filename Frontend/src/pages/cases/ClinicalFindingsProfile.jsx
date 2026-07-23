@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { clinicalFindingsService } from '../../services/clinicalFindingsService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview', 'Detailed Notes'];
 
 const ClinicalFindingsProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const ClinicalFindingsProfile = () => {
             <h1 className="pm-page-title">Clinical Findings Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/clinical-findings/${record.Finding_ID}/edit`}>
-              <Edit3 size={16}/>Edit Findings
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/clinical-findings/${record.Finding_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Findings
+                          </button>
+            )}
           </div>
         </div>
 

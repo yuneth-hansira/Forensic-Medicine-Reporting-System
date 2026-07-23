@@ -62,9 +62,11 @@ const PMFindings = () => {
             <p className="pm-page-subtitle">Track and manage autopsy results and causes of death</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/pm-findings/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> New Findings
-            </Link>
+            {canCreate(user) && (
+              <Link to="/pm-findings/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                            <Plus size={18}/> New Findings
+                          </Link>
+            )}
           </div>
         </div>
 
@@ -121,9 +123,11 @@ const PMFindings = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/pm-findings/${r.PM_Finding_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.PM_Finding_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.PM_Finding_ID)}>
+                                          <Trash2 size={14}/>
+                                        </button>
+            )}
                         </div>
                       </td>
                     </tr>

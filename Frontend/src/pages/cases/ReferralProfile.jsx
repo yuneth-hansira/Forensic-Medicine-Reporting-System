@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { referralService } from '../../services/referralService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const ReferralProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const ReferralProfile = () => {
             <h1 className="pm-page-title">Referral Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/referrals/${record.Referral_ID}/edit`}>
-              <Edit3 size={16}/>Edit Referral
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/referrals/${record.Referral_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Referral
+                          </button>
+            )}
           </div>
         </div>
 

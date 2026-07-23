@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { consentService } from '../../services/consentService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const ConsentProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [record, setRecord] = useState(null);
@@ -47,9 +50,11 @@ const ConsentProfile = () => {
             <h1 className="pm-page-title">Consent Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/consents/${record.Consent_ID}/edit`}>
-              <Edit3 size={16}/>Edit Consent
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/consents/${record.Consent_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Consent
+                          </button>
+            )}
           </div>
         </div>
 

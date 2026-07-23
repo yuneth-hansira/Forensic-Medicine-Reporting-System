@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 import { Link } from 'react-router-dom';
 import {
   Gavel, Plus, Eye, Trash2, Search
@@ -6,8 +8,7 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { courtInfoService } from '../../services/courtInfoService';
 import '../patients/patients.css';
-import { authService } from '../../services/authService';
-import { canCreate, canEdit, canDelete } from '../../utils/permissions';
+
 
 const CourtInfo = () => {
   const user = authService.getUser();
@@ -114,12 +115,14 @@ const CourtInfo = () => {
                       <td>{r.Date_Of_Trial ? new Date(r.Date_Of_Trial).toLocaleDateString() : '-'}</td>
                       <td>
                         <div className="pm-action-menu" style={{justifyContent:'center', gap:'0.5rem', display:'flex'}}>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="Edit Details" onClick={() => window.location.href=`/court-info/${r.Court_ID}/edit`}>
+                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/court-info/${r.Court_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Court_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+                            <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Court_ID)}>
+                              <Trash2 size={14}/>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

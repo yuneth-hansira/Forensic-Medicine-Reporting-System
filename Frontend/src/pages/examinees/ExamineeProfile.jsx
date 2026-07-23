@@ -6,10 +6,13 @@ import {
 } from 'lucide-react';
 import { examineeService } from '../../services/examineeService';
 import '../patients/patients.css';
+import { authService } from '../../services/authService';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 
 const TABS = ['Overview'];
 
 const ExamineeProfile = () => {
+  const user = authService.getUser();
   const { id } = useParams();
   const [tab, setTab] = useState('Overview');
   const [examinee, setExaminee] = useState(null);
@@ -48,9 +51,11 @@ const ExamineeProfile = () => {
             <h1 className="pm-page-title">Examinee Profile</h1>
           </div>
           <div className="pm-header-actions">
-            <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/examinees/${examinee.Examinee_ID}/edit`}>
-              <Edit3 size={16}/>Edit Examinee
-            </button>
+            {canEdit(user) && (
+              <button className="pm-btn pm-btn-primary" onClick={() => window.location.href=`/examinees/${examinee.Examinee_ID}/edit`}>
+                            <Edit3 size={16}/>Edit Examinee
+                          </button>
+            )}
           </div>
         </div>
 

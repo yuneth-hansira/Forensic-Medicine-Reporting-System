@@ -6,7 +6,7 @@ import {
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { userService } from '../../services/userService';
 import { authService } from '../../services/authService';
-import { canCreate, canDelete } from '../../utils/permissions';
+import { canCreate, canEdit, canDelete } from '../../utils/permissions';
 import '../patients/patients.css';
 
 const SystemUsers = () => {

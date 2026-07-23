@@ -64,9 +64,11 @@ const ToxicologyReports = () => {
             <p className="pm-page-subtitle">Manage chemical analysis and toxicological findings</p>
           </div>
           <div style={{display:'flex', gap:'1rem'}}>
-            <Link to="/toxicology/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
-              <Plus size={18}/> New Report
-            </Link>
+            {canCreate(user) && (
+              <Link to="/toxicology/register" className="pm-btn pm-btn-primary" style={{textDecoration:'none'}}>
+                            <Plus size={18}/> New Report
+                          </Link>
+            )}
           </div>
         </div>
 
@@ -119,9 +121,11 @@ const ToxicologyReports = () => {
                           <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#0284c7', borderColor: '#bae6fd'}} title="View Details" onClick={() => window.location.href=`/toxicology/${r.Toxicology_ID}`}>
                             <Eye size={14}/>
                           </button>
-                          <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Toxicology_ID)}>
-                            <Trash2 size={14}/>
-                          </button>
+                          {canDelete(user) && (
+              <button className="pm-btn pm-btn-secondary pm-btn-sm" style={{padding:'0.3rem 0.6rem', color: '#ef4444', borderColor: '#fee2e2'}} title="Delete" onClick={() => handleDelete(r.Toxicology_ID)}>
+                                          <Trash2 size={14}/>
+                                        </button>
+            )}
                         </div>
                       </td>
                     </tr>
